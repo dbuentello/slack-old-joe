@@ -11,7 +11,7 @@ export const test: SuiteMethod = async (
   client,
   { it, beforeAll, afterAll, beforeEach, afterEach }
 ) => {
-  it('loads a sign-in window', async () => {
+  it('opens and loads a sign-in window', async () => {
     assert.ok(await getSignInWindow(client));
 
     const url = await client.getUrl();
