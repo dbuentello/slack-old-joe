@@ -30,31 +30,4 @@ export const test: SuiteMethod = async (
     assert.ok(await getSignInWindow(client));
     assert.ok(await openBrowserAndWaitForSignIn());
   });
-
-  it('signs out', async () => {
-    const numberOfTeams = await getTeamsCount();
-    const { handle } = await getBrowserViewHandle(client);
-    assert.ok(handle);
-
-    // Try to sign out
-    const teamMenu = await client.$('#team_menu');
-    await teamMenu.click();
-    // Animation
-    await wait(1000);
-
-    const signoutBtn = await client.$('*=Sign out');
-    await signoutBtn.click();
-    await wait(1000);
-
-    // On Enterprise, we'll do this twice :D
-    const signoutBtnEnterprise = await client.$('*=Sign out');
-    if (signoutBtnEnterprise) {
-      await signoutBtn.click();
-      await wait(1000);
-    }
-
-    // We hopefully lost a team, at least after a while
-    await wait(3000);
-    assert.ok(numberOfTeams > (await getTeamsCount()));
-  });
 };

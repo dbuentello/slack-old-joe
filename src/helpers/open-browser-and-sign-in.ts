@@ -3,7 +3,7 @@ import { exec } from 'child_process';
 import { getTeamsCount } from './get-teams-count';
 
 export function openBrowserAndSignIn() {
-  const url = 'https://my.slack.com/ssb/signin_redirect';
+  const url = 'https://old-joe.slack.com/ssb/signin_redirect';
   const start =
     process.platform === 'darwin'
       ? 'open'
