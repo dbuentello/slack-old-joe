@@ -9,12 +9,12 @@ export async function getSlackPath(version = '') {
     const slackExe = path.join(slackDir, `app-${version}/slack.exe`);
 
     if (fs.existsSync(slackExe)) {
-      return slackExe
+      return slackExe;
     } else {
-      const contents = `\n - ` + (await fs.readdir(slackDir)).join(`\n - `)
-      const warning = `Could not find Slack for v${version}. Here is what we have: ${contents}`
+      const contents = `\n - ` + (await fs.readdir(slackDir)).join(`\n - `);
+      const warning = `Could not find Slack for v${version}. Here is what we have: ${contents}`;
 
-      console.log(warning)
+      console.log(warning);
     }
   }
 }

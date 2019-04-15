@@ -5,7 +5,8 @@ import { getSignInWindow } from '../helpers/get-sign-in-window';
 import { openBrowserAndSignIn } from '../helpers/open-browser-and-sign-in';
 
 export const test: SuiteMethod = async (
-  client, { it, beforeAll, afterAll, beforeEach, afterEach }
+  client,
+  { it, beforeAll, afterAll, beforeEach, afterEach }
 ) => {
   it('loads a sign-in window', async () => {
     assert.ok(await getSignInWindow(client));
@@ -27,10 +28,8 @@ export const test: SuiteMethod = async (
 
     openBrowserAndSignIn();
 
-    await new Promise((resolve) => {
-      setTimeout(() => {
-
-      }, 500)
-    })
-  })
-}
+    await new Promise(resolve => {
+      setTimeout(() => {}, 500);
+    });
+  });
+};
