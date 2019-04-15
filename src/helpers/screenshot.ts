@@ -12,5 +12,7 @@ export async function takeScreenshot(name: string) {
   const screenshotPath = path.join(screenshotDir, `${screenshotCount} - ${name}.jpg`);
   await fs.mkdirp(screenshotDir);
 
+  screenshotCount++;
+
   return screenshot({ filename: screenshotPath })
 }
