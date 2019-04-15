@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 
 import { SuiteMethodResults, SuiteMethods } from './interfaces';
+import { takeScreenshot } from './helpers/screenshot';
 
 export async function runTests(client: BrowserObject) {
   const smokeTestFiles = await fs.readdir('./src/smoke');
@@ -48,6 +49,9 @@ async function runTestFile(file: string, client: BrowserObject): Promise<string>
       await beforeEach();
     }
 
+    // Screenshot
+    await takeScreenshot(`before ${name}`);
+
     // Run the test
     try {
       await fn();
@@ -56,6 +60,9 @@ async function runTestFile(file: string, client: BrowserObject): Promise<string>
     } catch (error) {
       result += `\nnot ok: it ${name}`;
     }
+
+    // Screenshot
+    await takeScreenshot(`after ${name}`);
 
     // Run all "afterEach"
     for (const afterEach of suiteMethodResults.afterEach) {
