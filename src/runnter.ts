@@ -8,13 +8,13 @@ export async function runTests(client: BrowserObject) {
   let result = '';
 
   for (const testFile of smokeTestFiles) {
-    result += await runTestfile(testFile, client);
+    result += await runTestFile(testFile, client);
   }
 
   return result;
 }
 
-async function runTestfile(file: string, client: BrowserObject): Promise<string> {
+async function runTestFile(file: string, client: BrowserObject): Promise<string> {
   const { test } = await import(`./smoke/${file}`);
   const suiteMethodResults: SuiteMethodResults = {
     it: [],

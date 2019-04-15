@@ -16,12 +16,12 @@ async function main() {
   setTimeout(async () => {
     const result = await runTests(client);
 
-    // await client.deleteSession();
-    // await driver.kill();
+    await client.deleteSession();
+    await driver.kill();
 
     console.log(result);
 
-    // process.exit();
+    process.exit();
   }, 3000)
 }
 
