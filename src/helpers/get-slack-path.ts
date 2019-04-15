@@ -34,8 +34,8 @@ async function getSlackPathWindows(version: string) {
   return {
     expectedDir: slackDir,
     expectedPath: slackExe
-  }
-};
+  };
+}
 
 async function getSlackPathMac() {
   const slackDir = path.join(`/Applications/Slack.app`);
@@ -44,5 +44,5 @@ async function getSlackPathMac() {
   return {
     expectedDir: slackDir,
     expectedPath: slackBin
-  }
+  };
 }

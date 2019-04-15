@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { SuiteMethods, SuiteMethod } from '../interfaces';
+import { SuiteMethod } from '../interfaces';
 import { getSignInWindow } from '../helpers/get-sign-in-window';
 import { openBrowserAndSignIn } from '../helpers/open-browser-and-sign-in';
 

@@ -4,7 +4,7 @@ import { ChildProcess } from 'child_process';
 
 const debug = require('debug')('chromedriver')
 
-let driver = null;
+let driver: ChildProcess;
 
 export function spawnChromeDriver(): Promise<ChildProcess> {
   return new Promise<ChildProcess>((resolve) => {
@@ -14,14 +14,14 @@ export function spawnChromeDriver(): Promise<ChildProcess> {
 
     const checkIfLaunched = (data) => {
       if (data.toString().includes(`Only local connections are allowed.`)) {
-        driver.stdout.off('data', checkIfLaunched)
+        driver.stdout.removeListener('data', checkIfLaunched);
         resolve(driver)
       }
     }
 
-    driver.stdout.on('data', checkIfLaunched);
-    // driver.stdout.on('data', debug);
-    // driver.stderr.on('data', debug);
-    driver.on('close', (code) => debug(`Chromedriver exited with code ${code}`));
+    driver.stdout.addListener('data', checkIfLaunched);
+    driver.stdout.addListener('data', debug);
+    driver.stderr.addListener('data', debug);
+    driver.addListener('close', (code) => debug(`Chromedriver exited with code ${code}`));
   })
 }
