@@ -58,6 +58,8 @@ async function runTestFile(file: string, client: BrowserObject): Promise<string>
 
       result += `\nok: it ${name}`;
     } catch (error) {
+      console.warn(error);
+
       result += `\nnot ok: it ${name}`;
     }
 

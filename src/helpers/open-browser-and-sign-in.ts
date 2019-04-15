@@ -25,19 +25,18 @@ export async function openBrowserAndWaitForSignIn(
     const testInterval = setInterval(async () => {
       if (teamsCount < (await getTeamsCount())) {
         clearInterval(testInterval);
+        clearTimeout(runawayTimeout);
 
         // Let's give Slack some time to settle the teams
         // Say... 8 seconds?
-        setTimeout(resolve, 8000);
+        setTimeout(() => resolve(true), 8000);
       }
     }, 1000);
 
-    const runawayTimeout = () => {
+    const runawayTimeout = setTimeout(() => {
       clearInterval(testInterval);
 
       reject(`Sign-in failed, timeout reached (${timeout}ms)`);
-    };
-
-    setTimeout(runawayTimeout, timeout);
+    }, timeout);
   });
 }

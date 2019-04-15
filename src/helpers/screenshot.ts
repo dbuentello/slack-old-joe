@@ -3,7 +3,7 @@ import * as os from 'os';
 import * as fs from 'fs-extra';
 import * as screenshot from 'screenshot-desktop';
 
-const now = new Date().toLocaleTimeString().replace(/:/, '-');
+const now = new Date().toLocaleTimeString().replace(/:/g, '-');
 let screenshotCount = 0;
 
 export async function takeScreenshot(name: string) {

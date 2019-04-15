@@ -40,12 +40,21 @@ export const test: SuiteMethod = async (
     const teamMenu = await client.$('#team_menu');
     await teamMenu.click();
     // Animation
-    await wait(500);
+    await wait(1000);
 
     const signoutBtn = await client.$('*=Sign out');
     await signoutBtn.click();
+    await wait(1000);
 
-    // We hopefully lost a team
+    // On Enterprise, we'll do this twice :D
+    const signoutBtnEnterprise = await client.$('*=Sign out');
+    if (signoutBtnEnterprise) {
+      await signoutBtn.click();
+      await wait(1000);
+    }
+
+    // We hopefully lost a team, at least after a while
+    await wait(3000);
     assert.ok(numberOfTeams > (await getTeamsCount()));
   });
 };
