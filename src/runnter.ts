@@ -33,7 +33,7 @@ async function runTestFile(file: string, client: BrowserObject): Promise<string>
     afterEach: (fn) => suiteMethodResults.afterAll.push(fn),
   }
 
-  let result = `\nSuite: ${file} `.padEnd(50, '-');
+  let result = `\n` + `Suite: ${file} `.padEnd(50, '-');
 
   await test(client, suiteMethods);
 
@@ -78,7 +78,7 @@ async function runTestFile(file: string, client: BrowserObject): Promise<string>
   }
 
   result += `\n`;
-  result += ``.padEnd(50, '-');
+  result += ``.padEnd(50, '-') + `\n`;
 
   return result;
 }

@@ -4,7 +4,7 @@ import * as fs from 'fs-extra';
 import { getClient } from './client';
 import { spawnChromeDriver } from './driver';
 import { SuiteMethodResults, SuiteMethods } from './interfaces';
-import { clean } from './helpers/clean';
+import { clean, restore } from './helpers/clean-restore';
 import { runTests } from './runnter';
 
 async function main() {
@@ -14,12 +14,18 @@ async function main() {
   const client = await getClient({ version: `3.4.1-betaaa231d3` });
 
   setTimeout(async () => {
-    const result = await runTests(client);
+    try {
+      const result = await runTests(client);
 
-    await client.deleteSession();
-    await driver.kill();
+      await client.deleteSession();
+      await driver.kill();
 
-    console.log(result);
+      console.log(result);
+    } catch (error) {
+      console.warn(error);
+    }
+
+    await restore();
 
     process.exit();
   }, 3000)
