@@ -2,20 +2,29 @@
   "name": "slack-runtime-tests",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/src/main/main",
   "scripts": {
-    "start": "node -r ts-node/register src/index.ts",
-    "prettier": "prettier --write src/**/*.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "rimraf ./dist && electron-forge start",
+    "prettier": "prettier --write src/**/*.{ts,tsx}",
+    "make": "electron-forge make",
+    "package": "electron-forge package",
+    "parcel:build": "node ./tools/parcel-build.js",
+    "parcel:watch": "node ./tools/parcel-watch.js"
   },
-  "author": "",
+  "author": "Felix Rieseberg <felix@felixrieseberg.com>",
   "license": "ISC",
   "dependencies": {
+    "@blueprintjs/core": "^3.15.1",
     "cross-spawn": "^6.0.5",
     "debug": "^4.1.1",
     "electron-chromedriver": "4.0.0",
+    "electron-squirrel-startup": "^1.0.0",
     "fs-extra": "^7.0.1",
     "lodash": "^4.17.11",
+    "mobx": "^5.9.4",
+    "mobx-react": "^5.4.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "screenshot-desktop": "^1.7.0",
     "shortid": "^2.2.14",
     "ts-node": "^8.1.0",
@@ -23,9 +32,22 @@
     "webdriverio": "^5.7.13"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.34",
+    "@electron-forge/maker-deb": "^6.0.0-beta.34",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.34",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.34",
+    "@electron-forge/maker-zip": "^6.0.0-beta.34",
+    "@electron-forge/publisher-github": "^6.0.0-beta.34",
+    "@types/cross-spawn": "^6.0.0",
     "@types/fs-extra": "^5.0.5",
     "@types/node": "^11.13.4",
+    "@types/react": "^16.8.13",
+    "@types/react-dom": "^16.8.4",
     "@types/shortid": "0.0.29",
-    "prettier": "1.17.0"
+    "electron": "^4.1.4",
+    "less": "^3.9.0",
+    "parcel-bundler": "^1.12.3",
+    "prettier": "1.17.0",
+    "rimraf": "^2.6.3"
   }
 }

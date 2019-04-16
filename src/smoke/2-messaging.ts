@@ -11,14 +11,16 @@ export const test: SuiteMethod = async (
 ) => {
   beforeAll(async () => {
     await getBrowserViewHandle(client);
-  })
+  });
 
   it('can switch to the #random channel', async () => {
     // Switch to the random channel
     (await client.$('=random')).click();
 
     // Wait for the description to show up
-    const randomDesc = await client.$('span=Non-work banter and water cooler conversation')
+    const randomDesc = await client.$(
+      'span=Non-work banter and water cooler conversation'
+    );
     assert.ok(await randomDesc.waitForExist(1000));
   });
 
@@ -28,10 +30,10 @@ export const test: SuiteMethod = async (
     await msgInput.click();
 
     // Enter out time stamp, followed by the enter key
-    await client.sendKeys([...testValue.split(''), "\uE007"]);
+    await client.sendKeys([...testValue.split(''), '\uE007']);
 
     // The message should show up
-    const randomDesc = await client.$(`span=${testValue}`)
+    const randomDesc = await client.$(`span=${testValue}`);
     assert.ok(await randomDesc.waitForExist(1000));
   });
 
@@ -40,7 +42,7 @@ export const test: SuiteMethod = async (
     (await client.$('=ads')).click();
 
     // Wait for the description to show up
-    const randomDesc = await client.$('span=Old Camel ads')
+    const randomDesc = await client.$('span=Old Camel ads');
     assert.ok(await randomDesc.waitForExist(1000));
 
     // Play the video
@@ -52,7 +54,7 @@ export const test: SuiteMethod = async (
     iframe = await client.$('iframe');
 
     // Expect the video to be playing
-    const src = await iframe.getProperty('src') as string;
+    const src = (await iframe.getProperty('src')) as string;
     assert.ok(src.includes('youtube.com'));
     assert.ok(src.includes('IEItOBG0r2g'));
 
