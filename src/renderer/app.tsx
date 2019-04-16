@@ -124,7 +124,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
       : <h5>Waiting for test results...</h5>
 
     return (
-      <Card elevation={Elevation.ONE} className='result-card' onClick={() => shell.showItemInFolder(getScreenshotDir())}>
+      <Card elevation={Elevation.ONE} className='result-card'>
         {resultElements}
       </Card>
     )

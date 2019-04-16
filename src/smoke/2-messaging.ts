@@ -5,6 +5,34 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { wait } from '../helpers/wait';
 import { getTeamsCount } from '../helpers/get-teams-count';
 
+async function assertVideo(client: BrowserObject) {
+  // Play the video
+  (await client.$('.c-message_attachment__video_play')).click();
+
+  // Expect the iframe to show up
+  let iframe = await client.$('iframe');
+  await iframe.waitForExist(2000);
+  iframe = await client.$('iframe');
+
+  // Expect the video to be playing
+  const src = (await iframe.getProperty('src')) as string;
+  assert.ok(src.includes('youtube.com'));
+  assert.ok(src.includes('IEItOBG0r2g'));
+
+  // Switch to the iframe
+  await client.switchToFrame(iframe);
+
+  // Expect "playing mode"
+  let player = await client.$('.playing-mode');
+  await player.waitForExist(2000);
+
+  // Stop the video
+  (await client.$('body')).click();
+
+  // Switch back
+  await client.switchToParentFrame();
+}
+
 export const test: SuiteMethod = async (
   client,
   { it, beforeAll, afterAll, beforeEach, afterEach }
@@ -37,7 +65,7 @@ export const test: SuiteMethod = async (
     assert.ok(await randomDesc.waitForExist(1000));
   });
 
-  it('can play a youtube video', async () => {
+  it('can play a YouTube video', async () => {
     // Switch to the random channel
     (await client.$('=ads')).click();
 
@@ -45,27 +73,14 @@ export const test: SuiteMethod = async (
     const randomDesc = await client.$('span=Old Camel ads');
     assert.ok(await randomDesc.waitForExist(1000));
 
-    // Play the video
-    (await client.$('.c-message_attachment__video_play')).click();
-
-    // Expect the iframe to show up
-    let iframe = await client.$('iframe');
-    await iframe.waitForExist(2000);
-    iframe = await client.$('iframe');
-
-    // Expect the video to be playing
-    const src = (await iframe.getProperty('src')) as string;
-    assert.ok(src.includes('youtube.com'));
-    assert.ok(src.includes('IEItOBG0r2g'));
-
-    // Switch to the iframe
-    await client.switchToFrame(iframe);
-
-    // Expect "playing mode"
-    let player = await client.$('.playing-mode');
-    await player.waitForExist(2000);
-
-    // Switch back
-    await client.switchToParentFrame();
+    await assertVideo(client);
   });
+
+  it('can play a YouTube video in a thread', async () => {
+    (await client.$('=threads')).click();
+    (await client.$('=1 reply')).click();
+    (await client.$('.p-flexpane_header')).waitForExist(1000);
+
+    await assertVideo(client);
+  })
 };

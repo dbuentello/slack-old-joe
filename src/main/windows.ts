@@ -24,6 +24,7 @@ export function getMainWindowOptions(): Electron.BrowserWindowConstructorOptions
     acceptFirstMouse: true,
     transparent: true,
     alwaysOnTop: true,
+    titleBarStyle: 'hiddenInset',
     webPreferences: {
       webviewTag: false
     }
