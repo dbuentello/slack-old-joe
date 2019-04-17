@@ -28,8 +28,8 @@ export async function openBrowserAndWaitForSignIn(
         clearTimeout(runawayTimeout);
 
         // Let's give Slack some time to settle the teams
-        // Say... 8 seconds?
-        setTimeout(() => resolve(true), 8000);
+        // Say... 5 seconds?
+        setTimeout(() => resolve(true), 5000);
       }
     }, 1000);
 

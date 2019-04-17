@@ -18,7 +18,7 @@ export class Root {
   public async setup(): Promise<void | Element | React.Component> {
     const React = await import('react');
     const { render } = await import('react-dom');
-    const { App } = await import('./app');
+    const { App } = await import('./components/app');
 
     const className = `${process.platform} container`;
     const app = (

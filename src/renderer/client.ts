@@ -1,6 +1,5 @@
 import { remote } from 'webdriverio';
 
-import { getSlackPath } from '../helpers/get-slack-path';
 import { Options } from '../interfaces';
 
 let _client: null | BrowserObject = null;
@@ -15,11 +14,11 @@ export async function getClient(input: Options) {
     capabilities: {
       browserName: 'chrome',
       chromeOptions: {
-        binary: await getSlackPath(input.version),
+        binary: input.binary,
         args: ['--remote-debugging-port=12209'] // Optional, perhaps 'app=' + /path/to/your/app/
       }
     }
   };
 
-  return (_client = await remote(options));
+  return ((window as any).client = _client = await remote(options));
 }

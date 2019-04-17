@@ -2,12 +2,11 @@ import * as assert from 'assert';
 
 import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
-import { wait } from '../helpers/wait';
-import { getTeamsCount } from '../helpers/get-teams-count';
 
 async function assertVideo(client: BrowserObject) {
   // Play the video
-  (await client.$('.c-message_attachment__video_play')).click();
+  await (await client.$('.c-message_attachment__video_play')).moveTo();
+  await client.positionClick();
 
   // Expect the iframe to show up
   let iframe = await client.$('iframe');
@@ -27,7 +26,7 @@ async function assertVideo(client: BrowserObject) {
   await player.waitForExist(2000);
 
   // Stop the video
-  (await client.$('body')).click();
+  await (await client.$('body')).click();
 
   // Switch back
   await client.switchToParentFrame();
@@ -67,7 +66,7 @@ export const test: SuiteMethod = async (
 
   it('can play a YouTube video', async () => {
     // Switch to the random channel
-    (await client.$('=ads')).click();
+    await (await client.$('=ads')).click();
 
     // Wait for the description to show up
     const randomDesc = await client.$('span=Old Camel ads');
@@ -75,12 +74,4 @@ export const test: SuiteMethod = async (
 
     await assertVideo(client);
   });
-
-  it('can play a YouTube video in a thread', async () => {
-    (await client.$('=threads')).click();
-    (await client.$('=1 reply')).click();
-    (await client.$('.p-flexpane_header')).waitForExist(1000);
-
-    await assertVideo(client);
-  })
 };

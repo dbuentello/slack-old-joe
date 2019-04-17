@@ -1,5 +1,5 @@
 export interface Options {
-  version: string;
+  binary: string;
 }
 
 export type LifeCycleFn = () => Promise<void> | void;

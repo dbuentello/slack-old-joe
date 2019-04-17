@@ -10,14 +10,15 @@ import {
 } from '@blueprintjs/core';
 import { shell } from 'electron';
 
-import { AppState } from './state';
-import { clean, restore } from '../helpers/clean-restore';
-import { spawnChromeDriver } from './driver';
-import { getClient } from './client';
-import { runTestFile, readTests } from './runner';
+import { AppState } from '../state';
+import { clean, restore } from '../../helpers/clean-restore';
+import { spawnChromeDriver } from '../driver';
+import { getClient } from '../client';
+import { runTestFile, readTests } from '../runner';
 import { ChildProcess } from 'child_process';
-import { getScreenshotDir } from '../helpers/screenshot';
-import { SuiteResult } from '../interfaces';
+import { getScreenshotDir } from '../../helpers/screenshot';
+import { SuiteResult } from '../../interfaces';
+import { Setup } from './setup';
 
 interface AppProps {
   appState: AppState;
@@ -77,6 +78,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     return (
       <>
+        <Setup appState={this.props.appState} />
         {this.state.startingIn > 0 ? (
           <Spinner value={this.state.startingIn / 3000} />
         ) : null}
@@ -156,8 +158,13 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     // Start the driver and the client
     const { appState } = this.props;
+
+    if (!appState.appToTest) {
+      throw new Error('Please select an app to test first!');
+    }
+
     const driver = await spawnChromeDriver();
-    const client = await getClient({ version: appState.appVersion });
+    const client = await getClient({ binary: appState.appToTest });
 
     // Okay, get ready to run this
     const countdownInterval = setInterval(() => {

@@ -6,6 +6,8 @@ const spawn = require('cross-spawn');
 
 let driver: ChildProcess;
 
+export const DRIVER_VERSION = 4;
+
 export function spawnChromeDriver(): Promise<ChildProcess> {
   return new Promise<ChildProcess>(resolve => {
     const driverPath = path.join(
@@ -15,9 +17,13 @@ export function spawnChromeDriver(): Promise<ChildProcess> {
 
     driver = spawn(driverPath, ['--url-base=wd/hub', '--port=9515']);
 
-    const checkIfLaunched = data => {
+    if (!driver.stderr || !driver.stdout) {
+      throw new Error('Could not create stdout and stderr streams');
+    }
+
+    const checkIfLaunched = (data: Buffer) => {
       if (data.toString().includes(`Only local connections are allowed.`)) {
-        driver.stdout.removeListener('data', checkIfLaunched);
+        driver.stdout!.removeListener('data', checkIfLaunched);
         resolve(driver);
       }
     };
