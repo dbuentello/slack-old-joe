@@ -1,7 +1,10 @@
 import * as fs from 'fs-extra';
 
-export function waitForFile(filePath: string, timeout = 3000): Promise<boolean> {
-  return new Promise<boolean>((resolve) => {
+export function waitForFile(
+  filePath: string,
+  timeout = 3000
+): Promise<boolean> {
+  return new Promise<boolean>(resolve => {
     const checkTimeout = setTimeout(() => {
       clearInterval(checkInterval);
       resolve(false);

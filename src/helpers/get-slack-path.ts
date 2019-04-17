@@ -52,10 +52,8 @@ async function getSlackPathWindows(version?: string) {
     versionToUse = versions.reduce((prevHighest, current) => {
       const cleanedValue = current.replace('app-', '');
 
-      return semver.gt(cleanedValue, prevHighest)
-        ? cleanedValue
-        : prevHighest;
-    }, '0.0.0')
+      return semver.gt(cleanedValue, prevHighest) ? cleanedValue : prevHighest;
+    }, '0.0.0');
   }
 
   const slackExe = path.join(slackDir, `app-${versionToUse}/slack.exe`);
