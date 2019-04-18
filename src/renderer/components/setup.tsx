@@ -1,12 +1,13 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import * as path from 'path';
-import { remote } from 'electron';
-import { Card, Elevation, InputGroup, Button, FormGroup } from '@blueprintjs/core';
+import { remote, app } from 'electron';
+import { Card, Elevation, InputGroup, Button, FormGroup, Checkbox } from '@blueprintjs/core';
 
 import { AppState } from '../state';
 import { getBinaryPath } from '../../helpers/get-slack-path';
 import { DRIVER_VERSION } from '../driver';
+import { handleBooleanChange } from '../../helpers/handle-boolean-change';
 
 interface SetupProps {
   appState: AppState;
@@ -18,9 +19,11 @@ export class Setup extends React.Component<SetupProps, {}> {
     super(props);
 
     this.chooseFile = this.chooseFile.bind(this);
+    this.handleLogOutAndCloseAppChange = this.handleLogOutAndCloseAppChange.bind(this);
   }
 
   public render() {
+    const { appState } = this.props;
     const chooseButton = <Button
       text="Choose"
       onClick={this.chooseFile}
@@ -44,9 +47,18 @@ export class Setup extends React.Component<SetupProps, {}> {
             rightElement={chooseButton}
           />
         </FormGroup>
+        <Checkbox
+          checked={appState.logoutAndCloseApp}
+          label="Logout and close Slack at end of test"
+          onChange={this.handleLogOutAndCloseAppChange}
+        />
       </Card>
     );
   }
+
+  public handleLogOutAndCloseAppChange = handleBooleanChange((checked) => {
+    this.props.appState.logoutAndCloseApp = checked;
+  });
 
   public async chooseFile() {
     const currentWindow = remote.BrowserWindow.getAllWindows()[0];

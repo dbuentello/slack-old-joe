@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { Tests, SuiteResult } from '../interfaces';
+import { TestFiles, SuiteResult } from '../interfaces';
 import { getSlackPath } from '../helpers/get-slack-path';
 
 /**
@@ -10,14 +10,18 @@ import { getSlackPath } from '../helpers/get-slack-path';
  */
 export class AppState {
   @observable public progress = 0;
-  @observable public tests: Tests = [];
+  @observable public tests: TestFiles = [];
   @observable public results: Array<SuiteResult> = [];
   @observable public appToTest: string;
 
+  // Test results
   @observable public testsTotal: number = 0;
   @observable public testsDone: number = 0;
   @observable public testsFailed: number = 0;
   @observable public done: boolean = false;
+
+  // Configuration
+  @observable public logoutAndCloseApp: boolean = true;
 
   constructor() {
     this.setup();

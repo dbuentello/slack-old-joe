@@ -175,10 +175,11 @@ export class App extends React.Component<AppProps, LocalAppState> {
       clearInterval(countdownInterval);
       this.setState({ startingIn: 0 });
       this.runTests(driver, client);
+      this.stopTests(driver, client);
     }, 3000);
   }
 
-  public async runTests(driver: ChildProcess, client: BrowserObject) {
+  public async runTests(_driver: ChildProcess, client: BrowserObject) {
     const { appState } = this.props;
 
     this.setState({ hasStarted: true });
@@ -190,6 +191,11 @@ export class App extends React.Component<AppProps, LocalAppState> {
       }, 0);
 
       for (const test of appState.tests) {
+        // Don't logout if disabled
+        if (!appState.logoutAndCloseApp && test.file === 'logout') {
+          continue;
+        }
+
         // Now run the suite, updating after each test
         const fileResult = await runTestFile(
           test.file,
@@ -207,13 +213,23 @@ export class App extends React.Component<AppProps, LocalAppState> {
       }
 
       appState.done = true;
-
-      await client.deleteSession();
-      await driver.kill();
     } catch (error) {
       console.warn(error);
     }
+  }
 
-    await restore();
+  public async stopTests(driver: ChildProcess, client: BrowserObject) {
+    if (this.props.appState.logoutAndCloseApp) {
+      try {
+        // Kill driver and session
+        await client.deleteSession();
+        await driver.kill();
+
+        // Restore a possible user data backup
+        await restore();
+      } catch (error) {
+        console.warn(error);
+      }
+    }
   }
 }

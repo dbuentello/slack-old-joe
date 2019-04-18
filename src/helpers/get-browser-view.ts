@@ -1,7 +1,7 @@
 export async function getBrowserViewHandle(client: BrowserObject) {
   const windows = await client.getWindowHandles();
-  let handle: string;
-  let title: string;
+  let handle: string = '';
+  let title: string = '';
 
   for (const window of windows) {
     await client.switchToWindow(window);

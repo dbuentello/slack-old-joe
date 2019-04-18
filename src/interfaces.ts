@@ -15,18 +15,18 @@ export interface SuiteMethods {
 
 export interface SuiteMethodResults {
   it: Array<{ name: string, fn: TestFn }>,
-  beforeAll?: Array<LifeCycleFn>,
-  afterAll?: Array<LifeCycleFn>,
-  beforeEach?: Array<LifeCycleFn>,
-  afterEach?: Array<LifeCycleFn>
+  beforeAll: Array<LifeCycleFn>,
+  afterAll: Array<LifeCycleFn>,
+  beforeEach: Array<LifeCycleFn>,
+  afterEach: Array<LifeCycleFn>
 }
 
-export interface Test {
+export interface TestFile {
   file: string;
   suiteMethodResults: SuiteMethodResults;
 }
 
-export type Tests = Array<Test>;
+export type TestFiles = Array<TestFile>;
 
 export type Result = {
   ok: boolean;

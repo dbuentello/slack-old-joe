@@ -1,18 +1,16 @@
-import * as fs from 'fs-extra';
-
 import {
   SuiteMethodResults,
   SuiteMethods,
-  Tests,
+  TestFiles,
   SuiteResult,
   SuiteMethod
 } from '../interfaces';
 import { takeScreenshot } from '../helpers/screenshot';
 import { SMOKE_TESTS } from '../smoke';
 
-export async function readTests(client: BrowserObject): Promise<Tests> {
+export async function readTests(client: BrowserObject): Promise<TestFiles> {
   const smokeTestFiles = SMOKE_TESTS;
-  const tests: Tests = [];
+  const tests: TestFiles = [];
 
   for (const testFile of smokeTestFiles) {
     tests.push({
