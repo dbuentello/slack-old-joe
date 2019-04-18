@@ -174,8 +174,9 @@ export class App extends React.Component<AppProps, LocalAppState> {
     setTimeout(async () => {
       clearInterval(countdownInterval);
       this.setState({ startingIn: 0 });
-      this.runTests(driver, client);
-      this.stopTests(driver, client);
+
+      await this.runTests(driver, client);
+      await this.stopTests(driver, client);
     }, 3000);
   }
 

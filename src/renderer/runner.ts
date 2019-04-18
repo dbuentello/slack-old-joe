@@ -86,6 +86,8 @@ export async function runTestFile(
         error
       });
 
+      console.warn(error);
+
       updateCallback(false);
     }
 
