@@ -2,12 +2,13 @@ import * as assert from 'assert';
 
 import { SuiteMethod } from '../interfaces';
 import { getSignInWindow } from '../helpers/get-sign-in-window';
-import { openBrowserAndWaitForSignIn } from '../helpers/open-browser-and-sign-in';
+import {
+  openBrowserAndWaitForSignIn,
+  TestTeams
+} from '../helpers/open-browser-and-sign-in';
+import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 
-export const test: SuiteMethod = async (
-  client,
-  { it }
-) => {
+export const test: SuiteMethod = async (client, { it }) => {
   it('opens and loads a sign-in window', async () => {
     assert.ok(await getSignInWindow(client));
 
@@ -25,6 +26,30 @@ export const test: SuiteMethod = async (
 
   it('signs in', async () => {
     assert.ok(await getSignInWindow(client));
-    assert.ok(await openBrowserAndWaitForSignIn());
+    assert.ok(await openBrowserAndWaitForSignIn(TestTeams[0]));
+  });
+
+  it('does not have a quick switcher', async () => {
+    await getRendererWindowHandle(client);
+
+    const body = await client.$('body');
+    const html = await body.getHTML();
+    const hasSidebar = html.includes('TeamSidebar');
+
+    assert.ok(!hasSidebar);
+  });
+
+  it('signs into a second team', async () => {
+    assert.ok(await openBrowserAndWaitForSignIn(TestTeams[1]));
+  });
+
+  it('has a quick switcher', async () => {
+    await getRendererWindowHandle(client);
+
+    const body = await client.$('body');
+    const html = await body.getHTML();
+    const hasSidebar = html.includes('TeamSidebar');
+
+    assert.ok(hasSidebar);
   });
 };

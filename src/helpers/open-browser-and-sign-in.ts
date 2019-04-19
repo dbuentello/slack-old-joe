@@ -1,25 +1,20 @@
-import { exec } from 'child_process';
+import { shell } from 'electron';
 
 import { getTeamsCount } from './get-teams-count';
 
-export function openBrowserAndSignIn() {
-  const url = 'https://old-joe.slack.com/ssb/signin_redirect';
-  const start =
-    process.platform === 'darwin'
-      ? 'open'
-      : process.platform === 'win32'
-      ? 'start'
-      : 'xdg-open';
+export const TestTeams = ['old-joe', 'oldjoetwo'];
 
-  exec(`${start} ${url}`);
+export function openBrowserAndSignIn(teamName: string) {
+  shell.openExternal(`https://${teamName}.slack.com/ssb/signin_redirect`);
 }
 
 export async function openBrowserAndWaitForSignIn(
+  teamName: string,
   timeout = 10000
 ): Promise<boolean> {
   const teamsCount = await getTeamsCount();
 
-  openBrowserAndSignIn();
+  openBrowserAndSignIn(teamName);
 
   return new Promise<boolean>(async (resolve, reject) => {
     const testInterval = setInterval(async () => {
