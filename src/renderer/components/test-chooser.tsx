@@ -34,6 +34,7 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
 
     return (
       <Checkbox
+        key={input.name}
         checked={!input.disabled}
         label={input.name}
         onChange={onChange}
