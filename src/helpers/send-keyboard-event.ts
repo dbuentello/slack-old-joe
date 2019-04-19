@@ -1,7 +1,8 @@
+import { keyDescriptionForString } from '../lib/keyboard-description-for-string';
+
 export const enum KeyboardEventType {
   KEYUP = 'keyUp',
-  KEYDOWN = 'rawKeyDown',
-  KEYPRESS = 'char'
+  KEYDOWN = 'keyDown'
 }
 
 export interface KeyboardEventOptions {
@@ -28,8 +29,7 @@ export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
     const usingText = `using {${instructions.join(', ')}}`;
 
     await focus();
-
-    runAppleScript(
+    await runAppleScript(
       `tell application "System Events" to keystroke "${text}" ${usingText}`
     );
   }
@@ -40,7 +40,7 @@ export function sendKeyboardEvent(
   options: KeyboardEventOptions
 ) {
   const { type, text, shift, alt, ctrl, cmd } = options;
-  const charCode = text.charCodeAt(0);
+  const description = keyDescriptionForString(options);
 
   let modifiers = 0;
   if (shift) {
@@ -56,10 +56,19 @@ export function sendKeyboardEvent(
     modifiers += 4;
   }
 
+  const _type = type !== KeyboardEventType.KEYDOWN
+    ? text ? 'keyDown' : 'rawKeyDown'
+    : type;
+
   return client.sendCommand('Input.dispatchKeyEvent', {
-    type: type || KeyboardEventType.KEYPRESS,
-    windowsVirtualKeyCode: charCode,
-    modifiers: modifiers,
-    text: text
+    type: _type,
+    modifiers,
+    windowsVirtualKeyCode: description.keyCode,
+    code: description.code,
+    key: description.key,
+    text: text,
+    unmodifiedText: text,
+    location: description.location,
+    isKeypad: description.location === 3
   });
 }

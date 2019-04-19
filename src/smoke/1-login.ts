@@ -8,7 +8,7 @@ import {
 } from '../helpers/open-browser-and-sign-in';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
-import { switchTeam } from '../helpers/switch-teams';
+import { switchToTeam } from '../helpers/switch-teams';
 import { wait } from '../helpers/wait';
 
 export const test: SuiteMethod = async (client, { it }) => {
@@ -56,14 +56,14 @@ export const test: SuiteMethod = async (client, { it }) => {
     assert.ok(hasSidebar);
   });
 
-  it('can switch teams', async () => {
+  it('can switch teams (via shortcut)', async () => {
     await getBrowserViewHandle(client);
 
     let title = await client.getTitle();
     assert.ok(title.includes('Old Joe Two'));
 
-    await switchTeam(1);
-    await wait(300);
+    await switchToTeam(1);
+    await wait(500);
     await getBrowserViewHandle(client);
 
     title = await client.getTitle();

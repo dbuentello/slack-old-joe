@@ -5,7 +5,7 @@ import { wait } from '../helpers/wait';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { reload, reloadEverything } from '../native-commands/reload';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
-import { switchTeam } from '../helpers/switch-teams';
+import { switchToTeam } from '../helpers/switch-teams';
 
 export const test: SuiteMethod = async (
   client,
@@ -62,15 +62,15 @@ export const test: SuiteMethod = async (
     );
   });
 
-  it('can still switch teams post-reload', async () => {
-    await switchTeam(2);
+  it('can still switch teams post-reload (via shortcut)', async () => {
+    await switchToTeam(2);
     await wait(300);
     await getBrowserViewHandle(client);
 
     let title = await client.getTitle();
     assert.ok(title.includes('Old Joe Two'));
 
-    await switchTeam(1);
+    await switchToTeam(1);
     await wait(300);
     await getBrowserViewHandle(client);
 
