@@ -16,12 +16,18 @@ export const test: SuiteMethod = async (
   });
 
   it('can maximize the window', async () => {
-    const beforeDimensions = await client.executeScript('return window.outerHeight', []);
+    const beforeDimensions = await client.executeScript(
+      'return window.outerHeight',
+      []
+    );
 
     await maximize();
     await wait(1000);
 
-    const afterDimensions = await client.executeScript('return window.outerHeight', []);
+    const afterDimensions = await client.executeScript(
+      'return window.outerHeight',
+      []
+    );
 
     console.log(beforeDimensions, afterDimensions);
 
@@ -33,12 +39,18 @@ export const test: SuiteMethod = async (
   });
 
   it('can fullscreen the window', async () => {
-    const beforeDimensions = await client.executeScript('return window.outerHeight', []);
+    const beforeDimensions = await client.executeScript(
+      'return window.outerHeight',
+      []
+    );
 
     await fullscreen();
     await wait(1000);
 
-    const afterDimensions = await client.executeScript('return window.outerHeight', []);
+    const afterDimensions = await client.executeScript(
+      'return window.outerHeight',
+      []
+    );
 
     console.log(beforeDimensions, afterDimensions);
 

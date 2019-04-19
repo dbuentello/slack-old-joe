@@ -15,7 +15,9 @@ export const test: SuiteMethod = async (
 
   it('can reload a workspace', async () => {
     // Leave a breadcrumb to check that we've reloaded
-    assert.ok(await client.executeScript('return window.__old_joe_was_here = true', []));
+    assert.ok(
+      await client.executeScript('return window.__old_joe_was_here = true', [])
+    );
 
     await reload();
     await wait(500);
@@ -24,6 +26,8 @@ export const test: SuiteMethod = async (
     await (await client.$('#client-ui')).waitForExist(10000);
 
     // Our breadcrumb should be gone now
-    assert.ok(!(await client.executeScript('return window.__old_joe_was_here', [])));
+    assert.ok(
+      !(await client.executeScript('return window.__old_joe_was_here', []))
+    );
   });
 };

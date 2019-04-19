@@ -25,15 +25,20 @@ export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
     alt && instructions.push(`option down`);
     ctrl && instructions.push(`control down`);
 
-    const usingText = `using {${instructions.join(', ')}}`
+    const usingText = `using {${instructions.join(', ')}}`;
 
     await focus();
 
-    runAppleScript(`tell application "System Events" to keystroke "${text}" ${usingText}`)
+    runAppleScript(
+      `tell application "System Events" to keystroke "${text}" ${usingText}`
+    );
   }
 }
 
-export function sendKeyboardEvent(client: BrowserObject, options: KeyboardEventOptions) {
+export function sendKeyboardEvent(
+  client: BrowserObject,
+  options: KeyboardEventOptions
+) {
   const { type, text, shift, alt, ctrl, cmd } = options;
   const charCode = text.charCodeAt(0);
 
@@ -51,7 +56,7 @@ export function sendKeyboardEvent(client: BrowserObject, options: KeyboardEventO
     modifiers += 4;
   }
 
-  return client.sendCommand("Input.dispatchKeyEvent", {
+  return client.sendCommand('Input.dispatchKeyEvent', {
     type: type || KeyboardEventType.KEYPRESS,
     windowsVirtualKeyCode: charCode,
     modifiers: modifiers,

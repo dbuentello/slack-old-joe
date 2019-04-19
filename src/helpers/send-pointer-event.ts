@@ -11,7 +11,10 @@ export interface PointerEventOptions {
   y: number;
 }
 
-export function sendPointerEvent(client: BrowserObject, options: PointerEventOptions) {
+export function sendPointerEvent(
+  client: BrowserObject,
+  options: PointerEventOptions
+) {
   const { type, touch, x, y } = options;
 
   let command = '';

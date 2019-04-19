@@ -4,7 +4,10 @@ import { runAppleScriptFile } from '../helpers/applescript';
 
 export async function maximize() {
   if (process.platform === 'darwin') {
-    const scriptPath = path.join(__dirname, '../../static/applescript/maximize.scpt');
+    const scriptPath = path.join(
+      __dirname,
+      '../../static/applescript/maximize.scpt'
+    );
     return runAppleScriptFile(scriptPath);
   }
 }
