@@ -19,3 +19,25 @@ export function waitForFile(
     }, 200);
   });
 }
+
+export function waitForFileInDir(
+  dirPath: string,
+  testFn: (dirContents: Array<string>) => boolean,
+  timeout = 3000
+): Promise<boolean> {
+  return new Promise<boolean>(resolve => {
+    const checkTimeout = setTimeout(() => {
+      clearInterval(checkInterval);
+      resolve(false);
+    }, timeout);
+
+    const checkInterval = setInterval(async () => {
+      const contents = await fs.readdir(dirPath);
+      if (testFn(contents)) {
+        clearInterval(checkInterval);
+        clearTimeout(checkTimeout);
+        resolve(true);
+      }
+    }, 200);
+  });
+}
