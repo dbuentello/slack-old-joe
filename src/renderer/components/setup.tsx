@@ -2,12 +2,13 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import * as path from 'path';
 import { remote, app } from 'electron';
-import { Card, Elevation, InputGroup, Button, FormGroup, Checkbox } from '@blueprintjs/core';
+import { Card, Elevation, InputGroup, Button, FormGroup, Checkbox, Divider } from '@blueprintjs/core';
 
 import { AppState } from '../state';
 import { getBinaryPath } from '../../helpers/get-slack-path';
 import { DRIVER_VERSION } from '../driver';
 import { handleBooleanChange } from '../../helpers/handle-boolean-change';
+import { TestChooser } from './test-chooser';
 
 interface SetupProps {
   appState: AppState;
@@ -19,7 +20,7 @@ export class Setup extends React.Component<SetupProps, {}> {
     super(props);
 
     this.chooseFile = this.chooseFile.bind(this);
-    this.handleLogOutAndCloseAppChange = this.handleLogOutAndCloseAppChange.bind(this);
+    this.closeAtEndChange = this.closeAtEndChange.bind(this);
   }
 
   public render() {
@@ -30,34 +31,38 @@ export class Setup extends React.Component<SetupProps, {}> {
     />;
 
     return (
-      <Card elevation={Elevation.ONE} className='setup-card'>
-        <ul>
-          <li>Make sure your browser is signed into <code>old-joe</code> and <code>old-joe-2</code>.</li>
-          <li>Close Slack, if running.</li>
-          <li>Ensure that you're running a version of Old Joe that matches the Slack app's Electron version. It should be v{DRIVER_VERSION}.x.</li>
-        </ul>
-        <FormGroup
-          label="Slack App to test"
-          labelInfo="(required)"
-        >
-          <InputGroup
-            disabled={true}
-            leftIcon='application'
-            value={this.props.appState.appToTest}
-            rightElement={chooseButton}
+      <>
+        <Card elevation={Elevation.ONE} className='setup-card'>
+          <h3>Old Joe</h3>
+          <ul>
+            <li>Make sure your browser is signed into <code>old-joe</code> and <code>old-joe-2</code>.</li>
+            <li>Close Slack, if running.</li>
+            <li>Ensure that you're running a version of Old Joe that matches the Slack app's Electron version. It should be v{DRIVER_VERSION}.x.</li>
+          </ul>
+          <FormGroup
+            label="Slack App to test"
+            labelInfo="(required)"
+          >
+            <InputGroup
+              disabled={true}
+              leftIcon='application'
+              value={this.props.appState.appToTest}
+              rightElement={chooseButton}
+            />
+          </FormGroup>
+          <Checkbox
+            checked={appState.closeAppAtEnd}
+            label="Close Slack at end of test"
+            onChange={this.closeAtEndChange}
           />
-        </FormGroup>
-        <Checkbox
-          checked={appState.logoutAndCloseApp}
-          label="Logout and close Slack at end of test"
-          onChange={this.handleLogOutAndCloseAppChange}
-        />
-      </Card>
+        </Card>
+        <TestChooser appState={appState} />
+      </>
     );
   }
 
-  public handleLogOutAndCloseAppChange = handleBooleanChange((checked) => {
-    this.props.appState.logoutAndCloseApp = checked;
+  public closeAtEndChange = handleBooleanChange((checked) => {
+    this.props.appState.closeAppAtEnd = checked;
   });
 
   public async chooseFile() {

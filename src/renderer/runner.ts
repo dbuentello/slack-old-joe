@@ -1,22 +1,26 @@
 import {
   SuiteMethodResults,
   SuiteMethods,
-  TestFiles,
+  TestSuites,
   SuiteResult,
-  SuiteMethod
+  SuiteMethod,
+  TestFile
 } from '../interfaces';
 import { takeScreenshot } from '../helpers/screenshot';
-import { SMOKE_TESTS } from '../smoke';
 
-export async function readTests(client: BrowserObject): Promise<TestFiles> {
-  const smokeTestFiles = SMOKE_TESTS;
-  const tests: TestFiles = [];
+export async function readTests(
+  client: BrowserObject,
+  testFiles: Array<TestFile>
+): Promise<TestSuites> {
+  const tests: TestSuites = [];
 
-  for (const testFile of smokeTestFiles) {
-    tests.push({
-      file: testFile.name,
-      suiteMethodResults: await readTestFile(testFile.test, client)
-    });
+  for (const testFile of testFiles) {
+    if (!testFile.disabled) {
+      tests.push({
+        name: testFile.name,
+        suiteMethodResults: await readTestFile(testFile.test, client)
+      });
+    }
   }
 
   return tests;

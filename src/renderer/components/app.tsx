@@ -62,7 +62,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
           height: '100%'
         }}
       >
-        <h2>🐪</h2>
+        <h2 style={{ textAlign: 'right', marginTop: 0 }}>🐪</h2>
 
         {progressOrStandby}
       </div>
@@ -186,20 +186,20 @@ export class App extends React.Component<AppProps, LocalAppState> {
     this.setState({ hasStarted: true });
 
     try {
-      appState.tests = await readTests(client);
+      appState.tests = await readTests(client, appState.availableTestFiles);
       appState.testsTotal = appState.tests.reduce((prev, test) => {
         return prev + test.suiteMethodResults.it.length;
       }, 0);
 
       for (const test of appState.tests) {
         // Don't logout if disabled
-        if (!appState.logoutAndCloseApp && test.file === 'logout') {
+        if (!appState.closeAppAtEnd) {
           continue;
         }
 
         // Now run the suite, updating after each test
         const fileResult = await runTestFile(
-          test.file,
+          test.name,
           test.suiteMethodResults,
           success => {
             if (success) {
@@ -220,7 +220,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   public async stopTests(driver: ChildProcess, client: BrowserObject) {
-    if (this.props.appState.logoutAndCloseApp) {
+    if (this.props.appState.closeAppAtEnd) {
       try {
         // Kill driver and session
         await client.deleteSession();

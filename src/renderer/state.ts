@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
-import { TestFiles, SuiteResult } from '../interfaces';
+import { TestSuites, SuiteResult, TestFile } from '../interfaces';
 import { getSlackPath } from '../helpers/get-slack-path';
+import { SMOKE_TESTS } from '../smoke';
 
 /**
  * The application's state. Exported as a singleton below.
@@ -10,7 +11,8 @@ import { getSlackPath } from '../helpers/get-slack-path';
  */
 export class AppState {
   @observable public progress = 0;
-  @observable public tests: TestFiles = [];
+  @observable public availableTestFiles: Array<TestFile> = SMOKE_TESTS;
+  @observable public tests: TestSuites = [];
   @observable public results: Array<SuiteResult> = [];
   @observable public appToTest: string;
 
@@ -21,7 +23,8 @@ export class AppState {
   @observable public done: boolean = false;
 
   // Configuration
-  @observable public logoutAndCloseApp: boolean = true;
+  @observable public closeAppAtEnd: boolean = true;
+  @observable public disabledTests: Array<string> = [];
 
   constructor() {
     this.setup();

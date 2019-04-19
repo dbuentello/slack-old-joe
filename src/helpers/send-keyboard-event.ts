@@ -56,9 +56,12 @@ export function sendKeyboardEvent(
     modifiers += 4;
   }
 
-  const _type = type !== KeyboardEventType.KEYDOWN
-    ? text ? 'keyDown' : 'rawKeyDown'
-    : type;
+  const _type =
+    type !== KeyboardEventType.KEYDOWN
+      ? text
+        ? 'keyDown'
+        : 'rawKeyDown'
+      : type;
 
   return client.sendCommand('Input.dispatchKeyEvent', {
     type: _type,

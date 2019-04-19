@@ -3,7 +3,14 @@ import * as assert from 'assert';
 import { SuiteMethod } from '../interfaces';
 import { wait } from '../helpers/wait';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
-import { selectNextTeamWindowMenu, selectPreviousTeamWindowMenu, selectTeamWindowMenu, selectNextTeamShortcut, selectPreviousTeamShortcut, switchToTeam } from '../helpers/switch-teams';
+import {
+  selectNextTeamWindowMenu,
+  selectPreviousTeamWindowMenu,
+  selectTeamWindowMenu,
+  selectNextTeamShortcut,
+  selectPreviousTeamShortcut,
+  switchToTeam
+} from '../helpers/switch-teams';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { openQuickSwitcher } from '../helpers/open-quick-switcher';
 
@@ -103,7 +110,7 @@ export const test: SuiteMethod = async (
     await wait(250);
     await getBrowserViewHandle(client);
     await openQuickSwitcher(client);
-    await client.sendKeys([ ...'Old Joe'.split(''), '\uE007' ]);
+    await client.sendKeys([...'Old Joe'.split(''), '\uE007']);
     await wait(250);
     await getBrowserViewHandle(client);
 

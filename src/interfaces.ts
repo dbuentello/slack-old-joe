@@ -10,8 +10,7 @@ export interface SuiteMethods {
   beforeAll: (fn: LifeCycleFn) => void,
   afterAll: (fn: LifeCycleFn) => void,
   beforeEach: (fn: LifeCycleFn) => void,
-  afterEach: (fn: LifeCycleFn) => void,
-  assert
+  afterEach: (fn: LifeCycleFn) => void
 }
 
 export interface SuiteMethodResults {
@@ -23,11 +22,18 @@ export interface SuiteMethodResults {
 }
 
 export interface TestFile {
-  file: string;
-  suiteMethodResults: SuiteMethodResults;
+  name: string;
+  test: SuiteMethod;
+  disabled?: boolean;
 }
 
-export type TestFiles = Array<TestFile>;
+export interface TestSuite {
+  name: string;
+  suiteMethodResults: SuiteMethodResults;
+  disabled?: boolean;
+}
+
+export type TestSuites = Array<TestSuite>;
 
 export type Result = {
   ok: boolean;
