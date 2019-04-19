@@ -1,10 +1,7 @@
-import * as path from 'path';
+import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 
-import { runAppleScriptFile } from '../helpers/applescript';
-
-export function fullscreen() {
+export async function fullscreen() {
   if (process.platform === 'darwin') {
-    const scriptPath = path.join(__dirname, '../../static/applescript/fullscreen.scpt');
-    return runAppleScriptFile(scriptPath);
+    return sendNativeKeyboardEvent({ text: 'f', cmd: true, ctrl: true });
   }
 }

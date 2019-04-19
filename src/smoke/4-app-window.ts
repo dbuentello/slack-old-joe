@@ -5,6 +5,7 @@ import { wait } from '../helpers/wait';
 import { fullscreen } from '../native-commands/fullscreen';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { maximize } from '../native-commands/maximize';
+import { minimize } from '../native-commands/minimize';
 
 export const test: SuiteMethod = async (
   client,
@@ -45,6 +46,21 @@ export const test: SuiteMethod = async (
 
     // Restore
     await fullscreen();
+    await wait(1000);
+  });
+
+  it('can minimize the window', async () => {
+    let isHidden = await client.executeScript('return document.hidden', []);
+    assert.ok(!isHidden);
+
+    await minimize();
+    await wait(1000);
+
+    isHidden = await client.executeScript('return document.hidden', []);
+    assert.ok(isHidden);
+
+    // Restore
+    await minimize(true);
     await wait(1000);
   });
 };

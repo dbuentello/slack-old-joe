@@ -10,7 +10,8 @@ export interface SuiteMethods {
   beforeAll: (fn: LifeCycleFn) => void,
   afterAll: (fn: LifeCycleFn) => void,
   beforeEach: (fn: LifeCycleFn) => void,
-  afterEach: (fn: LifeCycleFn) => void
+  afterEach: (fn: LifeCycleFn) => void,
+  assert
 }
 
 export interface SuiteMethodResults {
