@@ -192,11 +192,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
       }, 0);
 
       for (const test of appState.tests) {
-        // Don't logout if disabled
-        if (!appState.closeAppAtEnd) {
-          continue;
-        }
-
         // Now run the suite, updating after each test
         const fileResult = await runTestFile(
           test.name,

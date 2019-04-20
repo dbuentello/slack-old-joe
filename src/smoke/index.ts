@@ -19,5 +19,5 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'menus', test: menuTest },
   { name: 'logs', test: logTest },
   { name: 'child windows', test: childWindowTest },
-  { name: 'logout', test: logoutTest }
+  { name: 'sign out', test: logoutTest }
 ];
