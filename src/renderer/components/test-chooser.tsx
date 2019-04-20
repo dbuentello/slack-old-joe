@@ -1,7 +1,7 @@
 
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { Card, Elevation, Checkbox } from '@blueprintjs/core';
+import { Card, Elevation, Checkbox, Button } from '@blueprintjs/core';
 
 import { AppState } from '../state';
 import { handleBooleanChange } from '../../helpers/handle-boolean-change';
@@ -23,7 +23,17 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
 
     return (
       <Card elevation={Elevation.ONE} className='test-chooser-card'>
-        <h3>Test Suites</h3>
+        <h3>
+          Test Suites
+          <div style={{ float: 'right' }}>
+            <Button
+              text='None'
+              icon='cross'
+              small={true}
+              onClick={() => appState.availableTestFiles.forEach((t) => (t.disabled = true))}
+            />
+          </div>
+        </h3>
         {tests}
       </Card>
     );
