@@ -146,17 +146,22 @@ export class App extends React.Component<AppProps, LocalAppState> {
     return (
       <>
         <h5>{suiteResult.name}</h5>
-        {suiteResult.results.map(({ ok, name }) => {
+        {suiteResult.results.map(({ ok, name, error }) => {
           const icon = ok ? (
             <Icon icon="endorsed" />
           ) : (
             <Icon icon="error" intent="danger" />
           );
 
+          const errorElement = error ? <pre>{error.toString()}</pre> : null;
+
           return (
-            <p>
-              {icon} {name}
-            </p>
+            <div className="result">
+              <p>
+                {icon} {name}
+              </p>
+              {errorElement}
+            </div>
           );
         })}
       </>
