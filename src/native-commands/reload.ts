@@ -1,19 +1,27 @@
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
-import { focus } from '../helpers/focus';
+import { focus } from './focus';
 import { wait } from '../helpers/wait';
+import { isMac, isWin, isLinux } from '../helpers/os';
 
 export async function reload() {
-  if (process.platform === 'darwin') {
-    await focus;
-    await wait(100);
-    return sendNativeKeyboardEvent({ text: 'r', cmd: true });
-  }
+  await focus();
+  await wait(100);
+
+  return sendNativeKeyboardEvent({
+    text: 'r',
+    cmd: isMac(),
+    ctrl: isWin() || isLinux()
+  });
 }
 
 export async function reloadEverything() {
-  if (process.platform === 'darwin') {
-    await focus;
-    await wait(100);
-    return sendNativeKeyboardEvent({ text: 'r', cmd: true, shift: true });
-  }
+  await focus();
+  await wait(100);
+
+  return sendNativeKeyboardEvent({
+    text: 'r',
+    cmd: isMac(),
+    ctrl: isWin() || isLinux(),
+    shift: true
+  });
 }

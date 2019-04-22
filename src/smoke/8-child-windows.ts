@@ -9,7 +9,6 @@ import {
 } from '../native-commands/mac-about-dialog';
 import { wait } from '../helpers/wait';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
-import { sendKeyboardEvent } from '../helpers/send-keyboard-event';
 
 export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   beforeAll(async () => {

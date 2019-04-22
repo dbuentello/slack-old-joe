@@ -1,4 +1,3 @@
-
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { Card, Elevation, Checkbox, Button } from '@blueprintjs/core';
@@ -22,15 +21,17 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
     const tests = appState.availableTestFiles.map(this.renderTest);
 
     return (
-      <Card elevation={Elevation.ONE} className='test-chooser-card'>
+      <Card elevation={Elevation.ONE} className="test-chooser-card">
         <h3>
           Test Suites
           <div style={{ float: 'right' }}>
             <Button
-              text='None'
-              icon='cross'
+              text="None"
+              icon="cross"
               small={true}
-              onClick={() => appState.availableTestFiles.forEach((t) => (t.disabled = true))}
+              onClick={() =>
+                appState.availableTestFiles.forEach(t => (t.disabled = true))
+              }
             />
           </div>
         </h3>
@@ -40,7 +41,9 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
   }
 
   public renderTest(input: TestFile) {
-    const onChange = handleBooleanChange((checked) => (input.disabled = !checked));
+    const onChange = handleBooleanChange(
+      checked => (input.disabled = !checked)
+    );
 
     return (
       <Checkbox
@@ -49,6 +52,6 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
         label={input.name}
         onChange={onChange}
       />
-    )
+    );
   }
 }

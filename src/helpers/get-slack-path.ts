@@ -30,6 +30,8 @@ export async function getSlackPath(version?: string): Promise<string> {
     console.log(warning);
   }
 
+  console.log(`getSlackPath(): Returning ${expectedPath}`);
+
   return expectedPath;
 }
 
@@ -44,7 +46,11 @@ async function getSlackPathWindows(version?: string) {
     const versions: Array<string> = [];
 
     for (const item of slackDirContents) {
-      if ((await fs.stat(item)).isDirectory()) {
+      const itemPath = path.join(slackDir, item);
+      const isDir = (await fs.stat(itemPath)).isDirectory();
+      const isApp = item.startsWith('app');
+
+      if (isDir && isApp) {
         versions.push(item);
       }
     }
@@ -52,7 +58,9 @@ async function getSlackPathWindows(version?: string) {
     versionToUse = versions.reduce((prevHighest, current) => {
       const cleanedValue = current.replace('app-', '');
 
-      return semver.gt(cleanedValue, prevHighest) ? cleanedValue : prevHighest;
+      return semver.valid(cleanedValue) && semver.gt(cleanedValue, prevHighest)
+        ? cleanedValue
+        : prevHighest;
     }, '0.0.0');
   }
 

@@ -1,6 +1,6 @@
 import * as robot from 'robotjs';
 
-import { focus } from './focus';
+import { focus } from '../native-commands/focus';
 import { keyDescriptionForString } from '../lib/keyboard-description-for-string';
 
 export const enum KeyboardEventType {
@@ -21,7 +21,7 @@ export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
   const { text, shift, alt, ctrl, cmd } = options;
   const modifier: Array<string> = [];
 
-  if (process.platform === 'darwin' && text === '{' || text === '}') {
+  if ((process.platform === 'darwin' && text === '{') || text === '}') {
     return sendAppleScriptKeyboardEvent(options);
   }
 

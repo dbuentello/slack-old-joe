@@ -101,8 +101,13 @@ export class App extends React.Component<AppProps, LocalAppState> {
     return (
       <>
         {this.renderResults()}
-        <Card interactive={true} elevation={Elevation.TWO} className='progress-card' onClick={() => shell.showItemInFolder(getScreenshotDir())}>
-          <Spinner value={percentageDone}/>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className="progress-card"
+          onClick={() => shell.showItemInFolder(getScreenshotDir())}
+        >
+          <Spinner value={percentageDone} />
           <div>
             <Icon icon="endorsed" /> Successful tests: {testsDone}
             <Divider />
@@ -110,7 +115,9 @@ export class App extends React.Component<AppProps, LocalAppState> {
             {done ? (
               <>
                 <Divider />
-                <span>All done! Click here for screenshots <Icon icon='camera' /></span>
+                <span>
+                  All done! Click here for screenshots <Icon icon="camera" />
+                </span>
               </>
             ) : null}
           </div>
@@ -121,15 +128,18 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
   public renderResults() {
     const { results } = this.props.appState;
-    const resultElements = results.length > 0
-      ? results.map(this.renderResult)
-      : <h5>Waiting for test results...</h5>
+    const resultElements =
+      results.length > 0 ? (
+        results.map(this.renderResult)
+      ) : (
+        <h5>Waiting for test results...</h5>
+      );
 
     return (
-      <Card elevation={Elevation.ONE} className='result-card'>
+      <Card elevation={Elevation.ONE} className="result-card">
         {resultElements}
       </Card>
-    )
+    );
   }
 
   public renderResult(suiteResult: SuiteResult) {
@@ -137,9 +147,11 @@ export class App extends React.Component<AppProps, LocalAppState> {
       <>
         <h5>{suiteResult.name}</h5>
         {suiteResult.results.map(({ ok, name }) => {
-          const icon = ok
-            ? <Icon icon='endorsed' />
-            : <Icon icon='error' intent='danger' />;
+          const icon = ok ? (
+            <Icon icon="endorsed" />
+          ) : (
+            <Icon icon="error" intent="danger" />
+          );
 
           return (
             <p>
@@ -148,7 +160,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
           );
         })}
       </>
-    )
+    );
   }
 
   public async run() {
