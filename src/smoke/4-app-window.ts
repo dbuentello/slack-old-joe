@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
 import { wait } from '../helpers/wait';
@@ -69,7 +69,7 @@ export const test: SuiteMethod = async (
     await wait(1000);
 
     isHidden = await client.executeScript('return document.hidden', []);
-    assert.ok(isHidden);
+    assert.ok(isHidden, 'document.hidden returns true');
 
     // Restore
     await minimize(true);

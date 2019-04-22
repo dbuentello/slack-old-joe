@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import { assert } from 'chai';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { remote } from 'electron';

@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';

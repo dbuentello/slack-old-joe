@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
 import { getSignInWindow } from '../helpers/get-sign-in-window';
@@ -16,7 +16,7 @@ export const test: SuiteMethod = async (client, { it }) => {
     assert.ok(await getSignInWindow(client));
 
     const url = await client.getUrl();
-    assert.ok(url.startsWith('https://slack.com/ssb/first'));
+    assert.ok(url.startsWith('https://slack.com/ssb/first'), 'Starts with slack.com/ssb/first');
   });
 
   it('has a visible sign-in button', async () => {
@@ -28,8 +28,8 @@ export const test: SuiteMethod = async (client, { it }) => {
   });
 
   it('signs in', async () => {
-    assert.ok(await getSignInWindow(client));
-    assert.ok(await openBrowserAndWaitForSignIn(TestTeams[0]));
+    assert.ok(await getSignInWindow(client), 'sign-in window exists');
+    assert.ok(await openBrowserAndWaitForSignIn(TestTeams[0]), 'sign-in was successful');
   });
 
   it('does not have a quick switcher', async () => {
