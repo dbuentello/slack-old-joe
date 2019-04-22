@@ -1,5 +1,5 @@
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
-import { focus } from './focus';
+import { focus } from '../helpers/focus';
 import { wait } from '../helpers/wait';
 
 export async function reload() {

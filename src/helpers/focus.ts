@@ -1,4 +1,4 @@
-import { runAppleScript } from '../helpers/applescript';
+import { runAppleScript } from './applescript';
 
 export async function focus() {
   if (process.platform === 'darwin') {

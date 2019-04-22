@@ -1,3 +1,6 @@
+import * as robot from 'robotjs';
+
+import { focus } from './focus';
 import { keyDescriptionForString } from '../lib/keyboard-description-for-string';
 
 export const enum KeyboardEventType {
@@ -16,23 +19,37 @@ export interface KeyboardEventOptions {
 
 export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
   const { text, shift, alt, ctrl, cmd } = options;
+  const modifier: Array<string> = [];
 
-  if (process.platform === 'darwin') {
-    const { runAppleScript } = await import('./applescript');
-    const instructions: Array<string> = [];
-
-    cmd && instructions.push(`command down`);
-    shift && instructions.push(`shift down`);
-    alt && instructions.push(`option down`);
-    ctrl && instructions.push(`control down`);
-
-    const usingText = `using {${instructions.join(', ')}}`;
-
-    await focus();
-    await runAppleScript(
-      `tell application "System Events" to keystroke "${text}" ${usingText}`
-    );
+  if (process.platform === 'darwin' && text === '{' || text === '}') {
+    return sendAppleScriptKeyboardEvent(options);
   }
+
+  cmd && modifier.push(`command`);
+  shift && modifier.push(`shift`);
+  alt && modifier.push(`alt`);
+  ctrl && modifier.push(`control`);
+
+  await focus();
+  robot.keyTap(text, modifier);
+}
+
+async function sendAppleScriptKeyboardEvent(options: KeyboardEventOptions) {
+  const { runAppleScript } = await import('./applescript');
+  const { text, shift, alt, ctrl, cmd } = options;
+  const instructions: Array<string> = [];
+
+  cmd && instructions.push(`command down`);
+  shift && instructions.push(`shift down`);
+  alt && instructions.push(`option down`);
+  ctrl && instructions.push(`control down`);
+
+  const usingText = `using {${instructions.join(', ')}}`;
+
+  await focus();
+  await runAppleScript(
+    `tell application "System Events" to keystroke "${text}" ${usingText}`
+  );
 }
 
 export function sendKeyboardEvent(
