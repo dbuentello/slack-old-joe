@@ -17,15 +17,17 @@ export async function minimize(unminimize?: boolean) {
 
   // Windows
   if (isWin()) {
-    if (unminimize) {
-      const scriptPath = path.join(
-        __dirname,
-        '../../static/powershell/minimize.ps1'
-      );
+    const scriptPath = path.join(
+      __dirname,
+      '../../static/powershell/show-window.ps1'
+    );
 
-      return runPowerShellScript(scriptPath);
+    if (unminimize) {
+      // 9 means restore
+      await runPowerShellScript(scriptPath, `-showState 9`);
     } else {
-      return sendNativeKeyboardEvent({ text: 'down', cmd: true });
+      // 2 means minify
+      await runPowerShellScript(scriptPath, `-showState 2`);
     }
   }
 }

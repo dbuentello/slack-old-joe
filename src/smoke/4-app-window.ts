@@ -63,7 +63,7 @@ export const test: SuiteMethod = async (
 
   it('can minimize the window', async () => {
     let isHidden = await client.executeScript('return document.hidden', []);
-    assert.ok(!isHidden);
+    assert.ok(!isHidden, 'document.hidden returns false');
 
     await minimize();
     await wait(1000);

@@ -2,7 +2,6 @@ import { app } from 'electron';
 
 import { getOrCreateMainWindow } from './windows';
 import { shouldQuit } from './squirrel';
-import { restore, clean } from '../helpers/clean-restore';
 
 /**
  * Handle the app's "ready" event. This is essentially

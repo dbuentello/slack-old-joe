@@ -2,9 +2,12 @@ import { ChildProcess } from 'child_process';
 
 const spawn = require('cross-spawn');
 
-export function runPowerShellScript(scriptPath: string): Promise<ChildProcess> {
+export function runPowerShellScript(
+  scriptPath: string,
+  scriptArgs: string = ''
+): Promise<ChildProcess> {
   return new Promise<ChildProcess>((resolve, reject) => {
-    const psArgs = `& {& '${scriptPath}' }`;
+    const psArgs = `& {& '${scriptPath}' ${scriptArgs} }`;
     const args = [
       '-ExecutionPolicy',
       'Bypass',

@@ -12,9 +12,9 @@ export async function focus() {
   if (isWin()) {
     const scriptPath = path.join(
       __dirname,
-      '../../static/powershell/minimize.ps1'
+      '../../static/powershell/show-window.ps1'
     );
 
-    await runPowerShellScript(scriptPath);
+    await runPowerShellScript(scriptPath, `-ShowState 9`);
   }
 }
