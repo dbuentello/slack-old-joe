@@ -86,9 +86,14 @@ export class App extends React.Component<AppProps, LocalAppState> {
         <Setup appState={this.props.appState} />
         <Button
           icon="play"
-          rightIcon={this.state.startingIn > 0 ? (
-            <Spinner value={this.state.startingIn / TIME_TO_LAUNCH} size={20} />
-          ) : null}
+          rightIcon={
+            this.state.startingIn > 0 ? (
+              <Spinner
+                value={this.state.startingIn / TIME_TO_LAUNCH}
+                size={20}
+              />
+            ) : null
+          }
           large={true}
           text={text}
           disabled={this.state.hasCountdownStarted}

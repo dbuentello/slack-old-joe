@@ -1,6 +1,5 @@
 export async function doTimes(howManyTimes: number, fn: () => void) {
-  const length = Array(howManyTimes)
-    .fill(null);
+  const length = Array(howManyTimes).fill(null);
 
   console.log(`Calling method ${howManyTimes} times`, fn);
 

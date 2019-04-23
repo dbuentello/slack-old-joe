@@ -1,4 +1,7 @@
-export async function getBrowserViewHandle(client: BrowserObject, teamUrl = '') {
+export async function getBrowserViewHandle(
+  client: BrowserObject,
+  teamUrl = ''
+) {
   const windows = await client.getWindowHandles();
   let handle: string = '';
   let title: string = '';

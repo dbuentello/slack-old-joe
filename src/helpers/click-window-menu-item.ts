@@ -68,7 +68,7 @@ async function clickWindowMenuItemWin(menuName: string, itemName: string) {
 
     // Go up n times
     await doTimes(menuMap[menuName].index, async () => {
-      robot.keyTap('up')
+      robot.keyTap('up');
       await wait(500);
     });
 
@@ -78,7 +78,7 @@ async function clickWindowMenuItemWin(menuName: string, itemName: string) {
 
     // Go up n times
     await doTimes(menuMap[menuName].items[itemName], async () => {
-      robot.keyTap('up')
+      robot.keyTap('up');
       await wait(500);
     });
 
