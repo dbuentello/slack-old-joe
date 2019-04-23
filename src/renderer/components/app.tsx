@@ -19,6 +19,8 @@ import { ChildProcess } from 'child_process';
 import { getScreenshotDir } from '../../helpers/screenshot';
 import { SuiteResult } from '../../interfaces';
 import { Setup } from './setup';
+import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
+import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
 
 interface AppProps {
   appState: AppState;
@@ -45,7 +47,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   public render() {
-    const { appState } = this.props;
     const { hasStarted, startingIn } = this.state;
     const progressOrStandby =
       hasStarted && !startingIn
@@ -169,13 +170,19 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   public async run() {
+    const { appState } = this.props;
+
     this.setState({ hasCountdownStarted: true });
 
     await clean();
 
-    // Start the driver and the client
-    const { appState } = this.props;
+    // Should we seed a user data dir? We'll do so if
+    // the sign-in test is disabled
+    if (isSignInDisabled(appState)) {
+      await seedUserDataDir();
+    }
 
+    // Start the driver and the client
     if (!appState.appToTest) {
       throw new Error('Please select an app to test first!');
     }
