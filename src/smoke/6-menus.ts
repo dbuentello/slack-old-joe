@@ -23,10 +23,11 @@ export const test: SuiteMethod = async (
   });
 
   it('can select the "next" workspace using the window menu', async () => {
+    await selectNextTeamWindowMenu();
+
     const beforeTitle = await client.getTitle();
 
     await selectNextTeamWindowMenu();
-    await wait(300);
 
     await getBrowserViewHandle(client);
     const afterTitle = await client.getTitle();
@@ -38,7 +39,6 @@ export const test: SuiteMethod = async (
     const beforeTitle = await client.getTitle();
 
     await selectPreviousTeamWindowMenu();
-    await wait(300);
 
     await getBrowserViewHandle(client);
     const afterTitle = await client.getTitle();
@@ -48,13 +48,11 @@ export const test: SuiteMethod = async (
 
   it('can select a workspace by name using the window menu', async () => {
     await selectTeamWindowMenu('Old Joe');
-    await wait(200);
 
     const beforeTitle = await client.getTitle();
     assert.ok(beforeTitle.includes('Old Joe') && !beforeTitle.includes('Two'));
 
     await selectTeamWindowMenu('Old Joe Two');
-    await wait(200);
     await getBrowserViewHandle(client);
 
     const afterTitle = await client.getTitle();

@@ -1,4 +1,4 @@
-export async function getBrowserViewHandle(client: BrowserObject) {
+export async function getBrowserViewHandle(client: BrowserObject, teamUrl = '') {
   const windows = await client.getWindowHandles();
   let handle: string = '';
   let title: string = '';
@@ -8,9 +8,10 @@ export async function getBrowserViewHandle(client: BrowserObject) {
     title = await client.getTitle();
 
     if (title.endsWith('Slack')) {
+      const isRemote = (await client.getUrl()).startsWith(`https://${teamUrl}`);
       const isHidden = await client.executeScript(`return document.hidden`, []);
 
-      if (!isHidden) {
+      if (!isHidden && isRemote) {
         handle = window;
         break;
       }

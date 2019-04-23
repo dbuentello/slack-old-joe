@@ -1,8 +1,23 @@
+Add-Type @"
+  using System;
+  using System.Runtime.InteropServices;
+  public class OldJoe {
+     [DllImport("user32.dll")]
+     [return: MarshalAs(UnmanagedType.Bool)]
+     public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+     [DllImport("user32.dll")]
+     [return: MarshalAs(UnmanagedType.Bool)]
+     public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+  }
+"@
+
 # Access Slack
-$process = Get-Process slack | Select-Object -Index 0
+$process = Get-Process slack | ForEach-Object {
+  # get the process window handle
+  $hwnd = $_.MainWindowHandle
 
-# get the process window handle
-$title = $process.MainWindowTitle
-
-$wshell = New-Object -ComObject wscript.shell
-$wshell.AppActivate($title)
+  # restore the window handle again
+  [OldJoe]::SetForegroundWindow($hwnd)
+  [OldJoe]::ShowWindow($hwnd, 3)
+}

@@ -3,6 +3,7 @@ import * as path from 'path';
 import { runAppleScript } from '../helpers/applescript';
 import { isMac, isWin } from '../helpers/os';
 import { runPowerShellScript } from '../helpers/powershell';
+import { wait } from '../helpers/wait';
 
 export async function focus() {
   if (isMac()) {
@@ -12,9 +13,10 @@ export async function focus() {
   if (isWin()) {
     const scriptPath = path.join(
       __dirname,
-      '../../static/powershell/show-window.ps1'
+      '../../static/powershell/focus.ps1'
     );
 
-    await runPowerShellScript(scriptPath, `-ShowState 9`);
+    await runPowerShellScript(scriptPath);
+    await wait(300);
   }
 }

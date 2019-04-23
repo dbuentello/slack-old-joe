@@ -21,6 +21,10 @@ import { SuiteResult } from '../../interfaces';
 import { Setup } from './setup';
 import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
 import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
+import { wait } from '../../helpers/wait';
+import { killSlack } from '../../native-commands/kill';
+
+const TIME_TO_LAUNCH = 5000;
 
 interface AppProps {
   appState: AppState;
@@ -71,20 +75,20 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   public renderStartingIn() {
-    const { hasCountdownStarted, hasStarted } = this.state;
+    const { hasCountdownStarted, hasStarted, startingIn } = this.state;
     const text =
       hasCountdownStarted && !hasStarted
-        ? `Preparing for Lift-Off...`
+        ? `Preparing for Lift-Off... (${startingIn})`
         : `Start Smoke Tests`;
 
     return (
       <>
         <Setup appState={this.props.appState} />
-        {this.state.startingIn > 0 ? (
-          <Spinner value={this.state.startingIn / 3000} />
-        ) : null}
         <Button
           icon="play"
+          rightIcon={this.state.startingIn > 0 ? (
+            <Spinner value={this.state.startingIn / TIME_TO_LAUNCH} size={20} />
+          ) : null}
           large={true}
           text={text}
           disabled={this.state.hasCountdownStarted}
@@ -172,7 +176,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
   public async run() {
     const { appState } = this.props;
 
-    this.setState({ hasCountdownStarted: true });
+    this.setState({ hasCountdownStarted: true, startingIn: TIME_TO_LAUNCH });
 
     await clean();
 
@@ -180,11 +184,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     // the sign-in test is disabled
     if (isSignInDisabled(appState)) {
       await seedUserDataDir();
-    }
-
-    // Start the driver and the client
-    if (!appState.appToTest) {
-      throw new Error('Please select an app to test first!');
     }
 
     const driver = await spawnChromeDriver();
@@ -201,7 +200,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
       await this.runTests(driver, client);
       await this.stopTests(driver, client);
-    }, 3000);
+    }, TIME_TO_LAUNCH);
   }
 
   public async runTests(_driver: ChildProcess, client: BrowserObject) {
@@ -245,7 +244,11 @@ export class App extends React.Component<AppProps, LocalAppState> {
         await client.deleteSession();
         await driver.kill();
 
+        // Kill Slack, if still running
+        await killSlack();
+
         // Restore a possible user data backup
+        await wait(300);
         await restore();
       } catch (error) {
         console.warn(error);

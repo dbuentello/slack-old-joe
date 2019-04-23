@@ -1,5 +1,6 @@
 import { runAppleScript } from '../helpers/applescript';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
+import { isMac } from '../helpers/os';
 
 const getAppleScriptValue = () =>
   `
@@ -17,7 +18,9 @@ export async function getAboutBoxValue() {
 }
 
 export async function openAboutBox() {
-  return clickWindowMenuItem('Slack', 'About Slack');
+  const menuName = isMac() ? `Slack` : `Help`;
+
+  return clickWindowMenuItem(menuName, 'About Slack');
 }
 
 const closeAboutBoxScriptValue = () =>

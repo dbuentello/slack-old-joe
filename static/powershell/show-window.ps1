@@ -2,11 +2,6 @@ param (
   [int] $showState = 9
 )
 
-# this enum works in PowerShell 5 only
-# in earlier versions, simply remove the enum,
-# and use the numbers for the desired window state
-# directly
-
 # Enum ShowStates
 # {
 #   Hide = 0
@@ -23,17 +18,25 @@ param (
 #   ForceMinimize = 11
 # }
 
-# the C#-style signature of an API function (see also www.pinvoke.net)
-$code = '[DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);'
+Add-Type @"
+  using System;
+  using System.Runtime.InteropServices;
+  public class OldJoe {
+     [DllImport("user32.dll")]
+     [return: MarshalAs(UnmanagedType.Bool)]
+     public static extern bool SetForegroundWindow(IntPtr hWnd);
 
-# add signature as new type to PowerShell (for this session)
-$type = Add-Type -MemberDefinition $code -Name myAPI -PassThru
+     [DllImport("user32.dll")]
+     [return: MarshalAs(UnmanagedType.Bool)]
+     public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+  }
+"@
 
 # Access Slack
-$process = Get-Process Firefox | Select-Object -Index 0
+$process = Get-Process slack | ForEach-Object {
+  # get the process window handle
+  $hwnd = $_.MainWindowHandle
 
-# get the process window handle
-$hwnd = $process.MainWindowHandle
-
-# restore the window handle again
-$type::ShowWindowAsync($hwnd, $showState)
+  # Set the handle
+  [OldJoe]::ShowWindow($hwnd, $showState)
+}

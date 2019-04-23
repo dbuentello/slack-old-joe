@@ -16,6 +16,8 @@ export class Root {
    * render process.
    */
   public async setup(): Promise<void | Element | React.Component> {
+    localStorage.debug = '*';
+
     const React = await import('react');
     const { render } = await import('react-dom');
     const { App } = await import('./components/app');

@@ -1,5 +1,6 @@
 import { sendNativeKeyboardEvent } from './send-keyboard-event';
 import { clickWindowMenuItem } from './click-window-menu-item';
+import { wait } from './wait';
 
 const PLATFORM_MODIFIER =
   process.platform === 'darwin' ? { cmd: true } : { ctrl: true };
@@ -30,13 +31,16 @@ export async function selectPreviousTeamShortcut() {
 }
 
 export async function selectNextTeamWindowMenu() {
-  return clickWindowMenuItem('Window', 'Select Next Workspace');
+  await clickWindowMenuItem('Window', 'Select Next Workspace');
+  await wait(300);
 }
 
 export async function selectPreviousTeamWindowMenu() {
-  return clickWindowMenuItem('Window', 'Select Previous Workspace');
+  await clickWindowMenuItem('Window', 'Select Previous Workspace');
+  await wait(300);
 }
 
 export async function selectTeamWindowMenu(name: string) {
-  return clickWindowMenuItem('Window', name);
+  await clickWindowMenuItem('Window', name);
+  await wait(300);
 }
