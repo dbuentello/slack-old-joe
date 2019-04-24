@@ -16,7 +16,7 @@ import { spawnChromeDriver } from '../driver';
 import { getClient } from '../client';
 import { runTestFile, readTests } from '../runner';
 import { ChildProcess } from 'child_process';
-import { getScreenshotDir } from '../../helpers/screenshot';
+import { getReportDir, writeReport } from '../../report';
 import { SuiteResult } from '../../interfaces';
 import { Setup } from './setup';
 import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
@@ -115,7 +115,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
           interactive={true}
           elevation={Elevation.TWO}
           className="progress-card"
-          onClick={() => shell.showItemInFolder(getScreenshotDir())}
+          onClick={() => shell.showItemInFolder(getReportDir())}
         >
           <Spinner value={percentageDone} />
           <div>
@@ -237,6 +237,8 @@ export class App extends React.Component<AppProps, LocalAppState> {
       }
 
       appState.done = true;
+
+      await writeReport(appState.results);
     } catch (error) {
       console.warn(error);
     }

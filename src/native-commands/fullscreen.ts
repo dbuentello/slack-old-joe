@@ -1,11 +1,13 @@
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
+import { isMac, isWin, isLinux } from '../helpers/os';
+import { wait } from '../helpers/wait';
 
 export async function fullscreen() {
-  if (process.platform === 'darwin') {
-    return sendNativeKeyboardEvent({ text: 'f', cmd: true, ctrl: true });
-  }
-
-  if (process.platform === 'win32' || process.platform === 'linux') {
-    return sendNativeKeyboardEvent({ text: 'f', shift: true, ctrl: true });
-  }
+  await sendNativeKeyboardEvent({
+    text: 'f',
+    cmd: isMac(),
+    shift: isWin() || isLinux(),
+    ctrl: true
+  });
+  await wait(350);
 }

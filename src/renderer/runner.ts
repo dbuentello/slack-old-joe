@@ -6,7 +6,7 @@ import {
   SuiteMethod,
   TestFile
 } from '../interfaces';
-import { takeScreenshot } from '../helpers/screenshot';
+import { takeScreenshot } from '../report';
 
 export async function readTests(
   client: BrowserObject,

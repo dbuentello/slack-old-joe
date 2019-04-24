@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
-import { wait } from '../helpers/wait';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import {
   selectNextTeamWindowMenu,

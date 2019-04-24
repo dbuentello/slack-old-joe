@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import * as os from 'os';
 import * as path from 'path';
-import { remote, app } from 'electron';
+import { remote } from 'electron';
 import {
   Card,
   Elevation,

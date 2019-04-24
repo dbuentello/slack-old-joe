@@ -7,6 +7,7 @@ import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { waitForFile } from '../helpers/wait-for-file';
 import { wait } from '../helpers/wait';
+import { switchToChannel } from '../helpers/switch-channel';
 
 const DOWNLOADS_DIR = remote.app.getPath('downloads');
 
@@ -20,7 +21,7 @@ export const test: SuiteMethod = async (
 
   it('can download a file in-channel', async () => {
     // Switch to the downloads channel
-    (await client.$('=downloads')).click();
+    await switchToChannel(client, 'downloads');
 
     // Wait for the description to show up
     const fileDesc = await client.$('span=test-file');
@@ -42,7 +43,7 @@ export const test: SuiteMethod = async (
 
   it('can pause and resume a download', async () => {
     // Switch to the downloads channel
-    (await client.$('=downloads')).click();
+    await switchToChannel(client, 'downloads');
 
     // Open the downloads panel
     (await client.$('#flex_menu_toggle')).click();

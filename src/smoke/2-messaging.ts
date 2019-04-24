@@ -2,6 +2,7 @@ import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
+import { switchToChannel } from '../helpers/switch-channel';
 
 async function assertVideo(client: BrowserObject) {
   // Play the video
@@ -42,7 +43,7 @@ export const test: SuiteMethod = async (
 
   it('can switch to the #random channel', async () => {
     // Switch to the random channel
-    (await client.$('=random')).click();
+    await switchToChannel(client, 'random');
 
     // Wait for the description to show up
     const randomDesc = await client.$(
@@ -66,7 +67,7 @@ export const test: SuiteMethod = async (
 
   it('can play a YouTube video', async () => {
     // Switch to the random channel
-    await (await client.$('=ads')).click();
+    await switchToChannel(client, 'ads');
 
     // Wait for the description to show up
     const randomDesc = await client.$('span=Old Camel ads');

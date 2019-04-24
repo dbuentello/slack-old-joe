@@ -9,6 +9,7 @@ import {
 } from '../native-commands/mac-about-dialog';
 import { wait } from '../helpers/wait';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
+import { switchToChannel } from '../helpers/switch-channel';
 
 export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   beforeAll(async () => {
@@ -57,7 +58,7 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
 
   it('creates a post window', async () => {
     // Switch to the posts channel
-    await (await client.$('=posts')).click();
+    await switchToChannel(client, 'posts');
 
     // Open the plus menu, wait 100ms, create a new post
     await (await client.$('#primary_file_button')).click();
