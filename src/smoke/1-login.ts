@@ -9,7 +9,6 @@ import {
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { switchToTeam } from '../helpers/switch-teams';
-import { wait } from '../helpers/wait';
 
 export const test: SuiteMethod = async (client, { it }) => {
   it('opens and loads a sign-in window', async () => {
@@ -68,9 +67,7 @@ export const test: SuiteMethod = async (client, { it }) => {
     let title = await client.getTitle();
     assert.ok(title.includes('Old Joe Two'));
 
-    await switchToTeam(1);
-    await wait(500);
-    await getBrowserViewHandle(client);
+    await switchToTeam(1, client);
 
     title = await client.getTitle();
     assert.ok(!title.includes('Old Joe Two') && title.includes('Old Joe'));

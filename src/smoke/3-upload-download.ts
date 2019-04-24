@@ -47,12 +47,12 @@ export const test: SuiteMethod = async (
     // Open the downloads panel
     (await client.$('#flex_menu_toggle')).click();
     const downloadsBtn = await client.$('#downloads');
-    assert.ok(await downloadsBtn.waitForDisplayed(1000));
+    assert.ok(await downloadsBtn.waitForDisplayed(2000));
     await downloadsBtn.click();
 
     // Wait for the panel to show up
     const downloadsHeader = await client.$('span=Downloads');
-    await downloadsHeader.waitForExist(1000);
+    await downloadsHeader.waitForExist(2000);
     await wait(500);
 
     // Download the large file
@@ -61,12 +61,12 @@ export const test: SuiteMethod = async (
 
     // Pause the download right away
     const pauseBtn = await client.$('.p-download_item__link--pause');
-    assert.ok(await pauseBtn.waitForDisplayed(2000));
+    assert.ok(await pauseBtn.waitForDisplayed(5000));
     await pauseBtn.click();
 
     // We should now have a resume button
     const resumeBtn = await client.$('.p-download_item__link--resume');
-    assert.ok(await resumeBtn.waitForDisplayed(2000));
+    assert.ok(await resumeBtn.waitForDisplayed(5000));
 
     // Let the network pipes cool down (not required, I just want to wait a sec)
     // and check if the file is actually no longer downloading

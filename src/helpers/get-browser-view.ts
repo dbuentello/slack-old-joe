@@ -1,7 +1,12 @@
+import { wait } from './wait';
+
 export async function getBrowserViewHandle(
   client: BrowserObject,
+  waitForMsBefore = 0,
   teamUrl = ''
 ) {
+  if (wait) await wait(waitForMsBefore);
+
   const windows = await client.getWindowHandles();
   let handle: string = '';
   let title: string = '';

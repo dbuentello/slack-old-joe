@@ -23,13 +23,12 @@ export const test: SuiteMethod = async (
   });
 
   it('can select the "next" workspace using the window menu', async () => {
-    await selectNextTeamWindowMenu();
+    await selectNextTeamWindowMenu(client);
 
     const beforeTitle = await client.getTitle();
 
-    await selectNextTeamWindowMenu();
+    await selectNextTeamWindowMenu(client);
 
-    await getBrowserViewHandle(client);
     const afterTitle = await client.getTitle();
 
     assert.notEqual(beforeTitle, afterTitle);
@@ -38,34 +37,27 @@ export const test: SuiteMethod = async (
   it('can select the "previous" workspace using the window menu', async () => {
     const beforeTitle = await client.getTitle();
 
-    await selectPreviousTeamWindowMenu();
+    await selectPreviousTeamWindowMenu(client);
 
-    await getBrowserViewHandle(client);
     const afterTitle = await client.getTitle();
 
     assert.notEqual(beforeTitle, afterTitle);
   });
 
   it('can select a workspace by name using the window menu', async () => {
-    await selectTeamWindowMenu('Old Joe');
-
+    await selectTeamWindowMenu('Old Joe', client);
     const beforeTitle = await client.getTitle();
-    assert.ok(beforeTitle.includes('Old Joe') && !beforeTitle.includes('Two'));
+    assert.notInclude(beforeTitle, 'Old Joe Two');
+    assert.include(beforeTitle, 'Old Joe');
 
-    await selectTeamWindowMenu('Old Joe Two');
-    await getBrowserViewHandle(client);
-
+    await selectTeamWindowMenu('Old Joe Two', client);
     const afterTitle = await client.getTitle();
-    assert.ok(afterTitle.includes('Old Joe Two'));
+    assert.include(afterTitle, 'Old Joe Two');
   });
 
   it('can select the "next" workspace using the shortcut', async () => {
     const beforeTitle = await client.getTitle();
-
-    await selectNextTeamShortcut();
-    await wait(300);
-
-    await getBrowserViewHandle(client);
+    await selectNextTeamShortcut(client);
     const afterTitle = await client.getTitle();
 
     assert.notEqual(beforeTitle, afterTitle);
@@ -73,11 +65,7 @@ export const test: SuiteMethod = async (
 
   it('can select the "previous" workspace using the shortcut', async () => {
     const beforeTitle = await client.getTitle();
-
-    await selectPreviousTeamShortcut();
-    await wait(300);
-
-    await getBrowserViewHandle(client);
+    await selectPreviousTeamShortcut(client);
     const afterTitle = await client.getTitle();
 
     assert.notEqual(beforeTitle, afterTitle);
@@ -88,29 +76,25 @@ export const test: SuiteMethod = async (
 
     // In the dock, "Old Joe" should be number six from the bottom
     await clickDockMenuItem(6);
-    await wait(500);
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(client, 500);
 
     const beforeTitle = await client.getTitle();
     assert.ok(beforeTitle.includes('Old Joe') && !beforeTitle.includes('Two'));
 
     // In the dock, "Old Joe Two" should be number five from the bottom
     await clickDockMenuItem(5);
-    await wait(500);
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(client, 500);
 
     const afterTitle = await client.getTitle();
     assert.ok(afterTitle.includes('Old Joe Two'));
   });
 
   it('can select a workspace using the Quick Switcher', async () => {
-    await switchToTeam(2);
-    await wait(250);
-    await getBrowserViewHandle(client);
+    await switchToTeam(2, client);
+    await getBrowserViewHandle(client, 300);
     await openQuickSwitcher(client);
     await client.sendKeys([...'Old Joe'.split(''), '\uE007']);
-    await wait(250);
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(client, 300);
 
     const afterTitle = await client.getTitle();
     assert.ok(afterTitle.includes('Old Joe') && !afterTitle.includes('Two'));

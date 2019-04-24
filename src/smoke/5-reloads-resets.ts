@@ -63,16 +63,12 @@ export const test: SuiteMethod = async (
   });
 
   it('can still switch teams post-reload (via shortcut)', async () => {
-    await switchToTeam(2);
-    await wait(300);
-    await getBrowserViewHandle(client);
+    await switchToTeam(2, client);
 
     let title = await client.getTitle();
     assert.ok(title.includes('Old Joe Two'));
 
-    await switchToTeam(1);
-    await wait(300);
-    await getBrowserViewHandle(client);
+    await switchToTeam(1, client);
 
     title = await client.getTitle();
     assert.ok(!title.includes('Old Joe Two') && title.includes('Old Joe'));

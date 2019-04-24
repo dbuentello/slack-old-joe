@@ -17,6 +17,8 @@ end tell
 `.trim();
 
 export async function clickWindowMenuItem(menuName: string, itemName: string) {
+  await focus();
+
   if (isMac()) {
     const script = getAppleScript(menuName, itemName);
     return runAppleScript(script);
