@@ -4,11 +4,11 @@ import { SuiteMethod } from '../interfaces';
 import { getSignInWindow } from '../helpers/get-sign-in-window';
 import {
   openBrowserAndWaitForSignIn,
-  TestTeams
 } from '../helpers/open-browser-and-sign-in';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { switchToTeam } from '../helpers/switch-teams';
+import { smokeTeams } from '../smoke-teams';
 
 export const test: SuiteMethod = async (client, { it }) => {
   it('opens and loads a sign-in window', async () => {
@@ -32,7 +32,7 @@ export const test: SuiteMethod = async (client, { it }) => {
   it('signs in', async () => {
     assert.ok(await getSignInWindow(client), 'sign-in window exists');
     assert.ok(
-      await openBrowserAndWaitForSignIn(TestTeams[0]),
+      await openBrowserAndWaitForSignIn(smokeTeams[0].url),
       'sign-in was successful'
     );
   });
@@ -48,7 +48,7 @@ export const test: SuiteMethod = async (client, { it }) => {
   });
 
   it('signs into a second team', async () => {
-    assert.ok(await openBrowserAndWaitForSignIn(TestTeams[1]));
+    assert.ok(await openBrowserAndWaitForSignIn(smokeTeams[1].url));
   });
 
   it('has a quick switcher', async () => {
@@ -70,6 +70,6 @@ export const test: SuiteMethod = async (client, { it }) => {
     await switchToTeam(1, client);
 
     title = await client.getTitle();
-    assert.ok(!title.includes('Old Joe Two') && title.includes('Old Joe'));
+    assert.include(title, 'Old Joe One');
   });
 };

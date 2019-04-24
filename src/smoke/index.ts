@@ -6,6 +6,7 @@ import { test as reloadTest } from './5-reloads-resets';
 import { test as menuTest } from './6-menus';
 import { test as logTest } from './7-logs';
 import { test as childWindowTest } from './8-child-windows';
+import { test as deepLinkTest } from './9-deep-links';
 import { test as logoutTest } from './99-logout';
 
 import { TestFile } from '../interfaces';
@@ -19,5 +20,6 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'menus', test: menuTest },
   { name: 'logs', test: logTest },
   { name: 'child windows', test: childWindowTest },
+  { name: 'deep links', test: deepLinkTest },
   { name: 'sign out', test: logoutTest }
 ];

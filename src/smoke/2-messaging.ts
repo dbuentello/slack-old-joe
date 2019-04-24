@@ -35,7 +35,7 @@ async function assertVideo(client: BrowserObject) {
 
 export const test: SuiteMethod = async (
   client,
-  { it, beforeAll, afterAll, beforeEach, afterEach }
+  { it, beforeAll }
 ) => {
   beforeAll(async () => {
     await getBrowserViewHandle(client);

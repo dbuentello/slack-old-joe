@@ -2,8 +2,6 @@ import { shell } from 'electron';
 
 import { getTeamsCount } from './get-teams-count';
 
-export const TestTeams = ['old-joe', 'oldjoetwo'];
-
 export function openBrowserAndSignIn(teamName: string) {
   shell.openExternal(`https://${teamName}.slack.com/ssb/signin_redirect`);
 }

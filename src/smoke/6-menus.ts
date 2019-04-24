@@ -12,10 +12,11 @@ import {
 } from '../helpers/switch-teams';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { openQuickSwitcher } from '../helpers/open-quick-switcher';
+import { smokeTeams } from '../smoke-teams';
 
 export const test: SuiteMethod = async (
   client,
-  { it, beforeAll, afterAll, beforeEach, afterEach }
+  { it, beforeEach }
 ) => {
   beforeEach(async () => {
     await getBrowserViewHandle(client);
@@ -44,14 +45,13 @@ export const test: SuiteMethod = async (
   });
 
   it('can select a workspace by name using the window menu', async () => {
-    await selectTeamWindowMenu('Old Joe', client);
+    await selectTeamWindowMenu(smokeTeams[0].name, client);
     const beforeTitle = await client.getTitle();
-    assert.notInclude(beforeTitle, 'Old Joe Two');
-    assert.include(beforeTitle, 'Old Joe');
+    assert.include(beforeTitle, smokeTeams[0].name);
 
-    await selectTeamWindowMenu('Old Joe Two', client);
+    await selectTeamWindowMenu(smokeTeams[1].name, client);
     const afterTitle = await client.getTitle();
-    assert.include(afterTitle, 'Old Joe Two');
+    assert.include(afterTitle, smokeTeams[1].name);
   });
 
   it('can select the "next" workspace using the shortcut', async () => {
@@ -78,24 +78,24 @@ export const test: SuiteMethod = async (
     await getBrowserViewHandle(client, 500);
 
     const beforeTitle = await client.getTitle();
-    assert.ok(beforeTitle.includes('Old Joe') && !beforeTitle.includes('Two'));
+    assert.include(beforeTitle, smokeTeams[0].name);
 
     // In the dock, "Old Joe Two" should be number five from the bottom
     await clickDockMenuItem(5);
     await getBrowserViewHandle(client, 500);
 
     const afterTitle = await client.getTitle();
-    assert.ok(afterTitle.includes('Old Joe Two'));
+    assert.include(afterTitle, smokeTeams[1].name);
   });
 
   it('can select a workspace using the Quick Switcher', async () => {
     await switchToTeam(2, client);
     await getBrowserViewHandle(client, 300);
     await openQuickSwitcher(client);
-    await client.sendKeys([...'Old Joe'.split(''), '\uE007']);
+    await client.sendKeys([...smokeTeams[1].name.split(''), '\uE007']);
     await getBrowserViewHandle(client, 300);
 
     const afterTitle = await client.getTitle();
-    assert.ok(afterTitle.includes('Old Joe') && !afterTitle.includes('Two'));
+    assert.include(afterTitle, smokeTeams[0].name);
   });
 };

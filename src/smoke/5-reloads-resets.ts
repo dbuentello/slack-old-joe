@@ -9,7 +9,7 @@ import { switchToTeam } from '../helpers/switch-teams';
 
 export const test: SuiteMethod = async (
   client,
-  { it, beforeAll, afterAll, beforeEach, afterEach }
+  { it, beforeAll }
 ) => {
   beforeAll(async () => {
     await getBrowserViewHandle(client);
@@ -66,11 +66,11 @@ export const test: SuiteMethod = async (
     await switchToTeam(2, client);
 
     let title = await client.getTitle();
-    assert.ok(title.includes('Old Joe Two'));
+    assert.include(title, 'Old Joe Two');
 
     await switchToTeam(1, client);
 
     title = await client.getTitle();
-    assert.ok(!title.includes('Old Joe Two') && title.includes('Old Joe'));
+    assert.include(title, 'Old Joe One');
   });
 };
