@@ -24,20 +24,29 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
       <Card elevation={Elevation.ONE} className="test-chooser-card">
         <h3>
           Test Suites
-          <div style={{ float: 'right' }}>
-            <Button
-              text="None"
-              icon="cross"
-              small={true}
-              onClick={() =>
-                appState.availableTestFiles.forEach(t => (t.disabled = true))
-              }
-            />
-          </div>
+          {this.renderNoneAllButton()}
         </h3>
         {tests}
       </Card>
     );
+  }
+
+  public renderNoneAllButton() {
+    const { appState } = this.props;
+    const allDisabled = appState.availableTestFiles.every(t => !!t.disabled);
+
+    return (
+      <div style={{ float: 'right' }}>
+        <Button
+          text={allDisabled ? 'All' : 'None'}
+          icon={allDisabled ? 'circle' : 'selection'}
+          small={true}
+          onClick={() =>
+            appState.availableTestFiles.forEach(t => (t.disabled = !allDisabled))
+          }
+        />
+      </div>
+    )
   }
 
   public renderTest(input: TestFile) {
