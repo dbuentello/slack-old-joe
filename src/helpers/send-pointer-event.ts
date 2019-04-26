@@ -9,18 +9,19 @@ export interface PointerEventOptions {
   touch?: boolean;
   x: number;
   y: number;
+  rightClick?: boolean;
 }
 
 export function sendPointerEvent(
   client: BrowserObject,
-  options: PointerEventOptions
+  options: PointerEventOptions,
 ) {
-  const { type, touch, x, y } = options;
+  const { type, touch, x, y, rightClick } = options;
 
   let command = '';
   const data = {
     type: type,
-    button: 'left',
+    button: rightClick ? 'right' : 'left',
     y: y,
     x: x,
     timestamp: Date.now(),
@@ -35,4 +36,17 @@ export function sendPointerEvent(
   }
 
   return client.sendCommand(command, data);
+}
+
+export async function sendRightClickElement(client: BrowserObject, selector: string) {
+  const element = await client.$(selector);
+  const location = await (client as any).getElementLocation((element as any).elementId);
+
+  await sendPointerEvent(client, {
+    type: PointerEvent.MOUSEDOWN,
+    // +2 so that we actually hit the element
+    x: location.x + 2,
+    y: location.y + 2,
+    rightClick: true
+  });
 }
