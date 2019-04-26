@@ -3,6 +3,7 @@ import { assert } from 'chai';
 import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { switchToChannel } from '../helpers/switch-channel';
+import { enterMessage } from '../helpers/enter-message';
 
 async function assertVideo(client: BrowserObject) {
   // Play the video
@@ -53,12 +54,8 @@ export const test: SuiteMethod = async (
   });
 
   it('can post a message', async () => {
-    const msgInput = await client.$('#msg_input .ql-editor');
     const testValue = Date.now().toString();
-    await msgInput.click();
-
-    // Enter out time stamp, followed by the enter key
-    await client.sendKeys([...testValue.split(''), '\uE007']);
+    await enterMessage(client, testValue);
 
     // The message should show up
     const randomDesc = await client.$(`span=${testValue}`);
