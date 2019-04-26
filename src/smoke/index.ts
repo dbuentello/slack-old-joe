@@ -7,19 +7,23 @@ import { test as menuTest } from './6-menus';
 import { test as logTest } from './7-logs';
 import { test as childWindowTest } from './8-child-windows';
 import { test as deepLinkTest } from './9-deep-links';
+import { test as networkTest } from './10-network';
+import { test as devToolsTest } from './11-devtools';
 import { test as logoutTest } from './99-logout';
 
 import { TestFile } from '../interfaces';
 
 export const SMOKE_TESTS: Array<TestFile> = [
-  { name: 'sign in', test: loginTest },
-  { name: 'messaging', test: messagingTest },
-  { name: 'file up- and download', test: downloadTest },
-  { name: 'app window', test: windowTest },
-  { name: 'reload', test: reloadTest },
-  { name: 'menus', test: menuTest },
-  { name: 'logs', test: logTest },
-  { name: 'child windows', test: childWindowTest },
-  { name: 'deep links', test: deepLinkTest },
-  { name: 'sign out', test: logoutTest }
+  { name: 'Sign in', test: loginTest },
+  { name: 'Messaging', test: messagingTest },
+  { name: 'File Up- and Download', test: downloadTest },
+  { name: 'App Window', test: windowTest },
+  { name: 'Reloading', test: reloadTest },
+  { name: 'Menus', test: menuTest },
+  { name: 'Logs', test: logTest },
+  { name: 'Child Windows', test: childWindowTest },
+  { name: 'Deep links', test: deepLinkTest },
+  { name: 'Network', test: networkTest },
+  { name: 'Developer Tools', test: devToolsTest },
+  { name: 'Sign out', test: logoutTest }
 ];
