@@ -10,19 +10,19 @@ import {
 } from '@blueprintjs/core';
 import { shell } from 'electron';
 
-import { AppState } from '../state';
+import { AppState, appState } from '../state';
 import { clean, restore } from '../../helpers/clean-restore';
 import { spawnChromeDriver } from '../driver';
 import { getClient } from '../client';
 import { runTestFile, readTests } from '../runner';
 import { ChildProcess } from 'child_process';
 import { getReportDir, writeReport } from '../../report';
-import { SuiteResult } from '../../interfaces';
 import { Setup } from './setup';
 import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
 import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
 import { wait } from '../../helpers/wait';
 import { killSlack } from '../../native-commands/kill';
+import { Results } from './results';
 
 const TIME_TO_LAUNCH = 5000;
 
@@ -42,6 +42,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
     super(props);
 
     this.run = this.run.bind(this);
+    this.showReportMaybe = this.showReportMaybe.bind(this);
 
     this.state = {
       startingIn: 0,
@@ -110,72 +111,39 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     return (
       <>
-        {this.renderResults()}
+        <Results appState={appState} />
         <Card
           interactive={true}
           elevation={Elevation.TWO}
           className="progress-card"
-          onClick={() => shell.showItemInFolder(getReportDir())}
+          onClick={this.showReportMaybe}
         >
           <Spinner value={percentageDone} />
           <div>
             <Icon icon="endorsed" /> Successful tests: {testsDone}
             <Divider />
             <Icon icon="error" /> Failed tests: {testsFailed}
-            {done ? (
-              <>
-                <Divider />
-                <span>
-                  All done! Click here for screenshots <Icon icon="camera" />
-                </span>
-              </>
-            ) : null}
+            {this.renderDone()}
           </div>
         </Card>
       </>
     );
   }
 
-  public renderResults() {
-    const { results } = this.props.appState;
-    const resultElements =
-      results.length > 0 ? (
-        results.map(this.renderResult)
-      ) : (
-        <h5>Waiting for test results...</h5>
-      );
+  public renderDone() {
+    const { appState } = this.props;
+    const text = appState.generateReportAtEnd
+      ? (<>All done! Click here for screenshots <Icon icon="camera" /></>)
+      : 'All done!';
 
-    return (
-      <Card elevation={Elevation.ONE} className="result-card">
-        {resultElements}
-      </Card>
-    );
-  }
-
-  public renderResult(suiteResult: SuiteResult) {
-    return (
+    return appState.done
+     ? (
       <>
-        <h5>{suiteResult.name}</h5>
-        {suiteResult.results.map(({ ok, name, error }) => {
-          const icon = ok ? (
-            <Icon icon="endorsed" />
-          ) : (
-            <Icon icon="error" intent="danger" />
-          );
-
-          const errorElement = error ? <pre>{error.toString()}</pre> : null;
-
-          return (
-            <div className="result">
-              <p>
-                {icon} {name}
-              </p>
-              {errorElement}
-            </div>
-          );
-        })}
+        <Divider />
+        <span>{text}</span>
       </>
-    );
+     )
+     : null;
   }
 
   public async run() {
@@ -230,7 +198,8 @@ export class App extends React.Component<AppProps, LocalAppState> {
             } else {
               appState.testsFailed++;
             }
-          }
+          },
+          appState
         );
 
         appState.results.push(fileResult);
@@ -238,7 +207,9 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
       appState.done = true;
 
-      await writeReport(appState.results);
+      if (appState.generateReportAtEnd) {
+        await writeReport(appState.results);
+      }
     } catch (error) {
       console.warn(error);
     }
@@ -260,6 +231,12 @@ export class App extends React.Component<AppProps, LocalAppState> {
       } catch (error) {
         console.warn(error);
       }
+    }
+  }
+
+  public showReportMaybe() {
+    if (this.props.appState.generateReportAtEnd) {
+      shell.showItemInFolder(getReportDir());
     }
   }
 }

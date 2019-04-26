@@ -9,7 +9,7 @@ export async function getClient(input: Options) {
     await _client.closeApp();
   }
 
-  const options: WebDriver.Options = {
+  const options: any = {
     port: 9515, // "9515" is the port opened by chrome driver.
     capabilities: {
       browserName: 'chrome',

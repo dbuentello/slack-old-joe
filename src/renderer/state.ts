@@ -24,6 +24,7 @@ export class AppState {
 
   // Configuration
   @observable public closeAppAtEnd: boolean = true;
+  @observable public generateReportAtEnd: boolean = false;
   @observable public disabledTests: Array<string> = [];
 
   constructor() {

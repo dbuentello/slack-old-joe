@@ -31,6 +31,7 @@ export class Setup extends React.Component<SetupProps, {}> {
 
     this.chooseFile = this.chooseFile.bind(this);
     this.closeAtEndChange = this.closeAtEndChange.bind(this);
+    this.generateReportChange = this.generateReportChange.bind(this);
   }
 
   public render() {
@@ -68,6 +69,11 @@ export class Setup extends React.Component<SetupProps, {}> {
             label="Close Slack at end of test"
             onChange={this.closeAtEndChange}
           />
+          <Checkbox
+            checked={appState.generateReportAtEnd}
+            label="Generate a report with screenshots"
+            onChange={this.generateReportChange}
+          />
         </Card>
         <TestChooser appState={appState} />
       </>
@@ -76,6 +82,10 @@ export class Setup extends React.Component<SetupProps, {}> {
 
   public closeAtEndChange = handleBooleanChange(checked => {
     this.props.appState.closeAppAtEnd = checked;
+  });
+
+  public generateReportChange = handleBooleanChange(checked => {
+    this.props.appState.generateReportAtEnd = checked;
   });
 
   public async chooseFile() {

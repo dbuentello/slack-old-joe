@@ -7,6 +7,7 @@ import {
   TestFile
 } from '../interfaces';
 import { takeScreenshot } from '../report';
+import { AppState } from './state';
 
 export async function readTests(
   client: BrowserObject,
@@ -51,8 +52,10 @@ export async function readTestFile(test: SuiteMethod, client: BrowserObject) {
 export async function runTestFile(
   file: string,
   suiteMethodResults: SuiteMethodResults,
-  updateCallback: (succeeded: boolean) => void
+  updateCallback: (succeeded: boolean) => void,
+  appState: AppState
 ): Promise<SuiteResult> {
+  const { generateReportAtEnd } = appState;
   const result: SuiteResult = {
     name: file,
     results: []
@@ -71,7 +74,7 @@ export async function runTestFile(
     }
 
     // Screenshot
-    await takeScreenshot(`before ${name}`);
+    if (generateReportAtEnd) await takeScreenshot(`before ${name}`);
 
     // Run the test
     try {
@@ -96,7 +99,7 @@ export async function runTestFile(
     }
 
     // Screenshot
-    await takeScreenshot(`after ${name}`);
+    if (generateReportAtEnd) await takeScreenshot(`after ${name}`);
 
     // Run all "afterEach"
     for (const afterEach of suiteMethodResults.afterEach) {
