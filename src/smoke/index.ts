@@ -1,16 +1,16 @@
-import { test as loginTest } from './1-login';
-import { test as messagingTest } from './2-messaging';
-import { test as downloadTest } from './3-upload-download';
-import { test as windowTest } from './4-app-window';
-import { test as reloadTest } from './5-reloads-resets';
-import { test as menuTest } from './6-menus';
-import { test as logTest } from './7-logs';
-import { test as childWindowTest } from './8-child-windows';
-import { test as deepLinkTest } from './9-deep-links';
-import { test as networkTest } from './10-network';
-import { test as devToolsTest } from './11-devtools';
-import { test as preferencesTest } from './12-preferences';
-import { test as logoutTest } from './99-logout';
+import { test as loginTest } from './login';
+import { test as messagingTest } from './messaging';
+import { test as downloadTest } from './upload-download';
+import { test as windowTest } from './app-window';
+import { test as reloadTest } from './reloads-resets';
+import { test as menuTest } from './menus';
+import { test as logTest } from './logs';
+import { test as childWindowTest } from './child-windows';
+import { test as deepLinkTest } from './deep-links';
+import { test as networkTest } from './network';
+import { test as devToolsTest } from './devtools';
+import { test as preferencesTest } from './preferences';
+import { test as logoutTest } from './logout';
 
 import { TestFile } from '../interfaces';
 
