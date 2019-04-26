@@ -108,6 +108,7 @@ export async function clickWindowSubMenuItem(
   itemName: string
 ) {
   if (process.platform === 'darwin') {
+    await focus();
     const script = getSubAppleScript(menuName, subMenuName, itemName);
     return runAppleScript(script);
   }

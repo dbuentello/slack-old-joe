@@ -9,12 +9,4 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   beforeAll(async () => {
     await getBrowserViewHandle(client);
   });
-
-  it('can open a workspace via deep link', async () => {
-    for (const { id, name } of smokeTeams) {
-      shell.openExternal(`slack://open?team=${id}`);
-      await getBrowserViewHandle(client, 300);
-      assert.include(await client.getTitle(), name);
-    }
-  });
 };
