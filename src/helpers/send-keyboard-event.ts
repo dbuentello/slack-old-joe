@@ -86,8 +86,8 @@ export function sendKeyboardEvent(
     windowsVirtualKeyCode: description.keyCode,
     code: description.code,
     key: description.key,
-    text: text,
-    unmodifiedText: text,
+    text: description.text,
+    //unmodifiedText: text,
     location: description.location,
     isKeypad: description.location === 3
   });

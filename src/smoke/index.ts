@@ -10,6 +10,7 @@ import { test as deepLinkTest } from './deep-links';
 import { test as networkTest } from './network';
 import { test as devToolsTest } from './devtools';
 import { test as preferencesTest } from './preferences';
+import { test as spellcheckTest } from './spellcheck';
 import { test as logoutTest } from './logout';
 
 import { TestFile } from '../interfaces';
@@ -27,5 +28,6 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'Network', test: networkTest },
   { name: 'Developer Tools', test: devToolsTest },
   { name: 'Preferences', test: preferencesTest },
+  { name: 'Spellcheck', test: spellcheckTest },
   { name: 'Sign out', test: logoutTest }
 ];

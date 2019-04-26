@@ -1,3 +1,4 @@
+import * as robot from 'robotjs';
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
@@ -9,6 +10,8 @@ import { switchToChannel } from '../helpers/switch-channel';
 import { wait } from '../helpers/wait';
 import { enterMessage } from '../helpers/enter-message';
 import { sendClickElement } from '../helpers/send-pointer-event';
+import { sendKeyboardEvent } from '../helpers/send-keyboard-event';
+import { doTimes } from '../helpers/do-times';
 
 export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   beforeAll(async () => {
@@ -17,19 +20,25 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
 
   it('has working spellcheck', async () => {
     await switchToChannel(client, 'spellcheck');
-    await wait(200);
+    await wait(300);
     await enterMessage(client, 'mispelled');
+    await focus();
+    await wait(1000);
+
+    await sendClickElement(client, 'p=mispelled', true);
     await wait(200);
+    await robot.keyTap('down');
+    await wait(200);
+    await robot.keyTap('enter');
 
-    // Todo: Get the correct selector
-    await sendClickElement(client, 'mispelled', true);
-    // Todo: Use the keyboard to select the corrected spelling
+    const messageElement = await client.$('p=misspelled');
+    await messageElement.waitForExist(1000);
 
-    const messageElement = await client.$('');
-    const text = await messageElement.getText();
+    assert.ok(messageElement, 'text did not get corrected');
 
-    assert.equal(text, 'misspelled', 'text did not get corrected');
+    // Hit backspace ten times
+    await doTimes(10, () => sendKeyboardEvent(client, {
+      text: 'Backspace'
+    }));
   });
-
-  // Todo: Do it again, but in a German channel?
 };
