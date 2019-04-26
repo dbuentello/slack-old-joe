@@ -1,4 +1,8 @@
-export async function enterMessage(client: BrowserObject, message: string, send?: boolean) {
+export async function enterMessage(
+  client: BrowserObject,
+  message: string,
+  send?: boolean
+) {
   const msgInput = await client.$('#msg_input .ql-editor');
   await msgInput.click();
 

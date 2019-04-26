@@ -26,7 +26,10 @@ import { openPreferences } from '../helpers/open-preferences';
 import { switchToChannel } from '../helpers/switch-channel';
 import { waitForFile, waitForFileInDir } from '../helpers/wait-for-file';
 import { switchToTeam } from '../helpers/switch-teams';
-import { sendPointerEvent, sendClickElement } from '../helpers/send-pointer-event';
+import {
+  sendPointerEvent,
+  sendClickElement
+} from '../helpers/send-pointer-event';
 
 export function registerHelpers() {
   window['helpers'] = {

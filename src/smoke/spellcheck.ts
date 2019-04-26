@@ -37,8 +37,10 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
     assert.ok(messageElement, 'text did not get corrected');
 
     // Hit backspace ten times
-    await doTimes(10, () => sendKeyboardEvent(client, {
-      text: 'Backspace'
-    }));
+    await doTimes(10, () =>
+      sendKeyboardEvent(client, {
+        text: 'Backspace'
+      })
+    );
   });
 };

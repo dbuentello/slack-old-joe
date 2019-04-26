@@ -21,11 +21,13 @@ export async function openPreferences(client: BrowserObject) {
 
 export async function closePreferences(client: BrowserObject) {
   if (!(await getIsPreferencesOpen(client))) return;
-  await sendNativeKeyboardEvent({ text: 'escape' })
+  await sendNativeKeyboardEvent({ text: 'escape' });
   await wait(500);
 }
 
-export async function getIsPreferencesOpen(client: BrowserObject): Promise<boolean> {
+export async function getIsPreferencesOpen(
+  client: BrowserObject
+): Promise<boolean> {
   const prefencesModal = await client.$('.p-prefs_modal');
   return prefencesModal.isExisting();
 }

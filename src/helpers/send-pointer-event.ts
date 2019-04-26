@@ -14,7 +14,7 @@ export interface PointerEventOptions {
 
 export function sendPointerEvent(
   client: BrowserObject,
-  options: PointerEventOptions,
+  options: PointerEventOptions
 ) {
   const { type, touch, x, y, rightClick } = options;
 
@@ -38,9 +38,15 @@ export function sendPointerEvent(
   return client.sendCommand(command, data);
 }
 
-export async function sendClickElement(client: BrowserObject, selector: string, rightClick?: boolean) {
+export async function sendClickElement(
+  client: BrowserObject,
+  selector: string,
+  rightClick?: boolean
+) {
   const element = await client.$(selector);
-  const location = await (client as any).getElementLocation((element as any).elementId);
+  const location = await (client as any).getElementLocation(
+    (element as any).elementId
+  );
 
   await sendPointerEvent(client, {
     type: PointerEvent.MOUSEDOWN,
