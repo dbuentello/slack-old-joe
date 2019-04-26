@@ -7,10 +7,7 @@ import { reload, reloadEverything } from '../native-commands/reload';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { switchToTeam } from '../helpers/switch-teams';
 
-export const test: SuiteMethod = async (
-  client,
-  { it, beforeAll }
-) => {
+export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   beforeAll(async () => {
     await getBrowserViewHandle(client);
   });

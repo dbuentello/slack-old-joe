@@ -34,10 +34,7 @@ async function assertVideo(client: BrowserObject) {
   await client.switchToParentFrame();
 }
 
-export const test: SuiteMethod = async (
-  client,
-  { it, beforeAll }
-) => {
+export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   beforeAll(async () => {
     await getBrowserViewHandle(client);
   });
@@ -55,7 +52,7 @@ export const test: SuiteMethod = async (
 
   it('can post a message', async () => {
     const testValue = Date.now().toString();
-    await enterMessage(client, testValue);
+    await enterMessage(client, testValue, true);
 
     // The message should show up
     const randomDesc = await client.$(`span=${testValue}`);

@@ -11,7 +11,7 @@ export const test: SuiteMethod = async (client, { it }) => {
     await wait(300);
 
     const { handle } = await getDevToolsWindowHandle(client);
-    assert.ok('DevTools have opened', handle);
+    assert.ok(handle, 'the devtools did not open');
   });
 
   it('can close the webapp devtools via menu', async () => {
@@ -19,22 +19,30 @@ export const test: SuiteMethod = async (client, { it }) => {
     await wait(300);
 
     const { handle } = await getDevToolsWindowHandle(client);
-    assert.notOk('DevTools have closed', handle);
+    assert.notOk('DevTools have closed', 'the devtools did not close');
   });
 
   it('can open the Electron devtools via menu', async () => {
-    await clickWindowSubMenuItem('View', 'Developer', 'Toggle Electron DevTools');
+    await clickWindowSubMenuItem(
+      'View',
+      'Developer',
+      'Toggle Electron DevTools'
+    );
     await wait(300);
 
     const { handle } = await getDevToolsWindowHandle(client);
-    assert.ok('DevTools have opened', handle);
+    assert.ok(handle, 'the devtools did not open');
   });
 
   it('can close the Electron devtools via menu', async () => {
-    await clickWindowSubMenuItem('View', 'Developer', 'Toggle Electron DevTools');
+    await clickWindowSubMenuItem(
+      'View',
+      'Developer',
+      'Toggle Electron DevTools'
+    );
     await wait(300);
 
     const { handle } = await getDevToolsWindowHandle(client);
-    assert.notOk('DevTools have closed', handle);
+    assert.notOk('DevTools have closed', 'the devtools did not close');
   });
 };

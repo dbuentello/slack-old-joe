@@ -2,9 +2,7 @@ import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
 import { getSignInWindow } from '../helpers/get-sign-in-window';
-import {
-  openBrowserAndWaitForSignIn,
-} from '../helpers/open-browser-and-sign-in';
+import { openBrowserAndWaitForSignIn } from '../helpers/open-browser-and-sign-in';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { switchToTeam } from '../helpers/switch-teams';

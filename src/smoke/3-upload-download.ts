@@ -11,10 +11,7 @@ import { switchToChannel } from '../helpers/switch-channel';
 
 const DOWNLOADS_DIR = remote.app.getPath('downloads');
 
-export const test: SuiteMethod = async (
-  client,
-  { it, beforeAll }
-) => {
+export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   beforeAll(async () => {
     await getBrowserViewHandle(client);
   });

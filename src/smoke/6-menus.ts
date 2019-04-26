@@ -14,10 +14,7 @@ import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { openQuickSwitcher } from '../helpers/open-quick-switcher';
 import { smokeTeams } from '../smoke-teams';
 
-export const test: SuiteMethod = async (
-  client,
-  { it, beforeEach }
-) => {
+export const test: SuiteMethod = async (client, { it, beforeEach }) => {
   beforeEach(async () => {
     await getBrowserViewHandle(client);
   });

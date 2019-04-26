@@ -7,10 +7,7 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { maximize } from '../native-commands/maximize';
 import { minimize } from '../native-commands/minimize';
 
-export const test: SuiteMethod = async (
-  client,
-  { it, beforeAll }
-) => {
+export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   beforeAll(async () => {
     await getBrowserViewHandle(client);
   });

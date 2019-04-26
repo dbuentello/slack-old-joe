@@ -9,6 +9,7 @@ import { test as childWindowTest } from './8-child-windows';
 import { test as deepLinkTest } from './9-deep-links';
 import { test as networkTest } from './10-network';
 import { test as devToolsTest } from './11-devtools';
+import { test as preferencesTest } from './12-preferences';
 import { test as logoutTest } from './99-logout';
 
 import { TestFile } from '../interfaces';
@@ -25,5 +26,6 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'Deep links', test: deepLinkTest },
   { name: 'Network', test: networkTest },
   { name: 'Developer Tools', test: devToolsTest },
+  { name: 'Preferences', test: preferencesTest },
   { name: 'Sign out', test: logoutTest }
 ];
