@@ -87,7 +87,7 @@ export const test: SuiteMethod = async (client, { it, beforeEach }) => {
   });
 
   it('can select a workspace using the Quick Switcher', async () => {
-    await switchToTeam(1, client);
+    await switchToTeam(client, 1);
     await getBrowserViewHandle(client, 300);
     await openQuickSwitcher(client);
     await client.sendKeys([...smokeTeams[0].name.split('')]);

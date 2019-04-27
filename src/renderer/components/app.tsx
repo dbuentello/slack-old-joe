@@ -23,6 +23,7 @@ import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
 import { wait } from '../../helpers/wait';
 import { killSlack } from '../../native-commands/kill';
 import { Results } from './results';
+import { waitForClientReady } from '../../helpers/wait-for-client-ready';
 
 const TIME_TO_LAUNCH = 5000;
 
@@ -167,13 +168,14 @@ export class App extends React.Component<AppProps, LocalAppState> {
       this.setState({ startingIn: this.state.startingIn - 50 });
     }, 50);
 
-    setTimeout(async () => {
-      clearInterval(countdownInterval);
-      this.setState({ startingIn: 0 });
+    // Wait for the client to be ready
+    await wait(1000);
+    await waitForClientReady(client);
+    clearInterval(countdownInterval);
+    this.setState({ startingIn: 0 });
 
-      await this.runTests(driver, client);
-      await this.stopTests(driver, client);
-    }, TIME_TO_LAUNCH);
+    await this.runTests(driver, client);
+    await this.stopTests(driver, client);
   }
 
   public async runTests(_driver: ChildProcess, client: BrowserObject) {

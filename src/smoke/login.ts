@@ -65,7 +65,7 @@ export const test: SuiteMethod = async (client, { it }) => {
     let title = await client.getTitle();
     assert.ok(title.includes('Old Joe Two'));
 
-    await switchToTeam(0, client);
+    await switchToTeam(client, 0);
 
     title = await client.getTitle();
     assert.include(title, 'Old Joe One');

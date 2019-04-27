@@ -5,7 +5,7 @@ import { getBrowserViewHandle } from './get-browser-view';
 const PLATFORM_MODIFIER =
   process.platform === 'darwin' ? { cmd: true } : { ctrl: true };
 
-export async function switchToTeam(index: number, client: BrowserObject) {
+export async function switchToTeam(client: BrowserObject, index: number) {
   await sendNativeKeyboardEvent({
     ...PLATFORM_MODIFIER,
     text: (index + 1).toString()

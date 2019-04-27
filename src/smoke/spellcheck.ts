@@ -3,7 +3,7 @@ import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
-import { selectNextTeamShortcut } from '../helpers/switch-teams';
+import { selectNextTeamShortcut, switchToTeam } from '../helpers/switch-teams';
 import { openPreferences } from '../helpers/open-preferences';
 import { isWin } from '../helpers/os';
 import { switchToChannel } from '../helpers/switch-channel';
@@ -15,7 +15,7 @@ import { doTimes } from '../helpers/do-times';
 
 export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(client);
+    await switchToTeam(client, 0);
   });
 
   it('corrects misspelled words and replaces on correction', async () => {
