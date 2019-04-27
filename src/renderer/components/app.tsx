@@ -114,13 +114,13 @@ export class App extends React.Component<AppProps, LocalAppState> {
       <>
         <Results appState={appState} />
         <Card
-          interactive={true}
+          interactive={appState.generateReportAtEnd}
           elevation={Elevation.TWO}
           className="progress-card"
           onClick={this.showReportMaybe}
         >
           <Spinner value={percentageDone} />
-          <div>
+          <div style={{ height: '9rem' }}>
             <Icon icon="endorsed" /> Successful tests: {testsDone}
             <Divider />
             <Icon icon="error" /> Failed tests: {testsFailed}
