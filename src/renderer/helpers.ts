@@ -30,19 +30,20 @@ import {
   sendPointerEvent,
   sendClickElement
 } from '../helpers/send-pointer-event';
+import { enableWifi, disableWifi } from '../native-commands/wifi';
 
 export function registerHelpers() {
   window['helpers'] = {
-    runAppleScript,
-    runAppleScriptFile,
     clickDockMenuItem,
     clickWindowMenuItem,
     clickWindowSubMenuItem,
+    disableWifi,
+    enableWifi,
     enterMessage,
     getBrowserViewHandle,
     getDevToolsWindowHandle,
-    getRendererWindowHandle,
     getPostWindowHandle,
+    getRendererWindowHandle,
     getSignInWindow,
     getSlackPath,
     getTeamsCount,
@@ -50,11 +51,13 @@ export function registerHelpers() {
     openBrowserAndWaitForSignIn,
     openPreferences,
     openQuickSwitcher,
+    runAppleScript,
+    runAppleScriptFile,
     runPowerShellScript,
-    sendPointerEvent,
     sendClickElement,
     sendKeyboardEvent,
     sendNativeKeyboardEvent,
+    sendPointerEvent,
     switchToChannel,
     switchToTeam,
     waitForFile,
