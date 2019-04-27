@@ -1,19 +1,16 @@
-export async function getRendererWindowHandle(client: BrowserObject) {
-  const windows = await client.getWindowHandles();
-  let handle: string = '';
-  let url: string = '';
+import { getWindowHandle, GetWindowResult } from './get-window-handle';
 
-  for (const window of windows) {
-    await client.switchToWindow(window);
-    url = await client.getUrl();
-
-    if (url.startsWith('file://')) {
-      handle = window;
-      break;
-    }
-  }
-
-  return {
-    handle
-  };
+/**
+ * Get the main window handle
+ *
+ * @export
+ * @param {BrowserObject} client
+ * @returns {(Promise<GetWindowResult | null>)}
+ */
+export async function getRendererWindowHandle(
+  client: BrowserObject
+): Promise<GetWindowResult | null> {
+  return getWindowHandle(client, url => {
+    return url.startsWith('file://') && !url.includes('component-window.html');
+  });
 }

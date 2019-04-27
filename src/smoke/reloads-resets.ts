@@ -60,12 +60,12 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   });
 
   it('can still switch teams post-reload (via shortcut)', async () => {
-    await switchToTeam(2, client);
+    await switchToTeam(1, client);
 
     let title = await client.getTitle();
     assert.include(title, 'Old Joe Two');
 
-    await switchToTeam(1, client);
+    await switchToTeam(0, client);
 
     title = await client.getTitle();
     assert.include(title, 'Old Joe One');

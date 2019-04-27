@@ -13,6 +13,7 @@ import {
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { openQuickSwitcher } from '../helpers/open-quick-switcher';
 import { smokeTeams } from '../smoke-teams';
+import { wait } from '../helpers/wait';
 
 export const test: SuiteMethod = async (client, { it, beforeEach }) => {
   beforeEach(async () => {
@@ -86,10 +87,12 @@ export const test: SuiteMethod = async (client, { it, beforeEach }) => {
   });
 
   it('can select a workspace using the Quick Switcher', async () => {
-    await switchToTeam(2, client);
+    await switchToTeam(1, client);
     await getBrowserViewHandle(client, 300);
     await openQuickSwitcher(client);
-    await client.sendKeys([...smokeTeams[1].name.split(''), '\uE007']);
+    await client.sendKeys([...smokeTeams[0].name.split('')]);
+    await wait(100);
+    await client.sendKeys(['\uE007']);
     await getBrowserViewHandle(client, 300);
 
     const afterTitle = await client.getTitle();

@@ -85,7 +85,7 @@ export const test: SuiteMethod = async (
     if (!isWin()) return;
   });
 
-  it('has Windows notification methods', async () => {
+  it('has Windows notification methods (Windows)', async () => {
     if (!isWin()) return;
   });
 };

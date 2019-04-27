@@ -18,7 +18,7 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
     await getBrowserViewHandle(client);
   });
 
-  it('has working spellcheck', async () => {
+  it('corrects misspelled words and replaces on correction', async () => {
     await switchToChannel(client, 'spellcheck');
     await wait(300);
     await enterMessage(client, 'mispelled');

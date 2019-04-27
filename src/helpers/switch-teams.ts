@@ -8,7 +8,7 @@ const PLATFORM_MODIFIER =
 export async function switchToTeam(index: number, client: BrowserObject) {
   await sendNativeKeyboardEvent({
     ...PLATFORM_MODIFIER,
-    text: index.toString()
+    text: (index + 1).toString()
   });
   await getBrowserViewHandle(client, 300);
 }

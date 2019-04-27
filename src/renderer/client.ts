@@ -2,6 +2,7 @@ import { remote } from 'webdriverio';
 
 import { Options } from '../interfaces';
 import { registerHelpers } from './helpers';
+import { wait } from '../helpers/wait';
 
 let _client: null | BrowserObject = null;
 
@@ -21,6 +22,13 @@ export async function getClient(input: Options) {
     }
   };
 
-  registerHelpers();
-  return (window['client'] = _client = await remote(options));
+  _client = await remote(options);
+  _client['restart'] = async () => {
+    await getClient(input);
+    await wait(2000);
+  };
+
+  return (window['client'] = _client);
 }
+
+registerHelpers();

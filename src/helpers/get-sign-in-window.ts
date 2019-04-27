@@ -1,16 +1,16 @@
+import { getWindowHandle, GetWindowResult } from './get-window-handle';
+
+/**
+ * Get the sign in window
+ *
+ * @export
+ * @param {BrowserObject} client
+ * @returns {(Promise<GetWindowResult | null>)}
+ */
 export async function getSignInWindow(
   client: BrowserObject
-): Promise<null | string> {
-  const windows = await client.getWindowHandles();
-  let signInWindow = null;
-
-  for (const window of windows) {
-    await client.switchToWindow(window);
-
-    if ((await client.getTitle()) === `Sign in | Slack`) {
-      signInWindow = window;
-    }
-  }
-
-  return signInWindow;
+): Promise<GetWindowResult | null> {
+  return getWindowHandle(client, (_url, title) => {
+    return title === 'Sign in | Slack';
+  });
 }
