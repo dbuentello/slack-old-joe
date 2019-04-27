@@ -5,9 +5,9 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { disableWifi, enableWifi } from '../native-commands/wifi';
 import { waitUntilElementGone } from '../helpers/wait-until-gone';
 
-export const test: SuiteMethod = async (client, { it, beforeAll }) => {
+export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
   });
 
   it('displays the offline information when offline', async () => {
@@ -15,7 +15,7 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
 
     // We don't really know how quickly the system will go down,
     // so we'll be generous with our wait time (20s), likely much faster
-    const offlineInfo = await client.$('.p-notification_bar__offline');
+    const offlineInfo = await window.client.$('.p-notification_bar__offline');
     await offlineInfo.waitForDisplayed(20 * 1000);
 
     assert.ok(await offlineInfo.isDisplayed(), 'offline info not displayed');
@@ -27,7 +27,7 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
     // Wait for us to be online before we continue
     assert.ok(
       await waitUntilElementGone(
-        client,
+        window.client,
         '.p-notification_bar__offline',
         20 * 1000
       )

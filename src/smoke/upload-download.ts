@@ -11,17 +11,17 @@ import { switchToChannel } from '../helpers/switch-channel';
 
 const DOWNLOADS_DIR = remote.app.getPath('downloads');
 
-export const test: SuiteMethod = async (client, { it, beforeAll }) => {
+export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
   });
 
   it('can download a file in-channel', async () => {
     // Switch to the downloads channel
-    await switchToChannel(client, 'downloads');
+    await switchToChannel(window.client, 'downloads');
 
     // Wait for the description to show up
-    const fileDesc = await client.$('span=test-file');
+    const fileDesc = await window.client.$('span=test-file');
     await fileDesc.waitForExist(1000);
     await fileDesc.click();
 
@@ -40,30 +40,30 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
 
   it('can pause and resume a download', async () => {
     // Switch to the downloads channel
-    await switchToChannel(client, 'downloads');
+    await switchToChannel(window.client, 'downloads');
 
     // Open the downloads panel
-    (await client.$('#flex_menu_toggle')).click();
-    const downloadsBtn = await client.$('#downloads');
+    (await window.client.$('#flex_menu_toggle')).click();
+    const downloadsBtn = await window.client.$('#downloads');
     assert.ok(await downloadsBtn.waitForDisplayed(2000));
     await downloadsBtn.click();
 
     // Wait for the panel to show up
-    const downloadsHeader = await client.$('span=Downloads');
+    const downloadsHeader = await window.client.$('span=Downloads');
     await downloadsHeader.waitForExist(2000);
     await wait(500);
 
     // Download the large file
-    const fileDesc = await client.$('span=test-large-file.zip');
+    const fileDesc = await window.client.$('span=test-large-file.zip');
     await fileDesc.click();
 
     // Pause the download right away
-    const pauseBtn = await client.$('.p-download_item__link--pause');
+    const pauseBtn = await window.client.$('.p-download_item__link--pause');
     assert.ok(await pauseBtn.waitForDisplayed(5000));
     await pauseBtn.click();
 
     // We should now have a resume button
-    const resumeBtn = await client.$('.p-download_item__link--resume');
+    const resumeBtn = await window.client.$('.p-download_item__link--resume');
     assert.ok(await resumeBtn.waitForDisplayed(5000));
 
     // Let the network pipes cool down (not required, I just want to wait a sec)

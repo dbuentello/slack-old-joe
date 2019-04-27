@@ -7,35 +7,35 @@ import { openPreferences, closePreferences } from '../helpers/open-preferences';
 import { isWin } from '../helpers/os';
 import { wait } from '../helpers/wait';
 
-export const test: SuiteMethod = async (
-  client,
-  { it, afterAll, beforeAll }
-) => {
+export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
   });
 
   afterAll(async () => {
-    await closePreferences(client);
+    await closePreferences(window.client);
   });
 
   it('can open the preferences', async () => {
-    assert.ok(await openPreferences(client), 'could not open preferences');
+    assert.ok(
+      await openPreferences(window.client),
+      'could not open preferences'
+    );
   });
 
   it('can disable hardware acceleration', async () => {
-    const advancedButton = await client.$('button=Advanced');
+    const advancedButton = await window.client.$('button=Advanced');
     await advancedButton.click();
     await wait(100);
 
-    const disableHwButton = await client.$(
+    const disableHwButton = await window.client.$(
       'strong=Disable hardware acceleration'
     );
     await disableHwButton.waitForExist(1000);
     await disableHwButton.click();
     await wait(200);
 
-    const setting = await client.executeScript(
+    const setting = await window.client.executeScript(
       'return desktop.app.getPreference("useHwAcceleration")',
       []
     );
@@ -43,14 +43,14 @@ export const test: SuiteMethod = async (
   });
 
   it('persists these setting across teams', async () => {
-    await selectNextTeamShortcut(client);
-    await openPreferences(client);
+    await selectNextTeamShortcut(window.client);
+    await openPreferences(window.client);
 
-    const advancedButton = await client.$('button=Advanced');
+    const advancedButton = await window.client.$('button=Advanced');
     await advancedButton.click();
     await wait(100);
 
-    const checkboxes = await client.$$('.c-input_checkbox');
+    const checkboxes = await window.client.$$('.c-input_checkbox');
     const disableHwCheckbox = checkboxes[checkboxes.length - 1];
     assert.ok(
       await disableHwCheckbox.getAttribute('checked'),
@@ -58,19 +58,19 @@ export const test: SuiteMethod = async (
     );
 
     // Switch back
-    await closePreferences(client);
+    await closePreferences(window.client);
     await wait(100);
-    await selectNextTeamShortcut(client);
+    await selectNextTeamShortcut(window.client);
   });
 
   it('can enable hardware acceleration', async () => {
-    const disableHwButton = await client.$(
+    const disableHwButton = await window.client.$(
       'strong=Disable hardware acceleration'
     );
     await disableHwButton.click();
     await wait(200);
 
-    const setting = await client.executeScript(
+    const setting = await window.client.executeScript(
       'return desktop.app.getPreference("useHwAcceleration")',
       []
     );

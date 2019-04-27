@@ -44,7 +44,6 @@ export type Result = {
 export type Results = Array<Result>;
 
 export type SuiteMethod = (
-  client: BrowserObject,
   methods: SuiteMethods
 ) => Promise<void> | void;
 

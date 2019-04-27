@@ -7,13 +7,13 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { maximize } from '../native-commands/maximize';
 import { minimize } from '../native-commands/minimize';
 
-export const test: SuiteMethod = async (client, { it, beforeAll }) => {
+export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
   });
 
   it('can maximize the window', async () => {
-    const beforeDimensions = await client.executeScript(
+    const beforeDimensions = await window.client.executeScript(
       'return window.outerHeight',
       []
     );
@@ -21,7 +21,7 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
     await maximize();
     await wait(1000);
 
-    const afterDimensions = await client.executeScript(
+    const afterDimensions = await window.client.executeScript(
       'return window.outerHeight',
       []
     );
@@ -36,7 +36,7 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   });
 
   it('can fullscreen the window', async () => {
-    const beforeDimensions = await client.executeScript(
+    const beforeDimensions = await window.client.executeScript(
       'return window.outerHeight',
       []
     );
@@ -44,7 +44,7 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
     await fullscreen();
     await wait(1000);
 
-    const afterDimensions = await client.executeScript(
+    const afterDimensions = await window.client.executeScript(
       'return window.outerHeight',
       []
     );
@@ -59,13 +59,16 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
   });
 
   it('can minimize the window', async () => {
-    let isHidden = await client.executeScript('return document.hidden', []);
+    let isHidden = await window.client.executeScript(
+      'return document.hidden',
+      []
+    );
     assert.ok(!isHidden, 'document.hidden returns false');
 
     await minimize();
     await wait(1000);
 
-    isHidden = await client.executeScript('return document.hidden', []);
+    isHidden = await window.client.executeScript('return document.hidden', []);
     assert.ok(isHidden, 'document.hidden returns true');
 
     // Restore

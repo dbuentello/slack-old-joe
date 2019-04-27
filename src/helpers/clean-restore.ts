@@ -46,8 +46,9 @@ export function restore() {
 
 export async function deleteOldJoeFolders() {
   const appDataDir = getAppDataDir();
-  const slackDevModeBackupFolders = (await fs.readdir(appDataDir))
-    .filter((f) => f.startsWith('SlackDevMode-') && f.length === 22);
+  const slackDevModeBackupFolders = (await fs.readdir(appDataDir)).filter(
+    f => f.startsWith('SlackDevMode-') && f.length === 22
+  );
 
   for (const folder of slackDevModeBackupFolders) {
     const folderPath = path.join(appDataDir, folder);

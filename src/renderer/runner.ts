@@ -44,7 +44,7 @@ export async function readTestFile(test: SuiteMethod, client: BrowserObject) {
     afterEach: fn => suiteMethodResults.afterAll.push(fn)
   };
 
-  await test(client, suiteMethods);
+  await test(suiteMethods);
 
   return suiteMethodResults;
 }

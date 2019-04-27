@@ -11,9 +11,9 @@ import { wait } from '../helpers/wait';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
 import { switchToChannel } from '../helpers/switch-channel';
 
-export const test: SuiteMethod = async (client, { it, beforeAll }) => {
+export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
   });
 
   it('(Mac) opens about dialog and displays the correct version string', async () => {
@@ -24,12 +24,12 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
     await openAboutBox();
 
     // What version do we expect?
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
 
     // Returns
     // "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko)
     // AtomShell/3.4.1-beta3179ea19 Chrome/69.0.3497.128 Electron/4.1.3 Safari/537.36 Slack_SSB/3.4.1"
-    const userAgent: string = await client.executeScript(
+    const userAgent: string = await window.client.executeScript(
       'return navigator.userAgent',
       []
     );
@@ -58,50 +58,52 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
 
   it('creates a post window', async () => {
     // Switch to the posts channel
-    await switchToChannel(client, 'posts');
+    await switchToChannel(window.client, 'posts');
 
     // Open the plus menu, wait 100ms, create a new post
-    await (await client.$('#primary_file_button')).click();
+    await (await window.client.$('#primary_file_button')).click();
     await wait(100);
-    await (await client.$('=Post')).click();
+    await (await window.client.$('=Post')).click();
     await wait(1000);
 
     // Switch to the new post window
-    const { handle } = await getPostWindowHandle(client);
-    assert.ok(handle);
+    const postsWindow = await getPostWindowHandle(window.client);
+    assert.ok(postsWindow);
 
     // Title includes the word "Untitled"?
-    assert.ok((await client.getTitle()).includes('Untitled'));
+    assert.ok((await window.client.getTitle()).includes('Untitled'));
   });
 
   it(`can create a post that's saved`, async () => {
     const expectedText = Date.now().toString();
 
     // Focus and enter some text
-    const shadowP = await client.$('p.shadow');
+    const shadowP = await window.client.$('p.shadow');
     await shadowP.waitForExist(5000);
     await shadowP.click();
     await wait(100);
-    await client.sendKeys([...expectedText.split('')]);
+    await window.client.sendKeys([...expectedText.split('')]);
 
     // Share
-    await (await client.$('.space_btn_share')).click();
+    await (await window.client.$('.space_btn_share')).click();
     await wait(300);
 
     // Name this post field
-    await (await client.$('#p-share_dialog__name_this_post_input')).click();
-    await client.sendKeys([...expectedText.split('')]);
+    await (await window.client.$(
+      '#p-share_dialog__name_this_post_input'
+    )).click();
+    await window.client.sendKeys([...expectedText.split('')]);
 
     // Submit
-    await (await client.$('button.c-dialog__go')).click();
+    await (await window.client.$('button.c-dialog__go')).click();
     await wait(300);
-    await client.execute('window.close()', []);
+    await window.client.execute('window.close()', []);
 
     // Back to the BrowserView
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
 
     // The message should show up
-    const randomDesc = await client.$(`span=${expectedText}`);
+    const randomDesc = await window.client.$(`span=${expectedText}`);
     assert.ok(await randomDesc.waitForExist(1000));
   });
 };

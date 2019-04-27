@@ -5,12 +5,12 @@ import { clickWindowSubMenuItem } from '../helpers/click-window-menu-item';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
 import { wait } from '../helpers/wait';
 
-export const test: SuiteMethod = async (client, { it }) => {
+export const test: SuiteMethod = async ({ it }) => {
   it('can open the webapp devtools via menu', async () => {
     await clickWindowSubMenuItem('View', 'Developer', 'Toggle Webapp DevTools');
     await wait(300);
 
-    const devToolsWindow = await getDevToolsWindowHandle(client);
+    const devToolsWindow = await getDevToolsWindowHandle(window.client);
     assert.ok(devToolsWindow, 'window handle for the dev tools');
   });
 
@@ -18,7 +18,7 @@ export const test: SuiteMethod = async (client, { it }) => {
     await clickWindowSubMenuItem('View', 'Developer', 'Toggle Webapp DevTools');
     await wait(300);
 
-    const devToolsWindow = await getDevToolsWindowHandle(client);
+    const devToolsWindow = await getDevToolsWindowHandle(window.client);
     assert.notOk(devToolsWindow, 'window handle for the devtools');
   });
 
@@ -30,7 +30,7 @@ export const test: SuiteMethod = async (client, { it }) => {
     );
     await wait(300);
 
-    const devToolsWindow = await getDevToolsWindowHandle(client);
+    const devToolsWindow = await getDevToolsWindowHandle(window.client);
     assert.ok(devToolsWindow, 'window handle for the dev tools');
   });
 
@@ -42,7 +42,7 @@ export const test: SuiteMethod = async (client, { it }) => {
     );
     await wait(300);
 
-    const devToolsWindow = await getDevToolsWindowHandle(client);
+    const devToolsWindow = await getDevToolsWindowHandle(window.client);
     assert.notOk(devToolsWindow, 'window handle for the devtools');
   });
 };

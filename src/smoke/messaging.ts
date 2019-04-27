@@ -34,17 +34,17 @@ async function assertVideo(client: BrowserObject) {
   await client.switchToParentFrame();
 }
 
-export const test: SuiteMethod = async (client, { it, beforeAll }) => {
+export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
   });
 
   it('can switch to the #random channel', async () => {
     // Switch to the random channel
-    await switchToChannel(client, 'random');
+    await switchToChannel(window.client, 'random');
 
     // Wait for the description to show up
-    const randomDesc = await client.$(
+    const randomDesc = await window.client.$(
       'span=Non-work banter and water cooler conversation'
     );
     assert.ok(await randomDesc.waitForExist(1000));
@@ -52,21 +52,21 @@ export const test: SuiteMethod = async (client, { it, beforeAll }) => {
 
   it('can post a message', async () => {
     const testValue = Date.now().toString();
-    await enterMessage(client, testValue, true);
+    await enterMessage(window.client, testValue, true);
 
     // The message should show up
-    const randomDesc = await client.$(`span=${testValue}`);
+    const randomDesc = await window.client.$(`span=${testValue}`);
     assert.ok(await randomDesc.waitForExist(1000));
   });
 
   it('can play a YouTube video', async () => {
     // Switch to the random channel
-    await switchToChannel(client, 'ads');
+    await switchToChannel(window.client, 'ads');
 
     // Wait for the description to show up
-    const randomDesc = await client.$('span=Old Camel ads');
+    const randomDesc = await window.client.$('span=Old Camel ads');
     assert.ok(await randomDesc.waitForExist(1000));
 
-    await assertVideo(client);
+    await assertVideo(window.client);
   });
 };

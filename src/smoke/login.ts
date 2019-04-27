@@ -8,11 +8,11 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { switchToTeam } from '../helpers/switch-teams';
 import { smokeTeams } from '../smoke-teams';
 
-export const test: SuiteMethod = async (client, { it }) => {
+export const test: SuiteMethod = async ({ it }) => {
   it('opens and loads a sign-in window', async () => {
-    assert.ok(await getSignInWindow(client));
+    assert.ok(await getSignInWindow(window.client));
 
-    const url = await client.getUrl();
+    const url = await window.client.getUrl();
     assert.ok(
       url.startsWith('https://slack.com/ssb/first'),
       'Starts with slack.com/ssb/first'
@@ -20,15 +20,15 @@ export const test: SuiteMethod = async (client, { it }) => {
   });
 
   it('has a visible sign-in button', async () => {
-    assert.ok(await getSignInWindow(client));
+    assert.ok(await getSignInWindow(window.client));
 
-    const button = await client.$('button');
+    const button = await window.client.$('button');
     assert.ok(button);
     assert.equal(await button.getText(), 'Sign In');
   });
 
   it('signs in', async () => {
-    assert.ok(await getSignInWindow(client), 'sign-in window exists');
+    assert.ok(await getSignInWindow(window.client), 'sign-in window exists');
     assert.ok(
       await openBrowserAndWaitForSignIn(smokeTeams[0].url),
       'sign-in was successful'
@@ -36,9 +36,9 @@ export const test: SuiteMethod = async (client, { it }) => {
   });
 
   it('does not have a quick switcher', async () => {
-    await getRendererWindowHandle(client);
+    await getRendererWindowHandle(window.client);
 
-    const body = await client.$('body');
+    const body = await window.client.$('body');
     const html = await body.getHTML();
     const hasSidebar = html.includes('TeamSidebar');
 
@@ -50,9 +50,9 @@ export const test: SuiteMethod = async (client, { it }) => {
   });
 
   it('has a quick switcher', async () => {
-    await getRendererWindowHandle(client);
+    await getRendererWindowHandle(window.client);
 
-    const body = await client.$('body');
+    const body = await window.client.$('body');
     const html = await body.getHTML();
     const hasSidebar = html.includes('TeamSidebar');
 
@@ -60,14 +60,14 @@ export const test: SuiteMethod = async (client, { it }) => {
   });
 
   it('can switch teams (via shortcut)', async () => {
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
 
-    let title = await client.getTitle();
+    let title = await window.client.getTitle();
     assert.ok(title.includes('Old Joe Two'));
 
-    await switchToTeam(client, 0);
+    await switchToTeam(window.client, 0);
 
-    title = await client.getTitle();
+    title = await window.client.getTitle();
     assert.include(title, 'Old Joe One');
   });
 };

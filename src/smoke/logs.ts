@@ -8,12 +8,12 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { clickWindowSubMenuItem } from '../helpers/click-window-menu-item';
 import { waitForFileInDir } from '../helpers/wait-for-file';
 
-export const test: SuiteMethod = async (client, { it, beforeAll }) => {
+export const test: SuiteMethod = async ({ it, beforeAll }) => {
   const targetDir = remote.app.getPath('downloads');
   let createdLogFile = '';
 
   beforeAll(async () => {
-    await getBrowserViewHandle(client);
+    await getBrowserViewHandle(window.client);
   });
 
   it('can reveals log (window menu) in the downloads folder', async () => {

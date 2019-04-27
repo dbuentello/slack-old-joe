@@ -35,4 +35,11 @@ export class Root {
   }
 }
 
-(window as any).OldJoe = new Root();
+declare global {
+  interface Window {
+    OldJoe: Root;
+    client: BrowserObject;
+  }
+}
+
+window.OldJoe = new Root();
