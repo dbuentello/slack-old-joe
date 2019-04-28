@@ -58,6 +58,7 @@ export class Setup extends React.Component<SetupProps, {}> {
             <li>
               Use a Wi-Fi connection.
             </li>
+            <li>Close all apps that might send notifications.</li>
           </ul>
           <FormGroup label="Slack App to test" labelInfo="(required)">
             <InputGroup

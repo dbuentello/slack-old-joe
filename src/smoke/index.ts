@@ -12,6 +12,7 @@ import { test as devToolsTest } from './devtools';
 import { test as preferencesTest } from './preferences';
 import { test as spellcheckTest } from './spellcheck';
 import { test as processesTest } from './processes';
+import { test as notificationTest } from './notifications';
 import { test as logoutTest } from './logout';
 
 import { TestFile } from '../interfaces';
@@ -19,6 +20,7 @@ import { TestFile } from '../interfaces';
 export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'Sign in', test: loginTest },
   { name: 'Messaging', test: messagingTest },
+  { name: 'Notifications', test: notificationTest },
   { name: 'File Up- and Download', test: downloadTest },
   { name: 'App Window', test: windowTest },
   { name: 'Reloading', test: reloadTest },
