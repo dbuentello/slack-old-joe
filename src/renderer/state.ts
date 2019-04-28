@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, autorun } from 'mobx';
 import { TestSuites, SuiteResult, TestFile } from '../interfaces';
 import { getSlackPath } from '../helpers/get-slack-path';
 import { SMOKE_TESTS } from '../smoke';
@@ -28,10 +28,13 @@ export class AppState {
   @observable public disabledTests: Array<string> = [];
 
   // Persisted
-  @observable public expectedLaunchTime: string = this.retrieve('expectedLaunchTime') || '5000';
+  @observable public expectedLaunchTime: string =
+    this.retrieve('expectedLaunchTime') || '5000';
 
   constructor() {
     this.setup();
+
+    autorun(() => this.save('expectedLaunchTime', this.expectedLaunchTime));
   }
 
   public async setup() {
@@ -46,9 +49,8 @@ export class AppState {
    */
   private save(key: string, value?: string | number | object | null | boolean) {
     if (value) {
-      const _value = typeof value === 'object'
-        ? JSON.stringify(value)
-        : value.toString();
+      const _value =
+        typeof value === 'object' ? JSON.stringify(value) : value.toString();
 
       localStorage.setItem(key, _value);
     } else {
