@@ -52,6 +52,10 @@ export interface SuiteResult {
   results: Results;
 }
 
-export type BrowserObject = WebDriver.ClientOptions &
+export type WIOJoeBrowserObject = WebDriver.ClientOptions &
   WebDriver.ClientAsync &
   WebdriverIOAsync.Browser;
+
+export interface JoeBrowserObject extends BrowserObject {
+  restart: () => Promise<void>;
+}

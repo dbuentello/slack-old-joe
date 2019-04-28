@@ -1,4 +1,6 @@
 import { appState } from './state';
+import { JoeBrowserObject } from '../interfaces';
+import { registerHelpers } from './helpers';
 
 /**
  * The top-level class controlling the whole app. This is *not* a React component,
@@ -9,6 +11,7 @@ import { appState } from './state';
 export class Root {
   constructor() {
     this.setup();
+    registerHelpers();
   }
 
   /**
@@ -38,7 +41,7 @@ export class Root {
 declare global {
   interface Window {
     OldJoe: Root;
-    client: BrowserObject;
+    client: JoeBrowserObject;
   }
 }
 

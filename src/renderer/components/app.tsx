@@ -24,6 +24,7 @@ import { wait } from '../../helpers/wait';
 import { killSlack } from '../../native-commands/kill';
 import { Results } from './results';
 import { waitForClientReady } from '../../helpers/wait-for-client-ready';
+import { JoeBrowserObject } from '../../interfaces';
 
 const TIME_TO_LAUNCH = 5000;
 
@@ -174,17 +175,17 @@ export class App extends React.Component<AppProps, LocalAppState> {
     clearInterval(countdownInterval);
     this.setState({ startingIn: 0 });
 
-    await this.runTests(driver, client);
+    await this.runTests(driver);
     await this.stopTests(driver, client);
   }
 
-  public async runTests(_driver: ChildProcess, client: BrowserObject) {
+  public async runTests(_driver: ChildProcess) {
     const { appState } = this.props;
 
     this.setState({ hasStarted: true });
 
     try {
-      appState.tests = await readTests(client, appState.availableTestFiles);
+      appState.tests = await readTests(appState.availableTestFiles);
       appState.testsTotal = appState.tests.reduce((prev, test) => {
         return prev + test.suiteMethodResults.it.length;
       }, 0);
@@ -217,7 +218,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
     }
   }
 
-  public async stopTests(driver: ChildProcess, client: BrowserObject) {
+  public async stopTests(driver: ChildProcess, client: JoeBrowserObject) {
     if (this.props.appState.closeAppAtEnd) {
       try {
         // Kill driver and session

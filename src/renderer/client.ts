@@ -1,14 +1,15 @@
 import { remote } from 'webdriverio';
 
-import { Options } from '../interfaces';
+import { Options, JoeBrowserObject } from '../interfaces';
 import { registerHelpers } from './helpers';
 import { wait } from '../helpers/wait';
+import { waitForClientReady } from '../helpers/wait-for-client-ready';
 
-let _client: null | BrowserObject = null;
+let _client: null | JoeBrowserObject = null;
 
 export async function getClient(input: Options) {
   if (_client) {
-    await _client.closeApp();
+    await _client.deleteSession();
   }
 
   const options: any = {
@@ -22,13 +23,12 @@ export async function getClient(input: Options) {
     }
   };
 
-  _client = await remote(options);
-  _client['restart'] = async () => {
+  _client = (await remote(options)) as any;
+  _client!.restart = async () => {
     await getClient(input);
-    await wait(2000);
+    await wait(1000);
+    await waitForClientReady(window.client);
   };
 
-  return (window['client'] = _client);
+  return (window.client = _client!);
 }
-
-registerHelpers();

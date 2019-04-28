@@ -1,11 +1,11 @@
 import { assert } from 'chai';
 
-import { SuiteMethod } from '../interfaces';
+import { SuiteMethod, JoeBrowserObject } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { switchToChannel } from '../helpers/switch-channel';
 import { enterMessage } from '../helpers/enter-message';
 
-async function assertVideo(client: BrowserObject) {
+async function assertVideo(client: JoeBrowserObject) {
   // Play the video
   await (await client.$('.c-message_attachment__video_play')).moveTo();
   await client.positionClick();

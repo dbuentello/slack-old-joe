@@ -10,7 +10,6 @@ import { takeScreenshot } from '../report';
 import { AppState } from './state';
 
 export async function readTests(
-  client: BrowserObject,
   testFiles: Array<TestFile>
 ): Promise<TestSuites> {
   const tests: TestSuites = [];
@@ -19,7 +18,7 @@ export async function readTests(
     if (!testFile.disabled) {
       tests.push({
         name: testFile.name,
-        suiteMethodResults: await readTestFile(testFile.test, client)
+        suiteMethodResults: await readTestFile(testFile.test)
       });
     }
   }
@@ -27,7 +26,7 @@ export async function readTests(
   return tests;
 }
 
-export async function readTestFile(test: SuiteMethod, client: BrowserObject) {
+export async function readTestFile(test: SuiteMethod) {
   const suiteMethodResults: SuiteMethodResults = {
     it: [],
     beforeAll: [],
