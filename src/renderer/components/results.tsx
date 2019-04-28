@@ -20,12 +20,15 @@ export class Results extends React.Component<ResultsProps, {}> {
   }
 
   public render() {
-    const { results } = this.props.appState;
+    const { results, done } = this.props.appState;
     const resultElements =
       results.length > 0 ? (
         results.map(this.renderResult)
       ) : (
-        [ <h5>Waiting for test results...</h5>]
+        [ done
+          ? <h5>Didn't run any tests, huh? You rascal!</h5>
+          : <h5>Waiting for test results...</h5>
+        ]
       );
 
     // Warning: In CSS, we'll reverse this list!
