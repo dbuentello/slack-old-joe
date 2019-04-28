@@ -25,9 +25,7 @@ import { killSlack } from '../../native-commands/kill';
 import { Results } from './results';
 import { waitUntilSlackReady } from '../../helpers/wait-until-slack-ready';
 import { JoeBrowserObject } from '../../interfaces';
-
-const TIME_TO_LAUNCH = 5000;
-
+import { start } from 'repl';
 interface AppProps {
   appState: AppState;
 }
@@ -78,10 +76,10 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   public renderStartingIn() {
-    const { hasCountdownStarted, hasStarted, startingIn } = this.state;
+    const { hasCountdownStarted, hasStarted } = this.state;
     const text =
       hasCountdownStarted && !hasStarted
-        ? `Preparing for Lift-Off... (${startingIn})`
+        ? `Lift-Off expected in ${this.getStartingIn()}`
         : `Start Smoke Tests`;
 
     return (
@@ -92,7 +90,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
           rightIcon={
             this.state.startingIn > 0 ? (
               <Spinner
-                value={this.state.startingIn / TIME_TO_LAUNCH}
+                value={this.state.startingIn / this.getExpectedLauchTime()}
                 size={20}
               />
             ) : null
@@ -151,7 +149,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
   public async run() {
     const { appState } = this.props;
 
-    this.setState({ hasCountdownStarted: true, startingIn: TIME_TO_LAUNCH });
+    this.setState({ hasCountdownStarted: true, startingIn: this.getExpectedLauchTime() });
 
     await clean();
 
@@ -172,7 +170,9 @@ export class App extends React.Component<AppProps, LocalAppState> {
     // Wait for the client to be ready
     await wait(1000);
     await waitUntilSlackReady(client);
+
     clearInterval(countdownInterval);
+    this.setNewExpectedLaunchTime();
     this.setState({ startingIn: 0 });
 
     await this.runTests(driver);
@@ -241,5 +241,21 @@ export class App extends React.Component<AppProps, LocalAppState> {
     if (this.props.appState.generateReportAtEnd) {
       shell.showItemInFolder(getReportDir());
     }
+  }
+
+  private getExpectedLauchTime() {
+    return parseInt(this.props.appState.expectedLaunchTime, 10);
+  }
+
+  private getStartingIn() {
+    const { startingIn } = this.state;
+    return `${(startingIn / 1000).toFixed(1)}s`;
+  }
+
+  private setNewExpectedLaunchTime() {
+    const { startingIn } = this.state;
+    const expectedLaunchTime = this.getExpectedLauchTime();
+
+    this.props.appState.expectedLaunchTime = `${expectedLaunchTime - startingIn}`;
   }
 }

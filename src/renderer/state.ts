@@ -27,12 +27,46 @@ export class AppState {
   @observable public generateReportAtEnd: boolean = false;
   @observable public disabledTests: Array<string> = [];
 
+  // Persisted
+  @observable public expectedLaunchTime: string = this.retrieve('expectedLaunchTime') || '5000';
+
   constructor() {
     this.setup();
   }
 
   public async setup() {
     this.appToTest = await getSlackPath();
+  }
+
+  /**
+   * Save a key/value to localStorage.
+   *
+   * @param {string} key
+   * @param {(string | number | object)} [value]
+   */
+  private save(key: string, value?: string | number | object | null | boolean) {
+    if (value) {
+      const _value = typeof value === 'object'
+        ? JSON.stringify(value)
+        : value.toString();
+
+      localStorage.setItem(key, _value);
+    } else {
+      localStorage.removeItem(key);
+    }
+  }
+
+  /**
+   * Fetch data from localStorage.
+   *
+   * @template T
+   * @param {string} key
+   * @returns {(T | string | null)}
+   */
+  private retrieve<T>(key: string): T {
+    const value = localStorage.getItem(key);
+
+    return JSON.parse(value || 'null') as T;
   }
 }
 
