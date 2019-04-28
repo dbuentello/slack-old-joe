@@ -23,7 +23,7 @@ import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
 import { wait } from '../../helpers/wait';
 import { killSlack } from '../../native-commands/kill';
 import { Results } from './results';
-import { waitForClientReady } from '../../helpers/wait-for-client-ready';
+import { waitUntilSlackReady } from '../../helpers/wait-until-slack-ready';
 import { JoeBrowserObject } from '../../interfaces';
 
 const TIME_TO_LAUNCH = 5000;
@@ -162,7 +162,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
     }
 
     const driver = await spawnChromeDriver();
-    const client = await getClient({ binary: appState.appToTest });
+    const client = await getClient(appState);
 
     // Okay, get ready to run this
     const countdownInterval = setInterval(() => {
@@ -171,7 +171,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     // Wait for the client to be ready
     await wait(1000);
-    await waitForClientReady(client);
+    await waitUntilSlackReady(client);
     clearInterval(countdownInterval);
     this.setState({ startingIn: 0 });
 

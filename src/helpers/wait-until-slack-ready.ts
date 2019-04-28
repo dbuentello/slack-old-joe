@@ -8,7 +8,7 @@ import { getBrowserViewHandle } from './get-browser-view';
  * @param {BrowserObject} client
  * @returns {Promise<boolean>}
  */
-export function waitForClientReady(client: BrowserObject): Promise<boolean> {
+export function waitUntilSlackReady(client: BrowserObject): Promise<boolean> {
   const getHasWindows = async () =>
     (await client.getWindowHandles()).length > 1;
 

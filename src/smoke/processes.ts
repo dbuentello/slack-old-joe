@@ -4,14 +4,14 @@ import { SuiteMethod } from '../interfaces';
 import { getRunningSlackPocessesCount } from '../helpers/get-running-slack-processes';
 import { isWin } from '../helpers/os';
 import { appState } from '../renderer/state';
-import { waitUntilSlackClosed } from '../helpers/wait-until-slack-closed';
+import { waitForSlackClosed } from '../helpers/wait-until-slack-closed';
 
 export const test: SuiteMethod = async ({ it }) => {
   it('leaves no processes behind after closing', async () => {
     await window.client.deleteSession();
 
     // Wait until we have no processes
-    assert.ok(await waitUntilSlackClosed(appState.appToTest));
+    assert.ok(await waitForSlackClosed(appState.appToTest));
 
     // Restart the app
     await window.client.restart();
