@@ -9,7 +9,7 @@ export const test: SuiteMethod = async ({ it }) => {
   it('signs out', async () => {
     const numberOfTeams = await getTeamsCount();
     const browserViewHandle = await getBrowserViewHandle(window.client);
-    assert.ok(browserViewHandle);
+    assert.ok(browserViewHandle, 'browserView handle');
 
     // Try to sign out
     const teamMenu = await window.client.$('#team_menu');
