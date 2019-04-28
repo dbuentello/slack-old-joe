@@ -22,7 +22,7 @@ import {
   sendKeyboardEvent,
   sendNativeKeyboardEvent
 } from '../helpers/send-keyboard-event';
-import { openPreferences } from '../helpers/open-preferences';
+import { openPreferences, closePreferences } from '../helpers/open-preferences';
 import { switchToChannel } from '../helpers/switch-channel';
 import { waitForFile, waitForFileInDir } from '../helpers/wait-for-file';
 import { switchToTeam } from '../helpers/switch-teams';
@@ -31,17 +31,21 @@ import {
   sendClickElement
 } from '../helpers/send-pointer-event';
 import { enableWifi, disableWifi } from '../native-commands/wifi';
+import { getGpuWindowHandle } from '../helpers/get-gpu-info-window';
+import { openGpuInfoWindow } from '../helpers/open-gpu-info-window';
 
 export function registerHelpers() {
   window['helpers'] = {
     clickDockMenuItem,
     clickWindowMenuItem,
     clickWindowSubMenuItem,
+    closePreferences,
     disableWifi,
     enableWifi,
     enterMessage,
     getBrowserViewHandle,
     getDevToolsWindowHandle,
+    getGpuWindowHandle,
     getPostWindowHandle,
     getRendererWindowHandle,
     getSignInWindow,
@@ -49,6 +53,7 @@ export function registerHelpers() {
     getTeamsCount,
     openBrowserAndSignIn,
     openBrowserAndWaitForSignIn,
+    openGpuInfoWindow,
     openPreferences,
     openQuickSwitcher,
     runAppleScript,

@@ -6,14 +6,14 @@ import { selectNextTeamShortcut } from '../helpers/switch-teams';
 import { openPreferences, closePreferences } from '../helpers/open-preferences';
 import { isWin } from '../helpers/os';
 import { wait } from '../helpers/wait';
+import { enterMessage } from '../helpers/enter-message';
+import { getGpuWindowHandle } from '../helpers/get-gpu-info-window';
+import { getIsGpuEnabled } from '../helpers/get-gpu-enabled';
+import { openGpuInfoWindow } from '../helpers/open-gpu-info-window';
 
 export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
   beforeAll(async () => {
     await getBrowserViewHandle(window.client);
-  });
-
-  afterAll(async () => {
-    await closePreferences(window.client);
   });
 
   it('can open the preferences', async () => {
@@ -39,22 +39,43 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
       'return desktop.app.getPreference("useHwAcceleration")',
       []
     );
-    assert.equal(setting, false, 'Setting has not been disabled');
+    assert.isFalse(
+      setting,
+      `hardware acceleration (as noted by Slack's preference store)`
+    );
+  });
+
+  it('can open the /slackgpuinfo window', async () => {
+    await closePreferences(window.client);
+    await enterMessage(window.client, '/slackgpuinfo', true);
+    await wait(300);
+
+    assert.ok(
+      await getGpuWindowHandle(window.client),
+      'the chrome:///gpu window'
+    );
+  });
+
+  it('has hardware acceleration enabled', async () => {
+    assert.isTrue(
+      await getIsGpuEnabled(window.client),
+      'hardware acceleration (as reported by Chrome)'
+    );
+
+    // Close the window
+    await window.client.closeWindow();
+    await getBrowserViewHandle(window.client);
   });
 
   it('persists these setting across teams', async () => {
     await selectNextTeamShortcut(window.client);
-    await openPreferences(window.client);
-
-    const advancedButton = await window.client.$('button=Advanced');
-    await advancedButton.click();
-    await wait(100);
+    await openPreferences(window.client, 'Advanced');
 
     const checkboxes = await window.client.$$('.c-input_checkbox');
     const disableHwCheckbox = checkboxes[checkboxes.length - 1];
     assert.ok(
       await disableHwCheckbox.getAttribute('checked'),
-      'checkbox is not checked'
+      'hardware acceleration checkbox'
     );
 
     // Switch back
@@ -63,7 +84,19 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
     await selectNextTeamShortcut(window.client);
   });
 
+  it('launches without hardware acceleration on next launch', async () => {
+    // The setting should now be at "off", so let's relaunch
+    await window.client.restart();
+
+    await openGpuInfoWindow(window.client);
+
+    assert.isFalse(await getIsGpuEnabled(window.client));
+    //await window.client.closeWindow();
+  });
+
   it('can enable hardware acceleration', async () => {
+    await openPreferences(window.client, 'Advanced');
+
     const disableHwButton = await window.client.$(
       'strong=Disable hardware acceleration'
     );
@@ -74,7 +107,23 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
       'return desktop.app.getPreference("useHwAcceleration")',
       []
     );
-    assert.equal(setting, true, 'Setting has not been enabled');
+    assert.isTrue(
+      setting,
+      `hardware acceleration (as noted by Slack's preference store)`
+    );
+  });
+
+  it('launches with hardware acceleration on next launch', async () => {
+    // The setting should now be at "off", so let's relaunch
+    await window.client.restart();
+    await openGpuInfoWindow(window.client);
+
+    assert.isTrue(
+      await getIsGpuEnabled(window.client),
+      'hardware acceleration (as reported by Chrome)'
+    );
+
+    await window.client.closeWindow();
   });
 
   it('can enable launch on login (Windows)', async () => {

@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { shell } from 'electron';
 
-import { AppState, appState } from '../state';
+import { AppState } from '../state';
 import { clean, restore } from '../../helpers/clean-restore';
 import { spawnChromeDriver } from '../driver';
 import { getClient } from '../client';
@@ -25,7 +25,7 @@ import { killSlack } from '../../native-commands/kill';
 import { Results } from './results';
 import { waitUntilSlackReady } from '../../helpers/wait-until-slack-ready';
 import { JoeBrowserObject } from '../../interfaces';
-import { start } from 'repl';
+
 interface AppProps {
   appState: AppState;
 }
@@ -43,6 +43,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     this.run = this.run.bind(this);
     this.showReportMaybe = this.showReportMaybe.bind(this);
+    this.testCallback = this.testCallback.bind(this);
 
     this.state = {
       startingIn: 0,
@@ -105,7 +106,8 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   public renderProgress() {
-    const { testsDone, testsFailed, testsTotal, done } = this.props.appState;
+    const { appState } = this.props;
+    const { testsDone, testsFailed, testsTotal } = appState;
     const percentageDone =
       testsTotal > 0 ? (testsFailed + testsDone) / testsTotal : 0;
 
@@ -192,29 +194,29 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
       for (const test of appState.tests) {
         // Now run the suite, updating after each test
-        const fileResult = await runTestFile(
-          test.name,
-          test.suiteMethodResults,
-          success => {
-            if (success) {
-              appState.testsDone++;
-            } else {
-              appState.testsFailed++;
-            }
-          },
-          appState
-        );
-
-        appState.results.push(fileResult);
+        try {
+          appState.results.push(await runTestFile(
+            test.name,
+            test.suiteMethodResults,
+            this.testCallback,
+            appState
+          ));
+        } catch (error) {
+          console.warn(`Failed to run test suite ${test.name}`, error);
+        }
       }
 
       appState.done = true;
 
       if (appState.generateReportAtEnd) {
-        await writeReport(appState.results);
+        try {
+          await writeReport(appState.results);
+        } catch (error) {
+          console.warn(`Failed to write report`, error);
+        }
       }
     } catch (error) {
-      console.warn(error);
+      console.warn(`Failed to run tests`, error);
     }
   }
 
@@ -234,6 +236,21 @@ export class App extends React.Component<AppProps, LocalAppState> {
       } catch (error) {
         console.warn(error);
       }
+    }
+  }
+
+  /**
+   * Callback for individual tests, counting successes and errors
+   *
+   * @param {boolean} success
+   */
+  public testCallback(success: boolean) {
+    const { appState } = this.props;
+
+    if (success) {
+      appState.testsDone++;
+    } else {
+      appState.testsFailed++;
     }
   }
 

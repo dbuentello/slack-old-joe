@@ -3,10 +3,14 @@ import { isMac } from './os';
 import { getBrowserViewHandle } from './get-browser-view';
 import { wait } from './wait';
 
-export async function openPreferences(client: BrowserObject) {
+export async function openPreferences(
+  client: BrowserObject,
+  preferenceGroup?: string
+) {
+  await getBrowserViewHandle(client);
+
   if (await getIsPreferencesOpen(client)) return;
 
-  await getBrowserViewHandle(client);
   await sendNativeKeyboardEvent({
     cmd: isMac(),
     ctrl: !isMac(),
@@ -15,6 +19,12 @@ export async function openPreferences(client: BrowserObject) {
 
   const prefencesModal = await client.$('.p-prefs_modal');
   await prefencesModal.waitForDisplayed(1000);
+
+  if (preferenceGroup) {
+    const advancedButton = await window.client.$(`button=${preferenceGroup}`);
+    await advancedButton.click();
+    await wait(200);
+  }
 
   return prefencesModal;
 }
