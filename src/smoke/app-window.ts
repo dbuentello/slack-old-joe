@@ -6,6 +6,7 @@ import { fullscreen } from '../native-commands/fullscreen';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { maximize } from '../native-commands/maximize';
 import { minimize } from '../native-commands/minimize';
+import { getIsHidden } from '../helpers/get-is-hidden';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
@@ -59,17 +60,12 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can minimize the window', async () => {
-    let isHidden = await window.client.executeScript(
-      'return document.hidden',
-      []
-    );
-    assert.ok(!isHidden, 'document.hidden returns false');
+    assert.ok(!(await getIsHidden(window.client)), 'document.hidden');
 
     await minimize();
     await wait(1000);
 
-    isHidden = await window.client.executeScript('return document.hidden', []);
-    assert.ok(isHidden, 'document.hidden returns true');
+    assert.ok(await getIsHidden(window.client), 'document.hidden');
 
     // Restore
     await minimize(true);

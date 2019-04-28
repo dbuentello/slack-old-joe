@@ -1,6 +1,8 @@
 import { runAppleScript } from '../helpers/applescript';
+import { isMac } from '../helpers/os';
 
-const getOpenNotificationCountAppleScript = () => `
+const getOpenNotificationCountAppleScript = () =>
+  `
 tell application "System Events"
 	tell process "Notification Center"
 		set theseWindows to every window
@@ -10,6 +12,8 @@ end tell
 `.trim();
 
 export async function getNativeOpenNotificationCount() {
-  const script = getOpenNotificationCountAppleScript();
-  return runAppleScript(script);
+  if (isMac()) {
+    const script = getOpenNotificationCountAppleScript();
+    return runAppleScript(script);
+  }
 }
