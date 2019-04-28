@@ -6,12 +6,12 @@ import { getRunningSlackPocessesCount } from './get-running-slack-processes';
  * @export
  * @param {string} appPath
  * @param {number} [timeout=10 * 1000]
- * @returns
+ * @returns {Promise<boolean>}
  */
 export async function waitUntilSlackClosed(
   appPath: string,
   timeout: number = 10 * 1000
-) {
+): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const test = async () => {
       return getRunningSlackPocessesCount(appPath) === 0;
@@ -26,7 +26,7 @@ export async function waitUntilSlackClosed(
       if (test()) {
         clearTimeout(testTimeout);
         clearInterval(testInterval);
-        resolve();
+        resolve(true);
       }
     }, 500);
   });

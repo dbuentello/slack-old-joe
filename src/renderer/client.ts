@@ -3,7 +3,7 @@ import { remote } from 'webdriverio';
 import { JoeBrowserObject } from '../interfaces';
 import { wait } from '../helpers/wait';
 import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';
-import { waitForSlackClosed } from '../helpers/wait-until-slack-closed';
+import { waitUntilSlackClosed } from '../helpers/wait-until-slack-closed';
 import { AppState } from './state';
 
 let _client: null | JoeBrowserObject = null;
@@ -20,18 +20,23 @@ export async function getClient(appState: AppState) {
     }
   };
 
-  _client = await remote(options) as JoeBrowserObject;
-  _client.restart = async function restart () {
+  _client = (await remote(options)) as JoeBrowserObject;
+  _client.restart = async function restart() {
     await this.stop();
+
     await getClient(appState);
     await wait(1000);
     await waitUntilSlackReady(window.client);
   };
 
   _client.stop = async function stop() {
-    await this.deleteSession();
-    await waitForSlackClosed(appState.appToTest);
-  }
+    const sessions = await this.getSessions();
 
-  return window.client = _client;
+    if (sessions.length > 0) {
+      await this.deleteSession();
+      await waitUntilSlackClosed(appState.appToTest);
+    }
+  };
+
+  return (window.client = _client);
 }
