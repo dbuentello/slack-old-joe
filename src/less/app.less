@@ -1,0 +1,72 @@
+#app {
+  height: 100vh;
+  padding: 10px;
+
+  .container {
+    height: 100%;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      align-content: space-between;
+      justify-content: space-between;
+      height: 100%;
+    }
+  }
+}
+
+.bp3-card {
+  opacity: .8;
+}
+
+.progress-card {
+  display: flex;
+
+  .bp3-spinner {
+    margin-right: 10px;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.result-card {
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: auto;
+  flex-grow: 1;
+  margin-bottom: 10px;
+
+  h5 {
+    margin: 20px 0 5px 0;
+  }
+
+  h5:last-of-type {
+    margin: 0 0 5px 0;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.setup-card,
+.test-chooser-card {
+  height: 100%;
+  margin-bottom: 10px;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  ul {
+    padding-inline-start: 1rem;
+  }
+}
+
+.result {
+  pre {
+    white-space: pre-wrap;
+  }
+}

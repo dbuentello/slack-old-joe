@@ -60,15 +60,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
         : this.renderStartingIn();
 
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignContent: 'space-between',
-          justifyContent: 'space-between',
-          height: '100%'
-        }}
-      >
+      <div>
         <h2 style={{ textAlign: 'right', marginTop: 0 }}>🐪</h2>
 
         {progressOrStandby}
@@ -107,9 +99,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
   public renderProgress() {
     const { appState } = this.props;
-    const { testsDone, testsFailed, testsTotal } = appState;
-    const percentageDone =
-      testsTotal > 0 ? (testsFailed + testsDone) / testsTotal : 0;
+    const { testsDone, testsFailed } = appState;
 
     return (
       <>
@@ -120,11 +110,11 @@ export class App extends React.Component<AppProps, LocalAppState> {
           className="progress-card"
           onClick={this.showReportMaybe}
         >
-          <Spinner value={percentageDone} />
-          <div style={{ height: '9rem' }}>
-            <Icon icon="endorsed" /> Successful tests: {testsDone}
+          <Spinner value={this.getPercentageDone()} />
+          <div>
+            <p><Icon icon="endorsed" /> Successful tests: {testsDone}</p>
             <Divider />
-            <Icon icon="error" /> Failed tests: {testsFailed}
+            <p><Icon icon="error" /> Failed tests: {testsFailed}</p>
             {this.renderDone()}
           </div>
         </Card>
@@ -142,7 +132,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
      ? (
       <>
         <Divider />
-        <span>{text}</span>
+        <p>{text}</p>
       </>
      )
      : null;
@@ -264,15 +254,23 @@ export class App extends React.Component<AppProps, LocalAppState> {
     return parseInt(this.props.appState.expectedLaunchTime, 10);
   }
 
-  private getStartingIn() {
-    const { startingIn } = this.state;
-    return `${(startingIn / 1000).toFixed(1)}s`;
-  }
-
   private setNewExpectedLaunchTime() {
     const { startingIn } = this.state;
     const expectedLaunchTime = this.getExpectedLauchTime();
 
     this.props.appState.expectedLaunchTime = `${expectedLaunchTime - startingIn}`;
+  }
+
+  private getStartingIn() {
+    const { startingIn } = this.state;
+    return `${(startingIn / 1000).toFixed(1)}s`;
+  }
+
+  private getPercentageDone() {
+    const { appState } = this.props;
+    const { testsDone, testsFailed, testsTotal, done } = appState;
+
+    if (done) return 1;
+    return testsTotal > 0 ? (testsFailed + testsDone) / testsTotal : 0
   }
 }

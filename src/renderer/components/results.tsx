@@ -25,9 +25,10 @@ export class Results extends React.Component<ResultsProps, {}> {
       results.length > 0 ? (
         results.map(this.renderResult)
       ) : (
-        <h5>Waiting for test results...</h5>
+        [ <h5>Waiting for test results...</h5>]
       );
 
+    // Warning: In CSS, we'll reverse this list!
     return (
       <Card elevation={Elevation.ONE} className="result-card">
         {resultElements}
@@ -35,29 +36,27 @@ export class Results extends React.Component<ResultsProps, {}> {
     );
   }
 
-  public renderResult(suiteResult: SuiteResult) {
-    return (
-      <>
-        <h5>{suiteResult.name}</h5>
-        {suiteResult.results.map(({ ok, name, error }) => {
-          const icon = ok ? (
-            <Icon icon="endorsed" />
-          ) : (
-            <Icon icon="error" intent="danger" />
-          );
+  public renderResult(suiteResult: SuiteResult): Array<JSX.Element> {
+    return [
+      <h5>{suiteResult.name}</h5>,
+      ...suiteResult.results.map(({ ok, name, error }) => {
+        const icon = ok ? (
+          <Icon icon="endorsed" />
+        ) : (
+          <Icon icon="error" intent="danger" />
+        );
 
-          const errorElement = error ? <pre>{error.toString()}</pre> : null;
+        const errorElement = error ? <pre>{error.toString()}</pre> : null;
 
-          return (
-            <div className="result">
-              <p>
-                {icon} {name}
-              </p>
-              {errorElement}
-            </div>
-          );
-        })}
-      </>
-    );
+        return (
+          <div className="result">
+            <p>
+              {icon} {name}
+            </p>
+            {errorElement}
+          </div>
+        );
+      })
+    ].reverse();
   }
 }
