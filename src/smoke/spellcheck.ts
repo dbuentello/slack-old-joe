@@ -15,7 +15,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await switchToTeam(window.client, 0);
   });
 
-  it('corrects misspelled words and replaces on correction', async () => {
+  it('corrects misspelled words and replaces on correction via context menu', async () => {
     await switchToChannel(window.client, 'spellcheck');
     await wait(300);
     await enterMessage(window.client, 'mispelled');

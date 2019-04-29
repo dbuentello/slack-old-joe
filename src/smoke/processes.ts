@@ -20,7 +20,7 @@ export const test: SuiteMethod = async ({ it }) => {
     await window.client.restart();
   });
 
-  it('has the right number of processes (and not more or less)', async () => {
+  it('has the right number of processes while running (and not more or less)', async () => {
     const processes = getRunningSlackPocessesCount(appState.appToTest);
     const expected = isWin() ? 6 : 6;
 

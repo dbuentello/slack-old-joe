@@ -69,8 +69,6 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
   });
 
   it('can select a workspace using the Dock menu', async () => {
-    if (process.platform !== 'darwin') return;
-
     // In the dock, "Old Joe" should be number six from the bottom
     await clickDockMenuItem(6);
     await getBrowserViewHandle(window.client, 500);
@@ -84,7 +82,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
 
     const afterTitle = await window.client.getTitle();
     assert.include(afterTitle, smokeTeams[1].name);
-  });
+  }, [ 'darwin' ]);
 
   it('can select a workspace using the Quick Switcher', async () => {
     await switchToTeam(window.client, 1);

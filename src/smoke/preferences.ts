@@ -4,7 +4,6 @@ import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { selectNextTeamShortcut } from '../helpers/switch-teams';
 import { openPreferences, closePreferences } from '../helpers/open-preferences';
-import { isWin } from '../utils/os';
 import { wait } from '../utils/wait';
 import { enterMessage } from '../helpers/enter-message';
 import { getGpuWindowHandle } from '../helpers/get-gpu-info-window';
@@ -45,7 +44,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
     );
   });
 
-  it('can open the /slackgpuinfo window', async () => {
+  it('can open the `/slackgpuinfo` window by typing it into the message box', async () => {
     await closePreferences(window.client);
     await enterMessage(window.client, '/slackgpuinfo', true);
     await wait(300);
@@ -56,7 +55,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
     );
   });
 
-  it('has hardware acceleration enabled', async () => {
+  it('has hardware acceleration enabled by default (and is actually using it)', async () => {
     assert.isTrue(
       await getIsGpuEnabled(window.client),
       'hardware acceleration (as reported by Chrome)'
