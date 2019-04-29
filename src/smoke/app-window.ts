@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 import { fullscreen } from '../native-commands/fullscreen';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { maximize } from '../native-commands/maximize';

@@ -4,11 +4,11 @@ import { assert } from 'chai';
 import { SuiteMethod } from '../interfaces';
 import { switchToTeam } from '../helpers/switch-teams';
 import { switchToChannel } from '../helpers/switch-channel';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 import { enterMessage } from '../helpers/enter-message';
 import { sendClickElement } from '../helpers/send-pointer-event';
 import { sendKeyboardEvent } from '../helpers/send-keyboard-event';
-import { doTimes } from '../helpers/do-times';
+import { doTimes } from '../utils/do-times';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {

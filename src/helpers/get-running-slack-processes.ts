@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 
-import { isWin, isMac } from './os';
+import { isWin, isMac } from '../utils/os';
 
 const debug = require('debug')('old-joe');
 

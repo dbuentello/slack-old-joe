@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { reload, reloadEverything } from '../native-commands/reload';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';

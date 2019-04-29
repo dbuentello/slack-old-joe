@@ -1,5 +1,5 @@
-import { runAppleScript } from '../helpers/applescript';
-import { isMac, isWin } from '../helpers/os';
+import { runAppleScript } from '../utils/applescript';
+import { isMac, isWin } from '../utils/os';
 
 const getCloseAppleScript = () =>
   `

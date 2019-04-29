@@ -1,6 +1,6 @@
 import { getSignInWindow } from './get-sign-in-window';
 import { getBrowserViewHandle } from './get-browser-view';
-import { wait } from './wait';
+import { wait } from '../utils/wait';
 
 /**
  * Resolves once the client is ready

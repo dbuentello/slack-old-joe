@@ -1,7 +1,7 @@
 import * as path from 'path';
 
-import { isWin } from '../helpers/os';
-import { runPowerShellScript } from '../helpers/powershell';
+import { isWin } from '../utils/os';
+import { runPowerShellScript } from '../utils/powershell';
 
 export async function killSlack() {
   if (isWin()) {

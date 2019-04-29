@@ -1,6 +1,6 @@
-import { runAppleScript } from '../helpers/applescript';
+import { runAppleScript } from '../utils/applescript';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
-import { isMac } from '../helpers/os';
+import { isMac } from '../utils/os';
 
 const getAppleScriptValue = () =>
   `

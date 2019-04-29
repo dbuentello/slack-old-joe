@@ -2,7 +2,7 @@ import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
 import { getRunningSlackPocessesCount } from '../helpers/get-running-slack-processes';
-import { isWin } from '../helpers/os';
+import { isWin } from '../utils/os';
 import { appState } from '../renderer/state';
 
 export const test: SuiteMethod = async ({ it }) => {

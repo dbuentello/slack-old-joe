@@ -1,5 +1,5 @@
-import { runAppleScript } from '../helpers/applescript';
-import { isMac } from '../helpers/os';
+import { runAppleScript } from '../utils/applescript';
+import { isMac } from '../utils/os';
 
 export async function clickFirstNativeNotification() {
   if (isMac()) {

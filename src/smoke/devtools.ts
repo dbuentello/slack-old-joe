@@ -3,7 +3,7 @@ import { assert } from 'chai';
 import { SuiteMethod } from '../interfaces';
 import { clickWindowSubMenuItem } from '../helpers/click-window-menu-item';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 
 export const test: SuiteMethod = async ({ it }) => {
   it('can open the webapp devtools via menu', async () => {

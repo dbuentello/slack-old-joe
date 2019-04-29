@@ -1,4 +1,4 @@
-import { runAppleScript } from './applescript';
+import { runAppleScript } from '../utils/applescript';
 
 const getAppleScript = (itemIndexFromBottom: number) =>
   `

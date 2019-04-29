@@ -1,5 +1,5 @@
 import { getBrowserViewHandle } from './get-browser-view';
-import { wait } from './wait';
+import { wait } from '../utils/wait';
 import { getGpuWindowHandle } from './get-gpu-info-window';
 
 /**

@@ -20,7 +20,7 @@ import { getReportDir, writeReport } from '../../report';
 import { Setup } from './setup';
 import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
 import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
-import { wait } from '../../helpers/wait';
+import { wait } from '../../utils/wait';
 import { killSlack } from '../../native-commands/kill';
 import { Results } from './results';
 import { waitUntilSlackReady } from '../../helpers/wait-until-slack-ready';

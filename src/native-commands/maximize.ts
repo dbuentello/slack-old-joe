@@ -1,7 +1,7 @@
 import * as path from 'path';
 
-import { runAppleScriptFile } from '../helpers/applescript';
-import { isMac, isWin } from '../helpers/os';
+import { runAppleScriptFile } from '../utils/applescript';
+import { isMac, isWin } from '../utils/os';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 
 export async function maximize() {

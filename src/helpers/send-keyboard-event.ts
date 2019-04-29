@@ -35,7 +35,7 @@ export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
 }
 
 async function sendAppleScriptKeyboardEvent(options: KeyboardEventOptions) {
-  const { runAppleScript } = await import('./applescript');
+  const { runAppleScript } = await import('../utils/applescript');
   const { text, shift, alt, ctrl, cmd } = options;
   const instructions: Array<string> = [];
 

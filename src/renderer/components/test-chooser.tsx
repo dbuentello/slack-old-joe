@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Card, Elevation, Checkbox, Button } from '@blueprintjs/core';
 
 import { AppState } from '../state';
-import { handleBooleanChange } from '../../helpers/handle-boolean-change';
+import { handleBooleanChange } from '../../utils/handle-boolean-change';
 import { TestFile } from '../../interfaces';
 
 interface TestChooserProps {

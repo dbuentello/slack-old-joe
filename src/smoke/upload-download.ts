@@ -6,7 +6,7 @@ import { remote } from 'electron';
 import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { waitForFile } from '../helpers/wait-for-file';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 import { switchToChannel } from '../helpers/switch-channel';
 
 const DOWNLOADS_DIR = remote.app.getPath('downloads');

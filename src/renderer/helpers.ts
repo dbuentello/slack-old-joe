@@ -1,4 +1,4 @@
-import { runAppleScript, runAppleScriptFile } from '../helpers/applescript';
+import { runAppleScript, runAppleScriptFile } from '../utils/applescript';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import {
   clickWindowMenuItem,
@@ -17,7 +17,7 @@ import {
   openBrowserAndWaitForSignIn
 } from '../helpers/open-browser-and-sign-in';
 import { openQuickSwitcher } from '../helpers/open-quick-switcher';
-import { runPowerShellScript } from '../helpers/powershell';
+import { runPowerShellScript } from '../utils/powershell';
 import {
   sendKeyboardEvent,
   sendNativeKeyboardEvent

@@ -1,9 +1,9 @@
 import * as path from 'path';
 
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
-import { runAppleScript } from '../helpers/applescript';
-import { isMac, isWin } from '../helpers/os';
-import { runPowerShellScript } from '../helpers/powershell';
+import { runAppleScript } from '../utils/applescript';
+import { isMac, isWin } from '../utils/os';
+import { runPowerShellScript } from '../utils/powershell';
 
 export async function minimize(unminimize?: boolean) {
   // macOS

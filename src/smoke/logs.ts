@@ -7,7 +7,7 @@ import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { clickWindowSubMenuItem } from '../helpers/click-window-menu-item';
 import { waitForFileInDir } from '../helpers/wait-for-file';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { getGpuWindowHandle } from '../helpers/get-gpu-info-window';

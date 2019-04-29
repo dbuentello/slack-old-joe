@@ -1,10 +1,10 @@
 import * as robot from 'robotjs';
 
-import { runAppleScript } from './applescript';
-import { isWin, isMac } from './os';
+import { runAppleScript } from '../utils/applescript';
+import { isWin, isMac } from '../utils/os';
 import { focus } from '../native-commands/focus';
-import { doTimes } from './do-times';
-import { wait } from './wait';
+import { doTimes } from '../utils/do-times';
+import { wait } from '../utils/wait';
 
 const getAppleScript = (menuName: string, itemName: string) =>
   `

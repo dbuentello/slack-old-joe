@@ -15,7 +15,7 @@ import {
 import { AppState } from '../state';
 import { getBinaryPath } from '../../helpers/get-slack-path';
 import { DRIVER_VERSION } from '../driver';
-import { handleBooleanChange } from '../../helpers/handle-boolean-change';
+import { handleBooleanChange } from '../../utils/handle-boolean-change';
 import { TestChooser } from './test-chooser';
 
 const HOME_DIR = os.homedir();

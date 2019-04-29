@@ -13,7 +13,7 @@ import {
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { openQuickSwitcher } from '../helpers/open-quick-switcher';
 import { smokeTeams } from '../smoke-teams';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 
 export const test: SuiteMethod = async ({ it, beforeEach }) => {
   beforeEach(async () => {

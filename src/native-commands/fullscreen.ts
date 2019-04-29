@@ -1,6 +1,6 @@
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
-import { isMac, isWin, isLinux } from '../helpers/os';
-import { wait } from '../helpers/wait';
+import { isMac, isWin, isLinux } from '../utils/os';
+import { wait } from '../utils/wait';
 
 export async function fullscreen() {
   await sendNativeKeyboardEvent({

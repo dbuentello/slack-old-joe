@@ -1,12 +1,12 @@
 import { remote } from 'webdriverio';
 
 import { JoeBrowserObject } from '../interfaces';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';
 import { waitUntilSlackClosed } from '../helpers/wait-until-slack-closed';
 import { AppState } from './state';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
-import { isMac } from '../helpers/os';
+import { isMac } from '../utils/os';
 
 let _client: null | JoeBrowserObject = null;
 

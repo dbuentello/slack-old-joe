@@ -1,4 +1,4 @@
-import { wait } from './wait';
+import { wait } from '../utils/wait';
 import { getWindowHandle, GetWindowResult } from './get-window-handle';
 
 /**

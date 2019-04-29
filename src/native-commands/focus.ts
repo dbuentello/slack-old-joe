@@ -1,9 +1,9 @@
 import * as path from 'path';
 
-import { runAppleScript } from '../helpers/applescript';
-import { isMac, isWin } from '../helpers/os';
-import { runPowerShellScript } from '../helpers/powershell';
-import { wait } from '../helpers/wait';
+import { runAppleScript } from '../utils/applescript';
+import { isMac, isWin } from '../utils/os';
+import { runPowerShellScript } from '../utils/powershell';
+import { wait } from '../utils/wait';
 
 export async function focus() {
   if (isMac()) {

@@ -2,7 +2,7 @@ import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 import { getTeamsCount } from '../helpers/get-teams-count';
 
 export const test: SuiteMethod = async ({ it }) => {

@@ -1,7 +1,7 @@
 import { sendNativeKeyboardEvent } from './send-keyboard-event';
-import { isMac } from './os';
+import { isMac } from '../utils/os';
 import { getBrowserViewHandle } from './get-browser-view';
-import { wait } from './wait';
+import { wait } from '../utils/wait';
 
 export async function openPreferences(
   client: BrowserObject,

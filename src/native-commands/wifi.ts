@@ -1,4 +1,4 @@
-import { isMac } from '../helpers/os';
+import { isMac } from '../utils/os';
 
 export async function enableWifi() {
   if (isMac()) {

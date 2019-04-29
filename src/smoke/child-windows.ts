@@ -7,7 +7,7 @@ import {
   openAboutBox,
   closeAboutBox
 } from '../native-commands/mac-about-dialog';
-import { wait } from '../helpers/wait';
+import { wait } from '../utils/wait';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
 import { switchToChannel } from '../helpers/switch-channel';
 
