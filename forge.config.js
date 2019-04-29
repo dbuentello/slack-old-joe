@@ -5,7 +5,7 @@ const fs = require('fs')
 const packageJson = require('./package.json')
 
 const { version } = packageJson
-const iconDir = path.resolve(__dirname, 'assets', 'icons')
+const iconDir = path.resolve(__dirname, 'assets')
 
 module.exports = {
   hooks: {
@@ -13,9 +13,9 @@ module.exports = {
   },
   packagerConfig: {
     name: 'Old Joe',
-    executableName: 'slack-old-joe',
+    executableName: 'old-joe',
     asar: true,
-    // icon: path.resolve(__dirname, 'assets', 'icons', 'fiddle'),
+    icon: path.resolve(iconDir, 'icon'),
     // TODO: FIXME?
     // ignore: [
     //   /^\/\.vscode\//,
@@ -24,7 +24,6 @@ module.exports = {
     appBundleId: 'com.slack.old-joe',
     appCategoryType: 'public.app-category.developer-tools',
     win32metadata: {
-      CompanyName: 'Slack Technologies',
       OriginalFilename: 'Old Joe',
     },
     osxSign: {
@@ -52,7 +51,7 @@ module.exports = {
           loadingGif: './assets/loading.gif',
           noMsi: true,
           remoteReleases: '',
-          setupExe: `electron-fiddle-${version}-${arch}-setup.exe`,
+          setupExe: `old-joe-${version}-${arch}-setup.exe`,
           setupIcon: path.resolve(iconDir, 'fiddle.ico'),
           certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD,
           certificateFile
