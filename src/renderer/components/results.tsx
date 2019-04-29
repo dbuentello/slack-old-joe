@@ -13,6 +13,9 @@ interface ResultsProps {
 export class Results extends React.Component<ResultsProps, {}> {
   constructor(props: ResultsProps) {
     super(props);
+
+    this.renderResult = this.renderResult.bind(this);
+    this.getIcon = this.getIcon.bind(this);
   }
 
   public render() {
@@ -57,13 +60,13 @@ export class Results extends React.Component<ResultsProps, {}> {
 
   private getIcon({ skipped, ok }: Result) {
     if (skipped) {
-      return <Icon icon="moon" htmlTitle='Test skipped (wrong platform)' />;
+      return <Icon icon="moon" htmlTitle="Test skipped (wrong platform)" />;
     }
 
     if (ok) {
-      return <Icon icon="endorsed" htmlTitle='Test passed' />;
+      return <Icon icon="endorsed" htmlTitle="Test passed" />;
     }
 
-    return <Icon icon="error" intent="danger" htmlTitle='Test failed' />;
+    return <Icon icon="error" intent="danger" htmlTitle="Test failed" />;
   }
 }

@@ -55,7 +55,7 @@ export class Setup extends React.Component<SetupProps, {}> {
               Ensure that you're running a version of Old Joe that matches the
               Slack app's Electron version. It should be v{DRIVER_VERSION}.x.
             </li>
-            <li>Use a Wi-Fi connection.</li>
+            <li>Use a Wi-Fi connection, disable all other network adapters.</li>
             <li>Close all apps that might send notifications.</li>
           </ul>
           <FormGroup label="Slack App to test" labelInfo="(required)">

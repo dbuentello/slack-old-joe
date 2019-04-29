@@ -14,9 +14,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await disableWifi();
 
     // We don't really know how quickly the system will go down,
-    // so we'll be generous with our wait time (20s), likely much faster
+    // so we'll be generous with our wait time (40s), likely much faster
     const offlineInfo = await window.client.$('.p-notification_bar__offline');
-    await offlineInfo.waitForDisplayed(20 * 1000);
+    await offlineInfo.waitForDisplayed(40 * 1000);
 
     assert.ok(await offlineInfo.isDisplayed(), 'offline info not displayed');
   });
@@ -29,7 +29,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await waitUntilElementGone(
         window.client,
         '.p-notification_bar__offline',
-        20 * 1000
+        40 * 1000
       )
     );
   });

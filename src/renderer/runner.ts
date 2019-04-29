@@ -44,7 +44,9 @@ export async function readTests(
  * @param {SuiteMethod} test
  * @returns {Promise<SuiteMethodResults>}
  */
-export async function readTestFile(test: SuiteMethod): Promise<SuiteMethodResults> {
+export async function readTestFile(
+  test: SuiteMethod
+): Promise<SuiteMethodResults> {
   const suiteMethodResults: SuiteMethodResults = {
     it: [],
     beforeAll: [],
@@ -90,7 +92,7 @@ export async function runTestFile(
   };
 
   // Run all "beforeAll"
-  await runAll(suiteMethodResults.beforeAll);
+  await runAll(suiteMethodResults.beforeAll, 'beforeAll');
 
   // Run all tests
   for (const test of suiteMethodResults.it) {
@@ -102,7 +104,7 @@ export async function runTestFile(
     }
 
     // Run all "beforeEach"
-    await runAll(suiteMethodResults.beforeEach);
+    await runAll(suiteMethodResults.beforeEach, 'beforeEach');
 
     // Screenshot
     if (generateReportAtEnd) await takeScreenshot(`before ${name}`);
@@ -114,11 +116,11 @@ export async function runTestFile(
     if (generateReportAtEnd) await takeScreenshot(`after ${name}`);
 
     // Run all "afterEach"
-    await runAll(suiteMethodResults.afterEach);
+    await runAll(suiteMethodResults.afterEach, 'afterEach');
   }
 
   // Run all "afterAll"
-  await runAll(suiteMethodResults.afterAll);
+  await runAll(suiteMethodResults.afterAll, 'afterAll');
 
   return result;
 }
@@ -158,8 +160,17 @@ async function runTest(
  * @param {Array<LifeCycleFn>} methods
  * @returns {Promise<void>}
  */
-async function runAll(methods: Array<LifeCycleFn>): Promise<void> {
+async function runAll(
+  methods: Array<LifeCycleFn>,
+  phase: string
+): Promise<void> {
   for (const method of methods) {
-    await method();
+    try {
+      await method();
+    } catch (error) {
+      console.warn(`Failed to run ${method.name} for phase ${phase}`, error);
+
+      throw error;
+    }
   }
 }

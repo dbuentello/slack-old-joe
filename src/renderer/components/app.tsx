@@ -170,7 +170,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     // Wait for the client to be ready
     await wait(1000);
-    await waitUntilSlackReady(client);
+    await waitUntilSlackReady(client, !isSignInDisabled(appState));
 
     clearInterval(countdownInterval);
     this.setNewExpectedLaunchTime();

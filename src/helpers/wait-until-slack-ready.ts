@@ -9,7 +9,10 @@ import { wait } from '../utils/wait';
  * @param {BrowserObject} client
  * @returns {Promise<boolean>}
  */
-export function waitUntilSlackReady(client: BrowserObject): Promise<boolean> {
+export function waitUntilSlackReady(
+  client: BrowserObject,
+  expectSignIn: boolean
+): Promise<boolean> {
   const getHasWindows = async () =>
     (await client.getWindowHandles()).length > 1;
 
@@ -19,7 +22,7 @@ export function waitUntilSlackReady(client: BrowserObject): Promise<boolean> {
 
       // At this point, we wait 500ms to allow
       // Slack's post-load scripts to load, too
-      await wait(500);
+      await wait(600);
 
       resolve(true);
     };
@@ -31,12 +34,13 @@ export function waitUntilSlackReady(client: BrowserObject): Promise<boolean> {
       }
 
       // So we have windows, huh? Are we ready?
-      const target =
-        (await getSignInWindow(client)) || (await getBrowserViewHandle(client));
-      const isLoading = await client.isLoading();
+      const target = expectSignIn
+        ? await getSignInWindow(client)
+        : await getBrowserViewHandle(client);
+      const isLoading = target && (await client.isLoading());
       if (target && !isLoading) return finish();
 
-      // No? Let's do this again in 300ms
-    }, 300);
+      // No? Let's do this again in 600ms
+    }, 600);
   });
 }

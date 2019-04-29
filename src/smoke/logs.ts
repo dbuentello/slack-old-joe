@@ -11,6 +11,8 @@ import { wait } from '../utils/wait';
 import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { getGpuWindowHandle } from '../helpers/get-gpu-info-window';
+import { appState } from '../renderer/state';
+import { isSignInDisabled } from '../utils/is-sign-in-disabled';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   const targetDir = remote.app.getPath('downloads');
@@ -86,7 +88,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     // A bit of wait padding on both sides to make things more robust
     await wait(500);
-    await waitUntilSlackReady(window.client);
+    await waitUntilSlackReady(window.client, !isSignInDisabled(appState));
     await wait(200);
 
     await getGpuWindowHandle(window.client);

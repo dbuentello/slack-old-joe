@@ -29,8 +29,8 @@ export function spawnChromeDriver(): Promise<ChildProcess> {
     };
 
     driver.stdout.addListener('data', checkIfLaunched);
-    driver.stdout.addListener('data', debug);
-    driver.stderr.addListener('data', debug);
+    driver.stdout.addListener('data', data => debug(data.toString()));
+    driver.stderr.addListener('data', data => debug(data.toString()));
     driver.addListener('close', code =>
       debug(`Chromedriver exited with code ${code}`)
     );

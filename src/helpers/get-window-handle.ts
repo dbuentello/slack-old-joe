@@ -25,16 +25,24 @@ export async function getWindowHandle(
   const windows = await client.getWindowHandles();
 
   for (const window of windows) {
-    await client.switchToWindow(window);
-    const title = await client.getTitle();
-    const url = await client.getUrl();
+    try {
+      await client.switchToWindow(window);
+      const title = await client.getTitle();
+      const url = await client.getUrl();
 
-    if (await testFn(url, title)) {
-      return {
-        handle: window,
-        url,
-        title
-      };
+      if (await testFn(url, title)) {
+        return {
+          handle: window,
+          url,
+          title
+        };
+      }
+    } catch (error) {
+      console.warn(
+        `Could not complete window check, it might not exist anymore`,
+        window,
+        error
+      );
     }
   }
 
