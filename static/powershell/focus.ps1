@@ -18,6 +18,6 @@ $process = Get-Process slack | ForEach-Object {
   $hwnd = $_.MainWindowHandle
 
   # restore the window handle again
+  [OldJoe]::ShowWindow($hwnd, 5)
   [OldJoe]::SetForegroundWindow($hwnd)
-  [OldJoe]::ShowWindow($hwnd, 3)
 }

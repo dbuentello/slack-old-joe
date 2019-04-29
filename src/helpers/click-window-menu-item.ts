@@ -47,7 +47,7 @@ async function clickWindowMenuItemWin(menuName: string, itemName: string) {
     Window: {
       index: 2,
       items: {
-        'Old Joe': 5,
+        'Old Joe One': 5,
         'Old Joe Two': 4,
         'Select Next Workspace': 3,
         'Select Previous Workspace': 2
