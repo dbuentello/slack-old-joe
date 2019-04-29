@@ -151,7 +151,14 @@ async function runTest(
   return result;
 }
 
-async function runAll(methods: Array<LifeCycleFn>) {
+/**
+ * Run all the lifecycle methods, but in sequence, not in parallel
+ * (hence not using Promise.all)
+ *
+ * @param {Array<LifeCycleFn>} methods
+ * @returns {Promise<void>}
+ */
+async function runAll(methods: Array<LifeCycleFn>): Promise<void> {
   for (const method of methods) {
     await method();
   }
