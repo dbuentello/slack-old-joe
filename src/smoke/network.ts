@@ -18,7 +18,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     const offlineInfo = await window.client.$('.p-notification_bar__offline');
     await offlineInfo.waitForDisplayed(40 * 1000);
 
-    assert.ok(await offlineInfo.isDisplayed(), 'offline info not displayed');
+    assert.ok(await offlineInfo.isDisplayed(), 'offline info');
   });
 
   it('returns to the connected state when Wifi comes back', async () => {

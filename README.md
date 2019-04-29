@@ -108,3 +108,13 @@ Old Joe currently verifies the following:
 
 #### Sign Out
 - Signing out removes a team
+
+## Internals
+Old Joe is using [Chromedriver](http://chromedriver.chromium.org/) driven by [webdriverio](https://webdriver.io/docs/api.html). Assertions are being done with [Cherio](https://github.com/cheeriojs/cheerio). Automation is being done by WebDriver, Chrome's DevTools protocol, and – where necessary – with AppleScript, PowerShell, and Robotjs. There are no dependencies for the system that's running the test.
+
+Check out the [`src/smoke`](src/smoke) folder to see test suites. The whole framework is built to look and feel just like any other test suite - with a large library of helpers for common Slack operations (switching teams, opening channels, clicking on menu items, and more). All of this stuff is pretty movable - you can swap out Chromedriver for another protocol with ease, swapping out Cheerio for another assertion library is just as easy.
+
+### Who's Joe?
+Joe Camel (officially Old Joe) was the advertising mascot for Camel cigarettes from late 1987 to July 12, 1997, appearing in magazine advertisements, billboards, and other print media.
+
+He's advertising smoking. This is a smoke test suite. Get it? GET IT?!
