@@ -5,21 +5,22 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { getNativeOpenNotificationCount } from '../native-commands/count-native-notifications';
 import { switchToChannel } from '../helpers/switch-channel';
 import { switchToTeam } from '../helpers/switch-teams';
-import { isMac } from '../utils/os';
+import { isMac, isWin } from '../utils/os';
 import { wait } from '../utils/wait';
 import { clickFirstNativeNotification } from '../native-commands/click-native-notification';
 import { getIsHidden } from '../helpers/get-is-hidden';
 import { close } from '../native-commands/close';
 import { closeFlexpane } from '../helpers/close-flexpane';
+import { setPreference } from '../helpers/set-preference';
 
-export const test: SuiteMethod = async ({ it, beforeAll }) => {
+export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   /**
    * Clicks on a message with Cmd / Ctrl and shift to send a notification.
    *
    * @param {string} text
    */
   async function sendNotification(text: string) {
-    const cmdOrCtrl = isMac() ? 'Meta' : 'Ctrl';
+    const cmdOrCtrl = isMac() ? 'Meta' : 'Control';
 
     await switchToTeam(window.client, 0);
     await switchToChannel(window.client, 'notify');
@@ -33,6 +34,14 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   }
 
   beforeAll(async () => {
+    if (isWin()) {
+      await setPreference(window.client, 'notificationStyle', '2018');
+      await setPreference(window.client, 'notificationMethod', 'html');
+      await wait(500);
+    }
+  })
+
+  beforeEach(async () => {
     await getBrowserViewHandle(window.client);
   });
 
@@ -40,7 +49,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await sendNotification(`Hi, it's me, the notification`);
 
     assert.equal(
-      await getNativeOpenNotificationCount(),
+      await getNativeOpenNotificationCount(window.client),
       1,
       'count of native notifications'
     );
@@ -48,7 +57,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
   it('can click on the notification and open the right channel', async () => {
     await switchToChannel(window.client, 'ads');
-    await clickFirstNativeNotification();
+    await clickFirstNativeNotification(window.client);
 
     // We should now be back at the notification item
     const messageToFind = await window.client.$(
@@ -61,7 +70,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await sendNotification(`Hi, it's me, the notification`);
     await close();
     await wait(100);
-    await clickFirstNativeNotification();
+    await clickFirstNativeNotification(window.client);
     await wait(300);
 
     assert.isFalse(await getIsHidden(window.client), 'document.hidden');
@@ -73,7 +82,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     await sendNotification('The thread notification');
     assert.equal(
-      await getNativeOpenNotificationCount(),
+      await getNativeOpenNotificationCount(window.client),
       1,
       'count of native notifications'
     );
@@ -85,10 +94,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await wait(50);
 
     // Hopefully open it again
-    await clickFirstNativeNotification();
+    await clickFirstNativeNotification(window.client);
     const threadMsg = await window.client.$('span=The thread notification');
-    assert.ok(threadMsg.waitForExist(1000));
+    assert.ok(threadMsg.waitForExist(2000));
 
+    await getBrowserViewHandle(window.client);
     await closeFlexpane(window.client);
   });
 };
