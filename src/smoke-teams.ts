@@ -15,6 +15,9 @@ export const SMOKE_TEAMS: Record<string, SmokeTeam> = {
     id: 'TJ1NTQW9W',
     url: 'oldjoetwo'
   }
-}
+};
 
-export const smokeTeams = [ SMOKE_TEAMS['Old Joe One'], SMOKE_TEAMS['Old Joe Two'] ];
+export const smokeTeams = [
+  SMOKE_TEAMS['Old Joe One'],
+  SMOKE_TEAMS['Old Joe Two']
+];

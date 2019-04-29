@@ -4,11 +4,21 @@ import {
   TestSuites,
   SuiteResult,
   SuiteMethod,
-  TestFile
+  TestFile,
+  ItTestParams,
+  Result,
+  LifeCycleFn
 } from '../interfaces';
 import { takeScreenshot } from '../report';
 import { AppState } from './state';
 
+/**
+ * Read all test files (or suites)
+ *
+ * @export
+ * @param {Array<TestFile>} testFiles
+ * @returns {Promise<TestSuites>}
+ */
 export async function readTests(
   testFiles: Array<TestFile>
 ): Promise<TestSuites> {
@@ -26,7 +36,15 @@ export async function readTests(
   return tests;
 }
 
-export async function readTestFile(test: SuiteMethod) {
+/**
+ * Read a test file (or suite), producing an array of all
+ * the methods we need to run
+ *
+ * @export
+ * @param {SuiteMethod} test
+ * @returns {Promise<SuiteMethodResults>}
+ */
+export async function readTestFile(test: SuiteMethod): Promise<SuiteMethodResults> {
   const suiteMethodResults: SuiteMethodResults = {
     it: [],
     beforeAll: [],
@@ -36,7 +54,8 @@ export async function readTestFile(test: SuiteMethod) {
   };
 
   const suiteMethods: SuiteMethods = {
-    it: (name, fn) => suiteMethodResults.it.push({ name, fn }),
+    it: (name, fn, platforms?) =>
+      suiteMethodResults.it.push({ name, fn, platforms }),
     beforeAll: fn => suiteMethodResults.beforeAll.push(fn),
     afterAll: fn => suiteMethodResults.afterAll.push(fn),
     beforeEach: fn => suiteMethodResults.beforeEach.push(fn),
@@ -48,6 +67,16 @@ export async function readTestFile(test: SuiteMethod) {
   return suiteMethodResults;
 }
 
+/**
+ * Run a test file (or suite)
+ *
+ * @export
+ * @param {string} file
+ * @param {SuiteMethodResults} suiteMethodResults
+ * @param {(succeeded: boolean) => void} updateCallback
+ * @param {AppState} appState
+ * @returns {Promise<SuiteResult>}
+ */
 export async function runTestFile(
   file: string,
   suiteMethodResults: SuiteMethodResults,
@@ -61,55 +90,69 @@ export async function runTestFile(
   };
 
   // Run all "beforeAll"
-  for (const beforeAll of suiteMethodResults.beforeAll) {
-    await beforeAll();
-  }
+  await runAll(suiteMethodResults.beforeAll);
 
   // Run all tests
-  for (const { fn, name } of suiteMethodResults.it) {
-    // Run all "beforeEach"
-    for (const beforeEach of suiteMethodResults.beforeEach) {
-      await beforeEach();
+  for (const test of suiteMethodResults.it) {
+    // Can we skip this platform?
+    if (test.platforms && !test.platforms.includes(process.platform)) {
+      result.results.push({ name, ok: true, skipped: true });
+
+      continue;
     }
+
+    // Run all "beforeEach"
+    await runAll(suiteMethodResults.beforeEach);
 
     // Screenshot
     if (generateReportAtEnd) await takeScreenshot(`before ${name}`);
 
     // Run the test
-    try {
-      await fn();
-
-      result.results.push({
-        name,
-        ok: true
-      });
-
-      updateCallback(true);
-    } catch (error) {
-      result.results.push({
-        name,
-        ok: false,
-        error
-      });
-
-      console.warn(error);
-
-      updateCallback(false);
-    }
+    result.results.push(await runTest(test, updateCallback));
 
     // Screenshot
     if (generateReportAtEnd) await takeScreenshot(`after ${name}`);
 
     // Run all "afterEach"
-    for (const afterEach of suiteMethodResults.afterEach) {
-      await afterEach();
-    }
+    await runAll(suiteMethodResults.afterEach);
   }
 
   // Run all "afterAll"
-  for (const afterAll of suiteMethodResults.afterAll) {
-    await afterAll();
-  }
+  await runAll(suiteMethodResults.afterAll);
 
   return result;
+}
+
+/**
+ * Run a single test, as returned by an it() method
+ *
+ * @param {ItTestParams} { name, fn }
+ * @param {(succeeded: boolean) => void} updateCallback
+ * @returns {Promise<Result>}
+ */
+async function runTest(
+  { name, fn }: ItTestParams,
+  updateCallback: (succeeded: boolean) => void
+): Promise<Result> {
+  const result: Result = { name, ok: false };
+
+  try {
+    await fn();
+
+    result.ok = true;
+  } catch (error) {
+    result.ok = false;
+    result.error = error;
+
+    console.warn(error);
+  }
+
+  updateCallback(result.ok);
+  return result;
+}
+
+async function runAll(methods: Array<LifeCycleFn>) {
+  for (const method of methods) {
+    await method();
+  }
 }

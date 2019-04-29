@@ -126,15 +126,9 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
     await window.client.closeWindow();
   });
 
-  it('can enable launch on login (Windows)', async () => {
-    if (!isWin()) return;
-  });
+  it('can enable launch on login', async () => {}, ['win32']);
 
-  it('can disable launch on login (Windows)', async () => {
-    if (!isWin()) return;
-  });
+  it('can disable launch on login', async () => {}, ['win32']);
 
-  it('has Windows notification methods (Windows)', async () => {
-    if (!isWin()) return;
-  });
+  it('has Windows notification methods', async () => {}, ['win32']);
 };

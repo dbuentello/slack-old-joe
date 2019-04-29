@@ -112,9 +112,13 @@ export class App extends React.Component<AppProps, LocalAppState> {
         >
           <Spinner value={this.getPercentageDone()} />
           <div>
-            <p><Icon icon="endorsed" /> Successful tests: {testsDone}</p>
+            <p>
+              <Icon icon="endorsed" /> Successful tests: {testsDone}
+            </p>
             <Divider />
-            <p><Icon icon="error" /> Failed tests: {testsFailed}</p>
+            <p>
+              <Icon icon="error" /> Failed tests: {testsFailed}
+            </p>
             {this.renderDone()}
           </div>
         </Card>
@@ -124,24 +128,29 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
   public renderDone() {
     const { appState } = this.props;
-    const text = appState.generateReportAtEnd
-      ? (<>All done! Click here for screenshots <Icon icon="camera" /></>)
-      : 'All done!';
+    const text = appState.generateReportAtEnd ? (
+      <>
+        All done! Click here for screenshots <Icon icon="camera" />
+      </>
+    ) : (
+      'All done!'
+    );
 
-    return appState.done
-     ? (
+    return appState.done ? (
       <>
         <Divider />
         <p>{text}</p>
       </>
-     )
-     : null;
+    ) : null;
   }
 
   public async run() {
     const { appState } = this.props;
 
-    this.setState({ hasCountdownStarted: true, startingIn: this.getExpectedLauchTime() });
+    this.setState({
+      hasCountdownStarted: true,
+      startingIn: this.getExpectedLauchTime()
+    });
 
     await clean();
 
@@ -185,12 +194,14 @@ export class App extends React.Component<AppProps, LocalAppState> {
       for (const test of appState.tests) {
         // Now run the suite, updating after each test
         try {
-          appState.results.push(await runTestFile(
-            test.name,
-            test.suiteMethodResults,
-            this.testCallback,
-            appState
-          ));
+          appState.results.push(
+            await runTestFile(
+              test.name,
+              test.suiteMethodResults,
+              this.testCallback,
+              appState
+            )
+          );
         } catch (error) {
           console.warn(`Failed to run test suite ${test.name}`, error);
         }
@@ -258,7 +269,8 @@ export class App extends React.Component<AppProps, LocalAppState> {
     const { startingIn } = this.state;
     const expectedLaunchTime = this.getExpectedLauchTime();
 
-    this.props.appState.expectedLaunchTime = `${expectedLaunchTime - startingIn}`;
+    this.props.appState.expectedLaunchTime = `${expectedLaunchTime -
+      startingIn}`;
   }
 
   private getStartingIn() {
@@ -271,6 +283,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     const { testsDone, testsFailed, testsTotal, done } = appState;
 
     if (done) return 1;
-    return testsTotal > 0 ? (testsFailed + testsDone) / testsTotal : 0
+    return testsTotal > 0 ? (testsFailed + testsDone) / testsTotal : 0;
   }
 }

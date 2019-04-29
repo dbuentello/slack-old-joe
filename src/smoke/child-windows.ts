@@ -16,45 +16,49 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await getBrowserViewHandle(window.client);
   });
 
-  it('(Mac) opens about dialog and displays the correct version string', async () => {
-    if (process.platform !== 'darwin') return;
+  it(
+    'opens about dialog and displays the correct version string',
+    async () => {
+      // Make sure that we make a blacklist of logs files we won't
+      // accept because they already exist
+      await openAboutBox();
 
-    // Make sure that we make a blacklist of logs files we won't
-    // accept because they already exist
-    await openAboutBox();
+      // What version do we expect?
+      await getBrowserViewHandle(window.client);
 
-    // What version do we expect?
-    await getBrowserViewHandle(window.client);
-
-    // Returns
-    // "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko)
-    // AtomShell/3.4.1-beta3179ea19 Chrome/69.0.3497.128 Electron/4.1.3 Safari/537.36 Slack_SSB/3.4.1"
-    const userAgent: string = await window.client.executeScript(
-      'return navigator.userAgent',
-      []
-    );
-    const aboutBoxValue: string = await getAboutBoxValue();
-    const simpleVersion = userAgent.slice(userAgent.indexOf('Slack_SSB') + 10);
-    const fullVersion = userAgent.slice(
-      userAgent.indexOf('AtomShell') + 10,
-      userAgent.indexOf(' Chrome')
-    );
-
-    console.log(aboutBoxValue, simpleVersion, fullVersion);
-
-    assert.ok(aboutBoxValue.includes(simpleVersion));
-
-    if (fullVersion.includes('alpha') || fullVersion.includes('beta')) {
-      // Covers alpha, beta, etc
-      assert.ok(
-        aboutBoxValue.toLowerCase().includes('alpha') ||
-          aboutBoxValue.includes('beta')
+      // Returns
+      // "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko)
+      // AtomShell/3.4.1-beta3179ea19 Chrome/69.0.3497.128 Electron/4.1.3 Safari/537.36 Slack_SSB/3.4.1"
+      const userAgent: string = await window.client.executeScript(
+        'return navigator.userAgent',
+        []
       );
-    }
+      const aboutBoxValue: string = await getAboutBoxValue();
+      const simpleVersion = userAgent.slice(
+        userAgent.indexOf('Slack_SSB') + 10
+      );
+      const fullVersion = userAgent.slice(
+        userAgent.indexOf('AtomShell') + 10,
+        userAgent.indexOf(' Chrome')
+      );
 
-    // Close window
-    await closeAboutBox();
-  });
+      console.log(aboutBoxValue, simpleVersion, fullVersion);
+
+      assert.ok(aboutBoxValue.includes(simpleVersion));
+
+      if (fullVersion.includes('alpha') || fullVersion.includes('beta')) {
+        // Covers alpha, beta, etc
+        assert.ok(
+          aboutBoxValue.toLowerCase().includes('alpha') ||
+            aboutBoxValue.includes('beta')
+        );
+      }
+
+      // Close window
+      await closeAboutBox();
+    },
+    ['darwin']
+  );
 
   it('creates a post window', async () => {
     // Switch to the posts channel

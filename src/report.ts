@@ -36,15 +36,19 @@ export async function writeReport(input: Array<SuiteResult>) {
     text += `\n\n## Suite: ${name}\n`;
 
     for (const result of results) {
-      text += `Test: ${result.name}\n`
+      text += `Test: ${result.name}\n`;
       text += `Result: ${result.ok ? 'Passed' : 'Did not pass'}\n`;
 
       if (result.error) {
         text += `Error:\n`;
-        text += result.error.toString().split('\n').map((line) => ` > ${line}`).join('\n');
+        text += result.error
+          .toString()
+          .split('\n')
+          .map(line => ` > ${line}`)
+          .join('\n');
       }
 
-      text += `\n`
+      text += `\n`;
     }
   }
 

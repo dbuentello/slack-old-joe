@@ -2,15 +2,25 @@ export type LifeCycleFn = () => Promise<void> | void;
 export type TestFn = () => Promise<void> | void;
 
 export interface SuiteMethods {
-  it: (name: string, fn: TestFn) => void;
+  it: (
+    name: string,
+    fn: TestFn,
+    onlyOnPlatforms?: Array<NodeJS.Platform>
+  ) => void;
   beforeAll: (fn: LifeCycleFn) => void;
   afterAll: (fn: LifeCycleFn) => void;
   beforeEach: (fn: LifeCycleFn) => void;
   afterEach: (fn: LifeCycleFn) => void;
 }
 
+export interface ItTestParams {
+  name: string;
+  fn: TestFn;
+  platforms?: Array<NodeJS.Platform>;
+}
+
 export interface SuiteMethodResults {
-  it: Array<{ name: string; fn: TestFn }>;
+  it: Array<ItTestParams>;
   beforeAll: Array<LifeCycleFn>;
   afterAll: Array<LifeCycleFn>;
   beforeEach: Array<LifeCycleFn>;
@@ -35,13 +45,12 @@ export type Result = {
   ok: boolean;
   name: string;
   error?: string | Error;
+  skipped?: boolean;
 };
 
 export type Results = Array<Result>;
 
-export type SuiteMethod = (
-  methods: SuiteMethods
-) => Promise<void> | void;
+export type SuiteMethod = (methods: SuiteMethods) => Promise<void> | void;
 
 export interface SuiteResult {
   name: string;

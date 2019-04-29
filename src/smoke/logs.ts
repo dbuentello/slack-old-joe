@@ -28,7 +28,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
         return notInBlackList;
       });
-    }
+    };
   }
 
   async function extractLogFile() {

@@ -42,11 +42,13 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
           icon={allDisabled ? 'circle' : 'selection'}
           small={true}
           onClick={() =>
-            appState.availableTestFiles.forEach(t => (t.disabled = !allDisabled))
+            appState.availableTestFiles.forEach(
+              t => (t.disabled = !allDisabled)
+            )
           }
         />
       </div>
-    )
+    );
   }
 
   public renderTest(input: TestFile) {

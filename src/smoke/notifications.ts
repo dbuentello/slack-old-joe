@@ -1,4 +1,3 @@
-import * as robot from 'robotjs';
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
