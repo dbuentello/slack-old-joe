@@ -8,7 +8,7 @@ export function openBrowserAndSignIn(teamName: string) {
 
 export async function openBrowserAndWaitForSignIn(
   teamName: string,
-  timeout = 10000
+  timeout = 30000
 ): Promise<boolean> {
   const teamsCount = await getTeamsCount();
 

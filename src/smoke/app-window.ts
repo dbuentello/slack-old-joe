@@ -7,10 +7,12 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { maximize } from '../native-commands/maximize';
 import { minimize } from '../native-commands/minimize';
 import { getIsHidden } from '../helpers/get-is-hidden';
+import { focus } from '../native-commands/focus';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
     await getBrowserViewHandle(window.client);
+    await focus();
   });
 
   it('can maximize the window', async () => {

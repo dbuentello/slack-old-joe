@@ -34,8 +34,12 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     const fileContents = await fs.readFile(expectedFilePath, 'utf-8');
     assert.equal(fileContents, 'I am a test file');
 
-    // Cleanup
-    await fs.remove(expectedFilePath);
+    // Cleanup, or attempted - Windows is weird sometimes
+    try {
+      await fs.remove(expectedFilePath);
+    } catch (error) {
+      console.warn(`Could not remove download file`, error);
+    }
   });
 
   it('can pause and resume a download', async () => {
@@ -74,7 +78,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     const afterBytes = fs.statSync(expectedFilePath).size;
     assert.equal(beforeBytes, afterBytes);
 
-    // Cleanup
-    await fs.remove(expectedFilePath);
+    // Cleanup, or attempted - Windows is weird sometimes
+    try {
+      await fs.remove(expectedFilePath);
+    } catch (error) {
+      console.warn(`Could not remove download file`, error);
+    }
   });
 };
