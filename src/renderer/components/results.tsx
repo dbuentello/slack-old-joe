@@ -57,13 +57,13 @@ export class Results extends React.Component<ResultsProps, {}> {
 
   private getIcon({ skipped, ok }: Result) {
     if (skipped) {
-      return <Icon icon="moon" />;
+      return <Icon icon="moon" htmlTitle='Test skipped (wrong platform)' />;
     }
 
     if (ok) {
-      return <Icon icon="endorsed" />;
+      return <Icon icon="endorsed" htmlTitle='Test passed' />;
     }
 
-    return <Icon icon="error" intent="danger" />;
+    return <Icon icon="error" intent="danger" htmlTitle='Test failed' />;
   }
 }
