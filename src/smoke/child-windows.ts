@@ -10,14 +10,36 @@ import {
 import { wait } from '../utils/wait';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
 import { switchToChannel } from '../helpers/switch-channel';
+import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
+import { getAboutWindowHandle } from '../helpers/get-about-window';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
+  const expectedVersion = {
+    simple: '',
+    full: ''
+  }
+
   beforeAll(async () => {
     await getBrowserViewHandle(window.client);
+
+    // Returns
+    // "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko)
+    // AtomShell/3.4.1-beta3179ea19 Chrome/69.0.3497.128 Electron/4.1.3 Safari/537.36 Slack_SSB/3.4.1"
+    const userAgent: string = await window.client.executeScript(
+      'return navigator.userAgent',
+      []
+    );
+    expectedVersion.simple = userAgent.slice(
+      userAgent.indexOf('Slack_SSB') + 10
+    );
+    expectedVersion.full = userAgent.slice(
+      userAgent.indexOf('AtomShell') + 10,
+      userAgent.indexOf(' Chrome')
+    );
   });
 
   it(
-    'opens about dialog and displays the correct version string',
+    'opens macOS "About" dialog and displays the correct version string',
     async () => {
       // Make sure that we make a blacklist of logs files we won't
       // accept because they already exist
@@ -26,32 +48,14 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       // What version do we expect?
       await getBrowserViewHandle(window.client);
 
-      // Returns
-      // "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko)
-      // AtomShell/3.4.1-beta3179ea19 Chrome/69.0.3497.128 Electron/4.1.3 Safari/537.36 Slack_SSB/3.4.1"
-      const userAgent: string = await window.client.executeScript(
-        'return navigator.userAgent',
-        []
-      );
       const aboutBoxValue: string = await getAboutBoxValue();
-      const simpleVersion = userAgent.slice(
-        userAgent.indexOf('Slack_SSB') + 10
-      );
-      const fullVersion = userAgent.slice(
-        userAgent.indexOf('AtomShell') + 10,
-        userAgent.indexOf(' Chrome')
-      );
 
-      console.log(aboutBoxValue, simpleVersion, fullVersion);
+      assert.ok(aboutBoxValue.includes(expectedVersion.simple));
 
-      assert.ok(aboutBoxValue.includes(simpleVersion));
-
-      if (fullVersion.includes('alpha') || fullVersion.includes('beta')) {
-        // Covers alpha, beta, etc
-        assert.ok(
-          aboutBoxValue.toLowerCase().includes('alpha') ||
-            aboutBoxValue.includes('beta')
-        );
+      if (expectedVersion.full.includes('alpha')) {
+        assert.include(aboutBoxValue.toLowerCase(), 'alpha', 'version string');
+      } else if (expectedVersion.full.includes('beta')) {
+        assert.include(aboutBoxValue.toLowerCase(), 'beta', 'version string');
       }
 
       // Close window
@@ -59,6 +63,27 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     },
     ['darwin']
   );
+
+  it('opens the Windows/Linux "About Slack" dialog', async () => {
+    await clickWindowMenuItem('Help', 'About Slack');
+    const handle = await getAboutWindowHandle(window.client);
+
+    assert.ok(handle, 'the about window handle');
+
+    const versionElement = await window.client.$('.AboutBox-version');
+    await versionElement.waitForExist(1000);
+
+    // Direct Download 3.4.1-beta PR6078/aa231d3 64-bit
+    const versionText = await versionElement.getText();
+
+    assert.include(versionText, expectedVersion.simple, 'version string');
+
+    if (expectedVersion.full.includes('alpha')) {
+      assert.include(versionText.toLowerCase(), 'alpha', 'version string');
+    } else if (expectedVersion.full.includes('beta')) {
+      assert.include(versionText.toLowerCase(), 'beta', 'version string');
+    }
+  }, [ 'win32', 'linux' ]);
 
   it('creates a post window', async () => {
     // Switch to the posts channel
@@ -76,6 +101,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     // Title includes the word "Untitled"?
     assert.ok((await window.client.getTitle()).includes('Untitled'));
+  });
+
+  it('has a a "notices" link in the about window', async () => {
+    const acknowledgements = await window.client.$('.AboutBox-acknowledgements')
+    assert.ok(await acknowledgements.isDisplayed(), 'visibility of the acknowledgements button');
   });
 
   it(`can create a post that's saved`, async () => {

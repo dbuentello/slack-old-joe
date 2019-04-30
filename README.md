@@ -69,7 +69,9 @@ Old Joe currently verifies the following:
 - Clicking on the `Stop logging` button results in a log zip file with a `net.log`
 
 #### Child Windows
-- About box contains the expected version number and modifiers (macOS)
+- "About Slack" box contains the expected version number and modifiers (macOS)
+- "About Slack" window contains the expected version number and modifiers (Windows, Linux)
+- "About Slack" window contains an acknowledgements button
 - Creating a new post opens a posts window
 - Can create a post that's being saved and shared back to the correct channel
 
@@ -118,3 +120,7 @@ Check out the [`src/smoke`](src/smoke) folder to see test suites. The whole fram
 Joe Camel (officially Old Joe) was the advertising mascot for Camel cigarettes from late 1987 to July 12, 1997, appearing in magazine advertisements, billboards, and other print media.
 
 He's advertising smoking. This is a smoke test suite. Get it? GET IT?!
+
+### Rapid Prototyping & Development
+
+The easiest way to write tests is to do it live. Start Old Joe, deselect all tests, and open up Old Joe's developer tools. The `BrowserObject` client will be available as `window.client`, all helpers can be found in `window.helpers`.

@@ -33,8 +33,11 @@ import {
 import { enableWifi, disableWifi } from '../native-commands/wifi';
 import { getGpuWindowHandle } from '../helpers/get-gpu-info-window';
 import { openGpuInfoWindow } from '../helpers/open-gpu-info-window';
+import { getAboutWindowHandle } from '../helpers/get-about-window';
+import { getAboutBoxValue } from '../native-commands/mac-about-dialog';
 
 export function registerHelpers() {
+
   window['helpers'] = {
     clickDockMenuItem,
     clickWindowMenuItem,
@@ -43,6 +46,8 @@ export function registerHelpers() {
     disableWifi,
     enableWifi,
     enterMessage,
+    getAboutBoxValue,
+    getAboutWindowHandle,
     getBrowserViewHandle,
     getDevToolsWindowHandle,
     getGpuWindowHandle,

@@ -56,6 +56,11 @@ async function clickWindowMenuItemWin(menuName: string, itemName: string) {
     Help: {
       index: 1,
       items: {
+        'Check for Updates': 6,
+        'Keyboard Shortcuts': 5,
+        'Open Help Center': 4,
+        'Troubleshooting': 3,
+        'What\'s new...': 2,
         'About Slack': 1
       }
     }
