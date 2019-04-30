@@ -10,6 +10,6 @@ export async function killSlack() {
 
     await runPowerShellScript(scriptPath);
   } else {
-    execSync('killall slack');
+    execSync('killall slack || true');
   }
 }

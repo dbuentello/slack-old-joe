@@ -111,6 +111,8 @@ Old Joe currently verifies the following:
 
 #### Sign Out
 - Signing out removes a team
+- Going back down to one team results in the quick switcher being removed
+- Signing out of the last team opens the sign-in window
 
 ## Internals
 Old Joe is using [Chromedriver](http://chromedriver.chromium.org/) driven by [webdriverio](https://webdriver.io/docs/api.html). Assertions are being done with [Cherio](https://github.com/cheeriojs/cheerio). Automation is being done by WebDriver, Chrome's DevTools protocol, and – where necessary – with AppleScript, PowerShell, and Robotjs. There are no dependencies for the system that's running the test.
