@@ -11,7 +11,10 @@ export async function getRunningSlackProcessesCount(appPath: string) {
   let pathToCheck = appPath;
 
   if (isWin()) {
-    const scriptPath = path.join(__dirname, '../../static/powershell/process-count.ps1');
+    const scriptPath = path.join(
+      __dirname,
+      '../../static/powershell/process-count.ps1'
+    );
 
     return runPowerShellScript(scriptPath);
   } else {

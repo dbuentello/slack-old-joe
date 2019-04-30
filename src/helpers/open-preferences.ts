@@ -15,7 +15,7 @@ export async function openPreferences(
       ctrl: !isMac(),
       text: ','
     });
-  };
+  }
 
   const prefencesModal = await client.$('.p-prefs_modal');
   await prefencesModal.waitForDisplayed(1000);

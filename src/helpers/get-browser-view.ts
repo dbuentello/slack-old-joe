@@ -18,7 +18,8 @@ export async function getBrowserViewHandle(
   if (wait) await wait(waitForMsBefore);
 
   return getWindowHandle(client, async (url, title) => {
-    const isRemote = url.startsWith(`https://${teamUrl}`) && url.includes('slack.com');
+    const isRemote =
+      url.startsWith(`https://${teamUrl}`) && url.includes('slack.com');
     const isSelectedTest = `return window.desktop.store.getState().appTeams.selectedTeamId === window.teamId`;
 
     if (title.endsWith('Slack') && isRemote) {

@@ -68,21 +68,25 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     assert.notEqual(beforeTitle, afterTitle);
   });
 
-  it('can select a workspace using the Dock menu', async () => {
-    // In the dock, "Old Joe" should be number six from the bottom
-    await clickDockMenuItem(6);
-    await getBrowserViewHandle(window.client, 500);
+  it(
+    'can select a workspace using the Dock menu',
+    async () => {
+      // In the dock, "Old Joe" should be number six from the bottom
+      await clickDockMenuItem(6);
+      await getBrowserViewHandle(window.client, 500);
 
-    const beforeTitle = await window.client.getTitle();
-    assert.include(beforeTitle, smokeTeams[0].name);
+      const beforeTitle = await window.client.getTitle();
+      assert.include(beforeTitle, smokeTeams[0].name);
 
-    // In the dock, "Old Joe Two" should be number five from the bottom
-    await clickDockMenuItem(5);
-    await getBrowserViewHandle(window.client, 500);
+      // In the dock, "Old Joe Two" should be number five from the bottom
+      await clickDockMenuItem(5);
+      await getBrowserViewHandle(window.client, 500);
 
-    const afterTitle = await window.client.getTitle();
-    assert.include(afterTitle, smokeTeams[1].name);
-  }, [ 'darwin' ]);
+      const afterTitle = await window.client.getTitle();
+      assert.include(afterTitle, smokeTeams[1].name);
+    },
+    ['darwin']
+  );
 
   it('can select a workspace using the Quick Switcher', async () => {
     await switchToTeam(window.client, 1);

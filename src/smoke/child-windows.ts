@@ -17,7 +17,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   const expectedVersion = {
     simple: '',
     full: ''
-  }
+  };
 
   beforeAll(async () => {
     await getBrowserViewHandle(window.client);
@@ -64,26 +64,30 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     ['darwin']
   );
 
-  it('opens the Windows/Linux "About Slack" dialog', async () => {
-    await clickWindowMenuItem('Help', 'About Slack');
-    const handle = await getAboutWindowHandle(window.client);
+  it(
+    'opens the Windows/Linux "About Slack" dialog',
+    async () => {
+      await clickWindowMenuItem('Help', 'About Slack');
+      const handle = await getAboutWindowHandle(window.client);
 
-    assert.ok(handle, 'the about window handle');
+      assert.ok(handle, 'the about window handle');
 
-    const versionElement = await window.client.$('.AboutBox-version');
-    await versionElement.waitForExist(1000);
+      const versionElement = await window.client.$('.AboutBox-version');
+      await versionElement.waitForExist(1000);
 
-    // Direct Download 3.4.1-beta PR6078/aa231d3 64-bit
-    const versionText = await versionElement.getText();
+      // Direct Download 3.4.1-beta PR6078/aa231d3 64-bit
+      const versionText = await versionElement.getText();
 
-    assert.include(versionText, expectedVersion.simple, 'version string');
+      assert.include(versionText, expectedVersion.simple, 'version string');
 
-    if (expectedVersion.full.includes('alpha')) {
-      assert.include(versionText.toLowerCase(), 'alpha', 'version string');
-    } else if (expectedVersion.full.includes('beta')) {
-      assert.include(versionText.toLowerCase(), 'beta', 'version string');
-    }
-  }, [ 'win32', 'linux' ]);
+      if (expectedVersion.full.includes('alpha')) {
+        assert.include(versionText.toLowerCase(), 'alpha', 'version string');
+      } else if (expectedVersion.full.includes('beta')) {
+        assert.include(versionText.toLowerCase(), 'beta', 'version string');
+      }
+    },
+    ['win32', 'linux']
+  );
 
   it('creates a post window', async () => {
     // Switch to the posts channel
@@ -104,8 +108,13 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('has a a "notices" link in the about window', async () => {
-    const acknowledgements = await window.client.$('.AboutBox-acknowledgements')
-    assert.ok(await acknowledgements.isDisplayed(), 'visibility of the acknowledgements button');
+    const acknowledgements = await window.client.$(
+      '.AboutBox-acknowledgements'
+    );
+    assert.ok(
+      await acknowledgements.isDisplayed(),
+      'visibility of the acknowledgements button'
+    );
   });
 
   it(`can create a post that's saved`, async () => {

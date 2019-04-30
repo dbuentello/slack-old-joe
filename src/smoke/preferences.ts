@@ -134,79 +134,126 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
   //   await window.client.closeWindow();
   // });
 
-  it('can enable launch on login', async () => {
-    await focus();
-    await openPreferences(window.client, 'Advanced');
-    const launchOnLoginSpan = await window.client.$(`span=Launch app on login`);
-    await launchOnLoginSpan.waitForExist(1000);
+  it(
+    'can enable launch on login',
+    async () => {
+      await focus();
+      await openPreferences(window.client, 'Advanced');
+      const launchOnLoginSpan = await window.client.$(
+        `span=Launch app on login`
+      );
+      await launchOnLoginSpan.waitForExist(1000);
 
-    // Currently enabled?
-    const currentStartupItems = await getStartupItems();
-    const currentlyEnabled = currentStartupItems.length > 0;
+      // Currently enabled?
+      const currentStartupItems = await getStartupItems();
+      const currentlyEnabled = currentStartupItems.length > 0;
 
-    // If currently enabled, we can apparently enable it
-    if (currentlyEnabled) {
-      assert.ok(currentlyEnabled, 'Slack launch on login');
-    } else {
+      // If currently enabled, we can apparently enable it
+      if (currentlyEnabled) {
+        assert.ok(currentlyEnabled, 'Slack launch on login');
+      } else {
+        await launchOnLoginSpan.click();
+        await wait(600);
+
+        const newStartupItems = await getStartupItems();
+        const newEnabled = newStartupItems.length > 0;
+
+        assert.ok(newEnabled, 'Slack launch on login');
+      }
+    },
+    ['win32']
+  );
+
+  it(
+    'can disable launch on login',
+    async () => {
+      // Because of the last test, launch on login should be enabled
+      // Let's disable it
+      const launchOnLoginSpan = await window.client.$(
+        `span=Launch app on login`
+      );
       await launchOnLoginSpan.click();
       await wait(600);
 
-      const newStartupItems = await getStartupItems();
-      const newEnabled = newStartupItems.length > 0;
+      const startupItems = await getStartupItems();
 
-      assert.ok(newEnabled, 'Slack launch on login');
-    }
-  }, ['win32']);
+      assert.equal(startupItems.length, 0, 'number of Slack startup items');
+    },
+    ['win32']
+  );
 
-  it('can disable launch on login', async () => {
-    // Because of the last test, launch on login should be enabled
-    // Let's disable it
-    const launchOnLoginSpan = await window.client.$(`span=Launch app on login`);
-    await launchOnLoginSpan.click();
-    await wait(600);
+  it(
+    'has Windows notification methods',
+    async () => {
+      await openPreferences(window.client, 'Notifications');
 
-    const startupItems = await getStartupItems();
+      const notificationsButton = await window.client.$(
+        '#winssb_notification_method_button'
+      );
+      await notificationsButton.waitForExist(1000);
+      await notificationsButton.click();
 
-    assert.equal(startupItems.length, 0, 'number of Slack startup items');
-  }, ['win32']);
+      // We're expecting three options
+      const options = [
+        '#winssb_notification_method_option_0',
+        '#winssb_notification_method_option_1',
+        '#winssb_notification_method_option_2'
+      ];
 
-  it('has Windows notification methods', async () => {
-    await openPreferences(window.client, 'Notifications');
+      for (const option of options) {
+        const element = await window.client.$(option);
+        await element.waitForExist(500);
+        assert.ok(await element.isExisting());
+      }
+    },
+    ['win32']
+  );
 
-    const notificationsButton = await window.client.$('#winssb_notification_method_button');
-    await notificationsButton.waitForExist(1000);
-    await notificationsButton.click();
+  it(
+    'can select the HTML notifications',
+    async () => {
+      await sendClickElement(
+        window.client,
+        '#winssb_notification_method_option_1',
+        false,
+        PointerEvents.MOUSEDOWN
+      );
+      await sendClickElement(
+        window.client,
+        '#winssb_notification_method_option_1',
+        false,
+        PointerEvents.MOUSEUP
+      );
 
-    // We're expecting three options
-    const options = [
-      '#winssb_notification_method_option_0',
-      '#winssb_notification_method_option_1',
-      '#winssb_notification_method_option_2',
-    ]
+      const notificationsButton = await window.client.$(
+        '#winssb_notification_method_button'
+      );
+      await notificationsButton.waitForExist(1000);
+      await notificationsButton.click();
 
-    for (const option of options) {
-      const element = await window.client.$(option);
-      await element.waitForExist(500);
-      assert.ok(await element.isExisting());
-    }
-  }, ['win32']);
+      await sendClickElement(
+        window.client,
+        '#winssb_notification_method_option_0',
+        false,
+        PointerEvents.MOUSEDOWN
+      );
+      await sendClickElement(
+        window.client,
+        '#winssb_notification_method_option_0',
+        false,
+        PointerEvents.MOUSEUP
+      );
 
-  it('can select the HTML notifications', async () => {
-    await sendClickElement(window.client, '#winssb_notification_method_option_1', false, PointerEvents.MOUSEDOWN);
-    await sendClickElement(window.client, '#winssb_notification_method_option_1', false, PointerEvents.MOUSEUP);
+      // Click somewhere else
+      await sendNativeKeyboardEvent({ text: 'escape' });
+      await closePreferences(window.client);
 
-    const notificationsButton = await window.client.$('#winssb_notification_method_button');
-    await notificationsButton.waitForExist(1000);
-    await notificationsButton.click();
-
-    await sendClickElement(window.client, '#winssb_notification_method_option_0', false, PointerEvents.MOUSEDOWN);
-    await sendClickElement(window.client, '#winssb_notification_method_option_0', false, PointerEvents.MOUSEUP);
-
-    // Click somewhere else
-    await sendNativeKeyboardEvent({ text: 'escape' });
-    await closePreferences(window.client);
-
-    const notificatonMethod = await getPreference(window.client, 'notificationMethod');
-    assert.equal(notificatonMethod, 'html');
-  }, ['win32']);
+      const notificatonMethod = await getPreference(
+        window.client,
+        'notificationMethod'
+      );
+      assert.equal(notificatonMethod, 'html');
+    },
+    ['win32']
+  );
 };

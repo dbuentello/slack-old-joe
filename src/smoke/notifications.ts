@@ -39,7 +39,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await setPreference(window.client, 'notificationMethod', 'html');
       await wait(500);
     }
-  })
+  });
 
   beforeEach(async () => {
     await getBrowserViewHandle(window.client);
