@@ -1,4 +1,4 @@
-import { getRunningSlackPocessesCount } from './get-running-slack-processes';
+import { getRunningSlackProcessesCount } from './get-running-slack-processes';
 
 /**
  * Wait until Slack is closed (and has 0 running processes)
@@ -14,7 +14,7 @@ export async function waitUntilSlackClosed(
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const test = async () => {
-      return getRunningSlackPocessesCount(appPath) === 0;
+      return (await getRunningSlackProcessesCount(appPath)) === 0;
     };
 
     const testTimeout = setTimeout(() => {

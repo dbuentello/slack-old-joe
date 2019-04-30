@@ -36,6 +36,7 @@ import { openGpuInfoWindow } from '../helpers/open-gpu-info-window';
 import { getAboutWindowHandle } from '../helpers/get-about-window';
 import { getAboutBoxValue } from '../native-commands/mac-about-dialog';
 import { getStartupItems } from '../helpers/get-startup-items';
+import { getRunningSlackProcessesCount } from '../helpers/get-running-slack-processes';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -53,6 +54,7 @@ export function registerHelpers() {
     getGpuWindowHandle,
     getPostWindowHandle,
     getRendererWindowHandle,
+    getRunningSlackProcessesCount,
     getSignInWindow,
     getSlackPath,
     getStartupItems,

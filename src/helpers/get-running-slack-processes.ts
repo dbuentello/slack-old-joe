@@ -1,15 +1,19 @@
 import { execSync } from 'child_process';
+import * as path from 'path';
 
 import { isWin, isMac } from '../utils/os';
+import { runPowerShellScript } from '../utils/powershell';
 
 const debug = require('debug')('old-joe');
 
-export function getRunningSlackPocessesCount(appPath: string) {
+export async function getRunningSlackProcessesCount(appPath: string) {
   let output: String | Buffer = '';
   let pathToCheck = appPath;
 
   if (isWin()) {
-    throw new Error('Not implemented yet');
+    const scriptPath = path.join(__dirname, '../../static/powershell/process-count.ps1');
+
+    return runPowerShellScript(scriptPath);
   } else {
     if (isMac()) {
       pathToCheck = pathToCheck.slice(0, pathToCheck.indexOf('.app/') + 4);
