@@ -25,7 +25,6 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'App Window', test: windowTest },
   { name: 'Reloading', test: reloadTest },
   { name: 'Menus', test: menuTest },
-  { name: 'Logs', test: logTest },
   { name: 'Child Windows', test: childWindowTest },
   { name: 'Deep links', test: deepLinkTest },
   { name: 'Network', test: networkTest },
@@ -33,5 +32,6 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'Preferences', test: preferencesTest },
   { name: 'Spellcheck', test: spellcheckTest },
   { name: 'Processes', test: processesTest },
+  { name: 'Logs', test: logTest },
   { name: 'Sign out', test: logoutTest }
 ];

@@ -8,12 +8,14 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { waitForFile } from '../helpers/wait-for-file';
 import { wait } from '../utils/wait';
 import { switchToChannel } from '../helpers/switch-channel';
+import { switchToTeam } from '../helpers/switch-teams';
 
 const DOWNLOADS_DIR = remote.app.getPath('downloads');
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
     await getBrowserViewHandle(window.client);
+    await switchToTeam(window.client, 0);
   });
 
   it('can download a file in-channel', async () => {
