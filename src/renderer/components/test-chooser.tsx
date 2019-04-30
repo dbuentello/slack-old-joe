@@ -5,6 +5,7 @@ import { Card, Elevation, Checkbox, Button } from '@blueprintjs/core';
 import { AppState } from '../state';
 import { handleBooleanChange } from '../../utils/handle-boolean-change';
 import { TestFile } from '../../interfaces';
+import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
 
 interface TestChooserProps {
   appState: AppState;
@@ -14,6 +15,8 @@ interface TestChooserProps {
 export class TestChooser extends React.Component<TestChooserProps, {}> {
   constructor(props: TestChooserProps) {
     super(props);
+
+    this.renderTest = this.renderTest.bind(this);
   }
 
   public render() {
@@ -52,15 +55,32 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
   }
 
   public renderTest(input: TestFile) {
-    const onChange = handleBooleanChange(
-      checked => (input.disabled = !checked)
+    const { appState } = this.props;
+    let onChange = handleBooleanChange(
+      update => (input.disabled = !update)
     );
+
+    let checked = !input.disabled;
+    let label = input.name;
+
+    // Signing out will destroy the cookie forever,
+    // so we can't use the packaged one.
+    if (input.name === 'Sign out' && isSignInDisabled(appState)) {
+      label = 'Sign out (Only available with Sign in)';
+      checked = false;
+      onChange =  handleBooleanChange(
+        update => {
+          input.disabled = !update;
+          appState.availableTestFiles
+        }
+      )
+    }
 
     return (
       <Checkbox
         key={input.name}
-        checked={!input.disabled}
-        label={input.name}
+        checked={checked}
+        label={label}
         onChange={onChange}
       />
     );

@@ -11,7 +11,7 @@ export async function seedUserDataDir() {
   console.groupCollapsed(`Seeding user data dir`);
   const extract = require('extract-zip');
   const userDir = getUserDir();
-  const zipFile = path.join(__dirname, `../../static/data/SlackDevMode-${process.platform}.zip`);
+  const zipFile = path.join(__dirname, `../../static/data/SlackDevMode.zip`);
 
   await fs.mkdirp(userDir);
   await new Promise((resolve, reject) => {

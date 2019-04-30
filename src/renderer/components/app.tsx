@@ -161,6 +161,10 @@ export class App extends React.Component<AppProps, LocalAppState> {
     // the sign-in test is disabled
     if (isSignInDisabled(appState)) {
       await seedUserDataDir();
+
+      // Also, we'll disable the sign-out test
+      const signOutTest = appState.availableTestFiles.find(({ name }) => name === 'Sign out');
+      signOutTest!.disabled = true;
     }
 
     const driver = await spawnChromeDriver();

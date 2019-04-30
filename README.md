@@ -8,7 +8,7 @@ work.
 ## Setup
 
  * Ensure that you're connected to the Internet only via Wi-Fi and that all other network adapters are disabled - including possible `vEthernet` adapters on Windows.
- * Ensure that Slack isn't already running. Old Joe will make backups of your user data dir and restore it after the test.
+ * Ensure that Slack isn't already running. Old Joe will make backups of your user data dir and restore it after the test. It'll also kill Slack if you don't.
  * Do not interact with the computer while the test is running. Old Joe will restart Slack multiple times and automate mouse, keyboard, and app focus.
  * If you're running the `Sign In` test suite, ensure that your browser is signed into both the [Old Joe One](https://old-joe.slack.com) and [Old Joe Two](https://oldjoetwo.slack.com) workspaces. There is only one account, get in touch with Felix for credentials.
  * macOS: Let Old Joe control your computer (`System Preferences - Security & Privacy - Accessibility`). macOS will ask during your first run.
