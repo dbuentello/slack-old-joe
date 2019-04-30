@@ -67,6 +67,8 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     'opens the Windows/Linux "About Slack" dialog',
     async () => {
       await openAboutBox();
+      await wait(1000);
+
       const handle = await getAboutWindowHandle(window.client);
 
       assert.ok(handle, 'the about window handle');
@@ -90,6 +92,16 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     ['win32', 'linux']
   );
 
+  it('has a a "notices" link in the about window', async () => {
+    const acknowledgements = await window.client.$(
+      '.AboutBox-acknowledgements'
+    );
+    assert.ok(
+      await acknowledgements.isDisplayed(),
+      'visibility of the acknowledgements button'
+    );
+  }, [ 'win32', 'linux' ]);
+
   it('creates a post window', async () => {
     // Switch to the posts channel
     await getBrowserViewHandle(window.client);
@@ -107,16 +119,6 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     // Title includes the word "Untitled"?
     assert.ok((await window.client.getTitle()).includes('Untitled'));
-  });
-
-  it('has a a "notices" link in the about window', async () => {
-    const acknowledgements = await window.client.$(
-      '.AboutBox-acknowledgements'
-    );
-    assert.ok(
-      await acknowledgements.isDisplayed(),
-      'visibility of the acknowledgements button'
-    );
   });
 
   it(`can create a post that's saved`, async () => {
