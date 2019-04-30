@@ -1,4 +1,5 @@
 import * as fs from 'fs-extra';
+import { wait } from '../utils/wait';
 
 export function waitForFile(
   filePath: string,
@@ -36,8 +37,11 @@ export function waitForFileInDir(
       if (testFn(contents)) {
         clearInterval(checkInterval);
         clearTimeout(checkTimeout);
+
+        // On Windows, the file might still be in-write
+        await wait(500);
         resolve(true);
       }
-    }, 200);
+    }, 500);
   });
 }

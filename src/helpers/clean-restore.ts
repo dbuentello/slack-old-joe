@@ -12,6 +12,7 @@ let backupUserDir = userDir.replace(
 );
 
 export async function clean() {
+  console.groupCollapsed('clean');
   const userDir = getUserDir();
 
   // Delete old "Old Joe" folder
@@ -29,9 +30,11 @@ export async function clean() {
 
   await fs.mkdirp(userDir);
   await fs.outputFile(path.join(userDir, '.oldjoe'), '🐪');
+  console.groupEnd();
 }
 
 export function restore() {
+  console.groupCollapsed('restore');
   if (backupUserDir) {
     debug(
       `Deleting ${userDir}, which was created during the test. We'll restore ${backupUserDir}`
@@ -42,6 +45,7 @@ export function restore() {
   } else {
     fs.removeSync(userDir);
   }
+  console.groupEnd();
 }
 
 export async function deleteOldJoeFolders() {

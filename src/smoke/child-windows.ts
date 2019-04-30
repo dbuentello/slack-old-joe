@@ -10,7 +10,6 @@ import {
 import { wait } from '../utils/wait';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
 import { switchToChannel } from '../helpers/switch-channel';
-import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { getAboutWindowHandle } from '../helpers/get-about-window';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
@@ -67,7 +66,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it(
     'opens the Windows/Linux "About Slack" dialog',
     async () => {
-      await clickWindowMenuItem('Help', 'About Slack');
+      await openAboutBox();
       const handle = await getAboutWindowHandle(window.client);
 
       assert.ok(handle, 'the about window handle');
@@ -85,12 +84,15 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       } else if (expectedVersion.full.includes('beta')) {
         assert.include(versionText.toLowerCase(), 'beta', 'version string');
       }
+
+      await window.client.closeWindow();
     },
     ['win32', 'linux']
   );
 
   it('creates a post window', async () => {
     // Switch to the posts channel
+    await getBrowserViewHandle(window.client);
     await switchToChannel(window.client, 'posts');
 
     // Open the plus menu, wait 100ms, create a new post

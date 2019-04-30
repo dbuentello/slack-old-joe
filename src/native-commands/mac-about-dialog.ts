@@ -20,7 +20,7 @@ export async function getAboutBoxValue() {
 export async function openAboutBox() {
   const menuName = isMac() ? `Slack` : `Help`;
 
-  return clickWindowMenuItem(menuName, 'About Slack');
+  return clickWindowMenuItem([menuName, 'About Slack']);
 }
 
 const closeAboutBoxScriptValue = () =>

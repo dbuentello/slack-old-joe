@@ -12,6 +12,8 @@ import {
 import { takeScreenshot } from '../report';
 import { AppState } from './state';
 
+const debug = require('debug')('old-joe');
+
 /**
  * Read all test files (or suites)
  *
@@ -91,14 +93,17 @@ export async function runTestFile(
     results: []
   };
 
+  console.groupCollapsed(file);
+
   // Run all "beforeAll"
   await runAll(suiteMethodResults.beforeAll, 'beforeAll');
 
   // Run all tests
   for (const test of suiteMethodResults.it) {
+    console.groupCollapsed(test.name);
     // Can we skip this platform?
     if (test.platforms && !test.platforms.includes(process.platform)) {
-      result.results.push({ name, ok: true, skipped: true });
+      result.results.push({ name: test.name, ok: true, skipped: true });
 
       continue;
     }
@@ -110,6 +115,7 @@ export async function runTestFile(
     if (generateReportAtEnd) await takeScreenshot(`before ${name}`);
 
     // Run the test
+    debug(`Now running test "${test.name}"`);
     result.results.push(await runTest(test, updateCallback));
 
     // Screenshot
@@ -117,10 +123,13 @@ export async function runTestFile(
 
     // Run all "afterEach"
     await runAll(suiteMethodResults.afterEach, 'afterEach');
+    console.groupEnd();
   }
 
   // Run all "afterAll"
   await runAll(suiteMethodResults.afterAll, 'afterAll');
+
+  console.groupEnd();
 
   return result;
 }
@@ -164,6 +173,8 @@ async function runAll(
   methods: Array<LifeCycleFn>,
   phase: string
 ): Promise<void> {
+  console.groupCollapsed(phase);
+
   for (const method of methods) {
     try {
       await method();
@@ -173,4 +184,6 @@ async function runAll(
       throw error;
     }
   }
+
+  console.groupEnd();
 }

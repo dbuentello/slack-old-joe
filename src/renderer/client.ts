@@ -12,6 +12,7 @@ import { isSignInDisabled } from '../utils/is-sign-in-disabled';
 let _client: null | JoeBrowserObject = null;
 
 export async function getClient(appState: AppState) {
+  console.groupCollapsed('Creating client');
   const options: any = {
     port: 9515, // "9515" is the port opened by chrome driver.
     capabilities: {
@@ -25,14 +26,17 @@ export async function getClient(appState: AppState) {
 
   _client = (await remote(options)) as JoeBrowserObject;
   _client.restart = async function restart() {
+    console.groupCollapsed('Restarting client');
     await this.stop();
 
     await getClient(appState);
     await wait(1000);
     await waitUntilSlackReady(window.client, !isSignInDisabled(appState));
+    console.groupEnd();
   };
 
   _client.stop = async function stop() {
+    console.groupCollapsed('Stopping client');
     const sessions = await this.getSessions();
 
     if (sessions.length > 0) {
@@ -47,7 +51,10 @@ export async function getClient(appState: AppState) {
       await waitUntilSlackClosed(appState.appToTest);
       await this.deleteSession();
     }
+    console.groupEnd();
   };
+
+  console.groupEnd();
 
   return (window.client = _client);
 }

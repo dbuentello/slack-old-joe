@@ -15,10 +15,11 @@ export interface KeyboardEventOptions {
   alt?: boolean;
   ctrl?: boolean;
   cmd?: boolean;
+  noFocus?: boolean;
 }
 
 export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
-  const { text, shift, alt, ctrl, cmd } = options;
+  const { text, shift, alt, ctrl, cmd, noFocus } = options;
   const modifier: Array<string> = [];
 
   if ((process.platform === 'darwin' && text === '{') || text === '}') {
@@ -30,7 +31,7 @@ export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
   alt && modifier.push(`alt`);
   ctrl && modifier.push(`control`);
 
-  await focus();
+  if (!noFocus) await focus();
   robot.keyTap(text, modifier);
 }
 

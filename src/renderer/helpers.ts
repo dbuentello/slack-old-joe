@@ -1,9 +1,6 @@
 import { runAppleScript, runAppleScriptFile } from '../utils/applescript';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
-import {
-  clickWindowMenuItem,
-  clickWindowSubMenuItem
-} from '../helpers/click-window-menu-item';
+import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { enterMessage } from '../helpers/enter-message';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
@@ -42,7 +39,6 @@ export function registerHelpers() {
   window['helpers'] = {
     clickDockMenuItem,
     clickWindowMenuItem,
-    clickWindowSubMenuItem,
     closePreferences,
     disableWifi,
     enableWifi,

@@ -34,12 +34,12 @@ export async function selectPreviousTeamShortcut(client: BrowserObject) {
 }
 
 export async function selectNextTeamWindowMenu(client: BrowserObject) {
-  await clickWindowMenuItem('Window', 'Select Next Workspace');
+  await clickWindowMenuItem(['Window', 'Select Next Workspace']);
   await getBrowserViewHandle(client, 300);
 }
 
 export async function selectPreviousTeamWindowMenu(client: BrowserObject) {
-  await clickWindowMenuItem('Window', 'Select Previous Workspace');
+  await clickWindowMenuItem(['Window', 'Select Previous Workspace']);
   await getBrowserViewHandle(client, 300);
 }
 
@@ -47,6 +47,6 @@ export async function selectTeamWindowMenu(
   name: string,
   client: BrowserObject
 ) {
-  await clickWindowMenuItem('Window', name);
+  await clickWindowMenuItem(['Window', name]);
   await getBrowserViewHandle(client, 300);
 }

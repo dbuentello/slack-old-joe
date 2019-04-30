@@ -40,7 +40,7 @@ export function waitUntilSlackReady(
       const isLoading = target && (await client.isLoading());
       if (target && !isLoading) return finish();
 
-      // No? Let's do this again in 600ms
-    }, 600);
+      // No? Let's do this again in one second
+    }, 1000);
   });
 }

@@ -8,6 +8,7 @@ import { getUserDir } from './get-user-dir';
  * to the user data dir. Avoids having to sign in.
  */
 export async function seedUserDataDir() {
+  console.groupCollapsed(`Seeding user data dir`);
   const extract = require('extract-zip');
   const userDir = getUserDir();
   const zipFile = path.join(__dirname, '../../static/data/SlackDevMode.zip');
@@ -22,4 +23,5 @@ export async function seedUserDataDir() {
       resolve();
     });
   });
+  console.groupEnd();
 }

@@ -6,6 +6,30 @@ import { focus } from '../native-commands/focus';
 import { doTimes } from '../utils/do-times';
 import { wait } from '../utils/wait';
 
+const debug = require('debug')('old-joe');
+
+export async function clickWindowMenuItem(clickList: Array<string>) {
+  await focus();
+
+  if (isMac()) {
+    const script =
+      clickList.length < 3
+        ? getAppleScript(clickList[0], clickList[1])
+        : getSubAppleScript(clickList[0], clickList[1], clickList[2]);
+
+    return runAppleScript(script);
+  }
+
+  if (isWin()) {
+    return clickWindowMenuItemWin(clickList);
+  }
+}
+
+type MenuMapEntry = {
+  index: number;
+  items?: Record<string, MenuMapEntry>;
+};
+
 const getAppleScript = (menuName: string, itemName: string) =>
   `
 tell application "System Events" to tell process "Slack"
@@ -16,18 +40,63 @@ tell application "System Events" to tell process "Slack"
 end tell
 `.trim();
 
-export async function clickWindowMenuItem(menuName: string, itemName: string) {
-  await focus();
+const getSubAppleScript = (
+  menuName: string,
+  subMenuName: string,
+  itemName: string
+) =>
+  `
+tell application "System Events" to tell process "Slack"
+	click menu item "${itemName}" of menu 1 of menu item "${subMenuName}" of menu 1 of menu bar item "${menuName}" of menu bar 1
+end tell
+`.trim();
 
-  if (isMac()) {
-    const script = getAppleScript(menuName, itemName);
-    return runAppleScript(script);
+const menuMap: Record<string, MenuMapEntry> = {
+  Window: {
+    index: 2,
+    items: {
+      'Old Joe One': { index: 5 },
+      'Old Joe Two': { index: 4 },
+      'Select Next Workspace': { index: 3 },
+      'Select Previous Workspace': { index: 2 }
+    }
+  },
+  View: {
+    index: 4,
+    items: {
+      Developer: {
+        index: 1,
+        items: {
+          'Toggle Webapp DevTools': { index: 3 },
+          'Toggle Electron DevTools': { index: 3 },
+          'Reload Everything': { index: 2 },
+          'Open Settings Editor': { index: 1 }
+        }
+      }
+    }
+  },
+  Help: {
+    index: 1,
+    items: {
+      'Check for Updates': { index: 6 },
+      'Keyboard Shortcuts': { index: 5 },
+      'Open Help Center': { index: 4 },
+      Troubleshooting: {
+        index: 3,
+        items: {
+          'Show Logs in Explorer': {
+            index: 4
+          },
+          'Restart and Collect Net Logs…': {
+            index: 3
+          }
+        }
+      },
+      "What's new...": { index: 2 },
+      'About Slack': { index: 1 }
+    }
   }
-
-  if (isWin()) {
-    return clickWindowMenuItemWin(menuName, itemName);
-  }
-}
+};
 
 /**
  * Keep it simple and stupid: For now, we'll do this with the keyboard
@@ -42,79 +111,37 @@ export async function clickWindowMenuItem(menuName: string, itemName: string) {
  * press the up arrow key N times. Then press the right arrow key. Then, press
  * the up arrow key N times.
  */
-async function clickWindowMenuItemWin(menuName: string, itemName: string) {
-  const menuMap = {
-    Window: {
-      index: 2,
-      items: {
-        'Old Joe One': 5,
-        'Old Joe Two': 4,
-        'Select Next Workspace': 3,
-        'Select Previous Workspace': 2
-      }
-    },
-    Help: {
-      index: 1,
-      items: {
-        'Check for Updates': 6,
-        'Keyboard Shortcuts': 5,
-        'Open Help Center': 4,
-        Troubleshooting: 3,
-        "What's new...": 2,
-        'About Slack': 1
-      }
+async function clickWindowMenuItemWin(clickList: Array<string>) {
+  // Make sure we're focused
+  await focus();
+
+  robot.keyTap('alt');
+  await wait(500);
+
+  let currentFocus = menuMap;
+  for (const entry of clickList) {
+    await performWinMenuAction(currentFocus[entry]);
+
+    if (currentFocus[entry].items) {
+      currentFocus = currentFocus[entry].items!;
     }
-  };
-
-  if (menuMap[menuName] && menuMap[menuName].items[itemName]) {
-    // Make sure we're focused
-    await focus();
-
-    robot.keyTap('alt');
-    await wait(500);
-
-    // Go up n times
-    await doTimes(menuMap[menuName].index, async () => {
-      robot.keyTap('up');
-      await wait(500);
-    });
-
-    // Go right
-    robot.keyTap('right');
-    await wait(500);
-
-    // Go up n times
-    await doTimes(menuMap[menuName].items[itemName], async () => {
-      robot.keyTap('up');
-      await wait(500);
-    });
-
-    // Do the thing
-    robot.keyTap('enter');
-  } else {
-    throw new Error(`menuMap doesn't know ${menuName} or ${itemName}`);
   }
+
+  // Do the thing
+  robot.keyTap('enter');
 }
 
-const getSubAppleScript = (
-  menuName: string,
-  subMenuName: string,
-  itemName: string
-) =>
-  `
-tell application "System Events" to tell process "Slack"
-	click menu item "${itemName}" of menu 1 of menu item "${subMenuName}" of menu 1 of menu bar item "${menuName}" of menu bar 1
-end tell
-`.trim();
+async function performWinMenuAction(item: MenuMapEntry) {
+  debug(`Navigating to menu item`);
 
-export async function clickWindowSubMenuItem(
-  menuName: string,
-  subMenuName: string,
-  itemName: string
-) {
-  if (process.platform === 'darwin') {
-    await focus();
-    const script = getSubAppleScript(menuName, subMenuName, itemName);
-    return runAppleScript(script);
+  await doTimes(item.index, async () => {
+    robot.keyTap('up');
+    await wait(250);
+  });
+
+  if (item.items) {
+    // Go right
+    robot.keyTap('right');
+    await wait(250);
   }
 }
