@@ -7,7 +7,6 @@ import { waitUntilSlackClosed } from '../helpers/wait-until-slack-closed';
 import { AppState } from './state';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { isMac } from '../utils/os';
-import { isSignInDisabled } from '../utils/is-sign-in-disabled';
 
 let _client: null | JoeBrowserObject = null;
 
@@ -31,7 +30,10 @@ export async function getClient(appState: AppState) {
 
     await getClient(appState);
     await wait(1000);
-    await waitUntilSlackReady(window.client, !isSignInDisabled(appState));
+
+    // We never expect sign-in here, we're not restarting
+    // prior to having signed in
+    await waitUntilSlackReady(window.client, false);
     console.groupEnd();
   };
 
