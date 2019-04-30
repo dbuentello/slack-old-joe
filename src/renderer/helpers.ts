@@ -35,9 +35,9 @@ import { getGpuWindowHandle } from '../helpers/get-gpu-info-window';
 import { openGpuInfoWindow } from '../helpers/open-gpu-info-window';
 import { getAboutWindowHandle } from '../helpers/get-about-window';
 import { getAboutBoxValue } from '../native-commands/mac-about-dialog';
+import { getStartupItems } from '../helpers/get-startup-items';
 
 export function registerHelpers() {
-
   window['helpers'] = {
     clickDockMenuItem,
     clickWindowMenuItem,
@@ -55,6 +55,7 @@ export function registerHelpers() {
     getRendererWindowHandle,
     getSignInWindow,
     getSlackPath,
+    getStartupItems,
     getTeamsCount,
     openBrowserAndSignIn,
     openBrowserAndWaitForSignIn,

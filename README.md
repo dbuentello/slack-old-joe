@@ -100,6 +100,7 @@ Old Joe currently verifies the following:
 - Can enable launch on login (Windows)
 - Can disable launch on login (Windows)
 - Has the Windows notification method options (Windows)
+- Can select the HTML notification method (and trigger a preference change)
 
 #### Spellcheck
 - Corrects misspelled words and replaces on correction via context menu

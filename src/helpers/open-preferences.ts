@@ -9,13 +9,13 @@ export async function openPreferences(
 ) {
   await getBrowserViewHandle(client);
 
-  if (await getIsPreferencesOpen(client)) return;
-
-  await sendNativeKeyboardEvent({
-    cmd: isMac(),
-    ctrl: !isMac(),
-    text: ','
-  });
+  if (!(await getIsPreferencesOpen(client))) {
+    await sendNativeKeyboardEvent({
+      cmd: isMac(),
+      ctrl: !isMac(),
+      text: ','
+    });
+  };
 
   const prefencesModal = await client.$('.p-prefs_modal');
   await prefencesModal.waitForDisplayed(1000);
@@ -31,7 +31,8 @@ export async function openPreferences(
 
 export async function closePreferences(client: BrowserObject) {
   if (!(await getIsPreferencesOpen(client))) return;
-  await sendNativeKeyboardEvent({ text: 'escape' });
+  const closeBtn = await client.$('.c-fullscreen_modal__close');
+  await closeBtn.click();
   await wait(500);
 }
 

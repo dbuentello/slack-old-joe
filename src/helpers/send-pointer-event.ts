@@ -1,11 +1,11 @@
-export const enum PointerEvent {
+export const enum PointerEvents {
   MOUSEMOVE = 'mouseMoved',
   MOUSEDOWN = 'mousePressed',
   MOUSEUP = 'mouseReleased'
 }
 
 export interface PointerEventOptions {
-  type: PointerEvent;
+  type: PointerEvents;
   touch?: boolean;
   x: number;
   y: number;
@@ -41,7 +41,8 @@ export function sendPointerEvent(
 export async function sendClickElement(
   client: BrowserObject,
   selector: string,
-  rightClick?: boolean
+  rightClick?: boolean,
+  type?: PointerEvents
 ) {
   const element = await client.$(selector);
   const location = await (client as any).getElementLocation(
@@ -49,7 +50,7 @@ export async function sendClickElement(
   );
 
   await sendPointerEvent(client, {
-    type: PointerEvent.MOUSEDOWN,
+    type: type || PointerEvents.MOUSEDOWN,
     // +2 so that we actually hit the element
     x: location.x + 2,
     y: location.y + 2,
