@@ -86,21 +86,26 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       } else if (expectedVersion.full.includes('beta')) {
         assert.include(versionText.toLowerCase(), 'beta', 'version string');
       }
+    },
+    ['win32', 'linux']
+  );
+
+  it(
+    'has a a "notices" link in the about window',
+    async () => {
+      const acknowledgements = await window.client.$(
+        '.AboutBox-acknowledgements'
+      );
+
+      assert.ok(
+        await acknowledgements.isDisplayed(),
+        'visibility of the acknowledgements button'
+      );
 
       await window.client.closeWindow();
     },
     ['win32', 'linux']
   );
-
-  it('has a a "notices" link in the about window', async () => {
-    const acknowledgements = await window.client.$(
-      '.AboutBox-acknowledgements'
-    );
-    assert.ok(
-      await acknowledgements.isDisplayed(),
-      'visibility of the acknowledgements button'
-    );
-  }, [ 'win32', 'linux' ]);
 
   it('creates a post window', async () => {
     // Switch to the posts channel

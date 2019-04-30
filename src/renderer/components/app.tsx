@@ -21,10 +21,11 @@ import { Setup } from './setup';
 import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
 import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
 import { wait } from '../../utils/wait';
-import { killSlack } from '../../native-commands/kill';
+import { killSlack } from '../../native-commands/kill-slack';
 import { Results } from './results';
 import { waitUntilSlackReady } from '../../helpers/wait-until-slack-ready';
 import { JoeBrowserObject } from '../../interfaces';
+import { killChromedriver } from '../../native-commands/kill-chromedriver';
 
 interface AppProps {
   appState: AppState;
@@ -152,6 +153,8 @@ export class App extends React.Component<AppProps, LocalAppState> {
       startingIn: this.getExpectedLauchTime()
     });
 
+    await killSlack();
+    await killChromedriver();
     await clean();
 
     // Should we seed a user data dir? We'll do so if
