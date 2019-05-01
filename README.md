@@ -127,3 +127,13 @@ He's advertising smoking. This is a smoke test suite. Get it? GET IT?!
 ### Rapid Prototyping & Development
 
 The easiest way to write tests is to do it live. Start Old Joe, deselect all tests, and open up Old Joe's developer tools. The `BrowserObject` client will be available as `window.client`, all helpers can be found in `window.helpers`.
+
+### Development Tips & Tricks
+
+#### `kb_list_mouse_interceptor` blocks my mouse clicks
+
+Slack's `webapp` will block mouse clicks if keyboard navigation is enabled. Easily fixable: Call `element.moveTo()` before trying to click on the element that'd otherwise be blocked by the mouse interceptor.
+
+#### Can I see where the tools clicked?
+
+Call `helpers.traceClicks(window.client)` from Old Joe's developer tools. Little red dots will appear in the currently selected browser context whenever something clicks there (human or robot).
