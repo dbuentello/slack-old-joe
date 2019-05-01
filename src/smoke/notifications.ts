@@ -12,6 +12,7 @@ import { getIsHidden } from '../helpers/get-is-hidden';
 import { close } from '../native-commands/close';
 import { closeFlexpane } from '../helpers/close-flexpane';
 import { setPreference } from '../helpers/set-preference';
+import { sendClickElement } from '../helpers/send-pointer-event';
 
 export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   /**
@@ -27,10 +28,9 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
 
     // The "notify" message
     await window.client.keys([cmdOrCtrl, 'Shift']);
-    const messageToClick = await window.client.$(`span=${text}`);
-    await messageToClick.click();
+    await sendClickElement(window.client, `span=${text}`);
     await window.client.keys([cmdOrCtrl, 'Shift']);
-    await wait(100);
+    await wait(300);
   }
 
   beforeAll(async () => {
@@ -91,7 +91,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   it('can click on the notification and open the right thread', async () => {
     // Close the thread
     await closeFlexpane(window.client);
-    await wait(50);
+    await wait(200);
 
     // Hopefully open it again
     await clickFirstNativeNotification(window.client);

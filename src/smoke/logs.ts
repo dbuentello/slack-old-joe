@@ -78,7 +78,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await waitForFileInDir(targetDir, getFindLogFileTest(blacklist));
 
     // Give Slack a second to show us the file in the Finder
-    await wait(1000);
+    await wait(2000);
 
     assert.ok(createdLogFile);
   });
@@ -98,7 +98,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       'Troubleshooting',
       'Restart and Collect Net Logs…'
     ]);
-    await wait(300);
+    await wait(600);
     await sendNativeKeyboardEvent({ text: 'enter', noFocus: true });
 
     // A bit of wait padding on both sides to make things more robust

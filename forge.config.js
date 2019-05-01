@@ -14,7 +14,7 @@ module.exports = {
   packagerConfig: {
     name: 'Old Joe',
     executableName: 'old-joe',
-    asar: true,
+    asar: false,
     icon: path.resolve(iconDir, 'icon'),
     // TODO: FIXME?
     // ignore: [

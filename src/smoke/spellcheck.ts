@@ -1,4 +1,3 @@
-import * as robot from 'robotjs';
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
@@ -7,7 +6,10 @@ import { switchToChannel } from '../helpers/switch-channel';
 import { wait } from '../utils/wait';
 import { enterMessage } from '../helpers/enter-message';
 import { sendClickElement } from '../helpers/send-pointer-event';
-import { sendKeyboardEvent } from '../helpers/send-keyboard-event';
+import {
+  sendKeyboardEvent,
+  sendNativeKeyboardEvent
+} from '../helpers/send-keyboard-event';
 import { doTimes } from '../utils/do-times';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
@@ -24,9 +26,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     await sendClickElement(window.client, 'p=mispelled', true);
     await wait(200);
-    await robot.keyTap('down');
+    await sendNativeKeyboardEvent({ text: 'down' });
     await wait(200);
-    await robot.keyTap('enter');
+    await sendNativeKeyboardEvent({ text: 'enter' });
 
     const messageElement = await window.client.$('p=misspelled');
     await messageElement.waitForExist(1000);

@@ -180,8 +180,6 @@ async function runAll(
       await method();
     } catch (error) {
       console.warn(`Failed to run ${method.name} for phase ${phase}`, error);
-
-      throw error;
     }
   }
 

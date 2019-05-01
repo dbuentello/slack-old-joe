@@ -6,8 +6,8 @@
   "scripts": {
     "start": "rimraf ./dist && electron-forge start",
     "prettier": "prettier --write src/**/*.{ts,tsx}",
-    "make": "electron-forge make",
-    "package": "electron-forge package",
+    "make": "NODE_ENV=production electron-forge make",
+    "package": "NODE_ENV=production electron-forge package",
     "parcel:build": "node ./tools/parcel-build.js",
     "parcel:watch": "node ./tools/parcel-watch.js"
   },

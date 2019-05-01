@@ -22,11 +22,9 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
 
   it('can select the "next" workspace using the window menu', async () => {
     await selectNextTeamWindowMenu(window.client);
-
     const beforeTitle = await window.client.getTitle();
 
     await selectNextTeamWindowMenu(window.client);
-
     const afterTitle = await window.client.getTitle();
 
     assert.notEqual(beforeTitle, afterTitle);
@@ -34,11 +32,9 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
 
   it('can select the "previous" workspace using the window menu', async () => {
     const beforeTitle = await window.client.getTitle();
-
     await selectPreviousTeamWindowMenu(window.client);
 
     const afterTitle = await window.client.getTitle();
-
     assert.notEqual(beforeTitle, afterTitle);
   });
 

@@ -28,7 +28,7 @@ export function spawnChromeDriver(): Promise<ChildProcess> {
   return new Promise<ChildProcess>(resolve => {
     const driverPath = path.join(
       __dirname,
-      '../../node_modules/.bin/chromedriver'
+      '../../node_modules/electron-chromedriver/bin/chromedriver'
     );
 
     driver = spawn(driverPath, ['--url-base=wd/hub', '--port=9515']);
@@ -50,5 +50,14 @@ export function spawnChromeDriver(): Promise<ChildProcess> {
     driver.addListener('close', code =>
       debug(`Chromedriver exited with code ${code}`)
     );
+
+    const killChromeDriver = () => {
+      try {
+        driver.kill();
+      } catch (ignored) {}
+    };
+
+    process.on('exit', killChromeDriver);
+    process.on('SIGTERM', killChromeDriver);
   });
 }

@@ -27,7 +27,8 @@ export function getMainWindowOptions(): Electron.BrowserWindowConstructorOptions
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       webviewTag: false
-    }
+    },
+    show: false
   };
 }
 
@@ -59,6 +60,8 @@ export function createMainWindow(): Electron.BrowserWindow {
     event.preventDefault();
     shell.openExternal(url);
   });
+
+  browserWindow.once('ready-to-show', browserWindow.show);
 
   browserWindows.push(browserWindow);
 

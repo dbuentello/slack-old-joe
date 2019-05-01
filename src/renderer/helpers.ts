@@ -1,3 +1,5 @@
+import * as robot from 'robotjs';
+
 import { runAppleScript, runAppleScriptFile } from '../utils/applescript';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
@@ -34,6 +36,7 @@ import { getAboutWindowHandle } from '../helpers/get-about-window';
 import { getAboutBoxValue } from '../native-commands/mac-about-dialog';
 import { getStartupItems } from '../helpers/get-startup-items';
 import { getRunningSlackProcessesCount } from '../helpers/get-running-slack-processes';
+import { focus } from '../native-commands/focus';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -43,6 +46,7 @@ export function registerHelpers() {
     disableWifi,
     enableWifi,
     enterMessage,
+    focus,
     getAboutBoxValue,
     getAboutWindowHandle,
     getBrowserViewHandle,
@@ -72,4 +76,6 @@ export function registerHelpers() {
     waitForFile,
     waitForFileInDir
   };
+
+  window['robot'] = robot;
 }

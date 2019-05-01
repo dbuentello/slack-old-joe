@@ -1,5 +1,6 @@
-import * as menu from 'electron-create-menu';
-import * as contextMenu from 'electron-context-menu';
+import { app } from 'electron';
+import menu from 'electron-create-menu';
+import contextMenu from 'electron-context-menu';
 
 /**
  * Setup the menu
@@ -7,6 +8,18 @@ import * as contextMenu from 'electron-context-menu';
  * @export
  */
 export function setupMenu() {
-  menu();
+  menu((defaultMenu: Array<Electron.MenuItemConstructorOptions>) => {
+    if (Array.isArray(defaultMenu[0].submenu)) {
+      defaultMenu[0].submenu.push({
+        label: 'Quit',
+        accelerator: 'CmdOrCtrl+Q',
+        click() {
+          app.quit();
+        }
+      });
+    }
+
+    return defaultMenu;
+  });
   contextMenu();
 }

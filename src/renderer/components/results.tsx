@@ -41,13 +41,13 @@ export class Results extends React.Component<ResultsProps, {}> {
 
   public renderResult(suiteResult: SuiteResult): Array<JSX.Element> {
     return [
-      <h5>{suiteResult.name}</h5>,
+      <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
       ...suiteResult.results.map(result => {
         const { error, name } = result;
         const errorElement = error ? <pre>{error.toString()}</pre> : null;
 
         return (
-          <div className="result">
+          <div className="result" key={result.name}>
             <p>
               {this.getIcon(result)} {name}
             </p>

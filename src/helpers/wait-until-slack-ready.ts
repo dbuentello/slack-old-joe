@@ -50,9 +50,10 @@ export function waitUntilSlackReady(
       }
 
       // So we have windows, huh? Are we ready?
-      target = target || expectSignIn
-        ? await getSignInWindow(client)
-        : await getBrowserViewHandle(client);
+      target =
+        target || expectSignIn
+          ? await getSignInWindow(client)
+          : await getBrowserViewHandle(client);
       const isLoading = target && (await client.isLoading());
 
       if (target && !isLoading) return finish();

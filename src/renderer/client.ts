@@ -6,7 +6,7 @@ import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';
 import { waitUntilSlackClosed } from '../helpers/wait-until-slack-closed';
 import { AppState } from './state';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
-import { isMac } from '../utils/os';
+import { isMac, isWin } from '../utils/os';
 
 let _client: null | JoeBrowserObject = null;
 
@@ -44,14 +44,18 @@ export async function getClient(appState: AppState) {
     if (sessions.length > 0) {
       // Simply stopping the session means that Slack will
       // likely not have time to save preferences and clean up
-      // before being killed
+      // before being killed. On Windows. Boy.
+      if (!isWin()) await this.deleteSession();
+
       await sendNativeKeyboardEvent({
         cmd: isMac(),
         ctrl: !isMac(),
         text: 'q'
       });
       await waitUntilSlackClosed(appState.appToTest);
-      await this.deleteSession();
+
+      // See comment above
+      if (isWin()) await this.deleteSession();
     }
     console.groupEnd();
   };
