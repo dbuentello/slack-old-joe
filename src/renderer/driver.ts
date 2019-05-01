@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { remote } from 'electron';
 import { ChildProcess } from 'child_process';
+import { Driver } from '../interfaces';
 
 const debug = require('debug')('chromedriver');
 const spawn = require('cross-spawn');
@@ -56,6 +57,9 @@ export function spawnChromeDriver(): Promise<ChildProcess> {
         driver.kill();
       } catch (ignored) {}
     };
+
+    driver['restart'] = spawnChromeDriver;
+    window.driver = driver as Driver;
 
     process.on('exit', killChromeDriver);
     process.on('SIGTERM', killChromeDriver);

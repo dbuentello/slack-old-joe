@@ -1,7 +1,7 @@
 import * as RobotType from 'robotjs';
 
 import { appState } from './state';
-import { JoeBrowserObject } from '../interfaces';
+import { JoeBrowserObject, Driver } from '../interfaces';
 import { registerHelpers } from './helpers';
 
 /**
@@ -44,6 +44,7 @@ declare global {
   interface Window {
     OldJoe: Root;
     client: JoeBrowserObject;
+    driver: Driver;
     robot: typeof RobotType;
   }
 }

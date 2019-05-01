@@ -234,8 +234,8 @@ export class App extends React.Component<AppProps, LocalAppState> {
     if (appState.closeAppAtEnd) {
       try {
         // Kill driver and session
-        await client.deleteSession();
-        await driver.kill();
+        await window.client.deleteSession();
+        await window.driver.kill();
 
         // Kill Slack, if still running
         await killSlack(appState);

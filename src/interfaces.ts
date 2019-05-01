@@ -1,3 +1,5 @@
+import { ChildProcess } from 'child_process';
+
 export type LifeCycleFn = () => Promise<void> | void;
 export type TestFn = () => Promise<void> | void;
 
@@ -64,4 +66,8 @@ export type WIOJoeBrowserObject = WebDriver.ClientOptions &
 export interface JoeBrowserObject extends BrowserObject {
   restart: () => Promise<void>;
   stop: () => Promise<void>;
+}
+
+export interface Driver extends ChildProcess {
+  restart: () => Promise<void>
 }
