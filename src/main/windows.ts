@@ -12,7 +12,12 @@ export let browserWindows: Array<BrowserWindow> = [];
 export function getMainWindowOptions(): Electron.BrowserWindowConstructorOptions {
   const display = screen.getPrimaryDisplay();
   const width = 400;
-  const height = 1000;
+  let height = 1000;
+
+  if (display.bounds.height - height < 300) {
+    height = display.bounds.height - 300;
+  }
+
   const x = display.bounds.width - width - 50;
   const y = display.bounds.height - height - 50;
 

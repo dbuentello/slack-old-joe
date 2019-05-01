@@ -52,7 +52,7 @@ export async function getClient(appState: AppState) {
         ctrl: !isMac(),
         text: 'q'
       });
-      await waitUntilSlackClosed(appState.appToTest);
+      await waitUntilSlackClosed(appState);
 
       // See comment above
       if (isWin()) await this.deleteSession();

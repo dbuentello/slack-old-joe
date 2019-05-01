@@ -11,7 +11,7 @@ export const test: SuiteMethod = async ({ it }) => {
 
     // Wait until we have no processes
     assert.equal(
-      await getRunningSlackProcessesCount(appState.appToTest),
+      await getRunningSlackProcessesCount(appState),
       0,
       'number of running processes'
     );
@@ -21,7 +21,7 @@ export const test: SuiteMethod = async ({ it }) => {
   });
 
   it('has the right number of processes while running (and not more or less)', async () => {
-    const processes = await getRunningSlackProcessesCount(appState.appToTest);
+    const processes = await getRunningSlackProcessesCount(appState);
     const expected = isWin() ? 9 : 6;
 
     assert.equal(processes, expected, 'number of Slack processes');

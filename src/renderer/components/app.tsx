@@ -153,7 +153,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
       startingIn: this.getExpectedLauchTime()
     });
 
-    await killSlack();
+    await killSlack(appState);
     await killChromedriver();
     await clean();
 
@@ -229,14 +229,16 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   public async stopTests(driver: ChildProcess, client: JoeBrowserObject) {
-    if (this.props.appState.closeAppAtEnd) {
+    const { appState } = this.props;
+
+    if (appState.closeAppAtEnd) {
       try {
         // Kill driver and session
         await client.deleteSession();
         await driver.kill();
 
         // Kill Slack, if still running
-        await killSlack();
+        await killSlack(appState);
 
         // Restore a possible user data backup
         await wait(300);

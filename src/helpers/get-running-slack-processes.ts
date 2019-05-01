@@ -3,12 +3,13 @@ import * as path from 'path';
 
 import { isWin, isMac } from '../utils/os';
 import { runPowerShellScript } from '../utils/powershell';
+import { AppState } from '../renderer/state';
 
 const debug = require('debug')('old-joe');
 
-export async function getRunningSlackProcessesCount(appPath: string) {
+export async function getRunningSlackProcessesCount(appState: AppState) {
   let output: String | Buffer = '';
-  let pathToCheck = appPath;
+  let pathToCheck = appState.appToTest;
 
   if (isWin()) {
     const scriptPath = path.join(
