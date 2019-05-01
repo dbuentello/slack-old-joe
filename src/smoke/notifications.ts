@@ -12,7 +12,6 @@ import { getIsHidden } from '../helpers/get-is-hidden';
 import { close } from '../native-commands/close';
 import { closeFlexpane } from '../helpers/close-flexpane';
 import { setPreference } from '../helpers/set-preference';
-import { sendClickElement } from '../helpers/send-pointer-event';
 
 export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   /**
@@ -27,8 +26,11 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     await switchToChannel(window.client, 'notify');
 
     // The "notify" message
+    const messageToClick = await window.client.$(`span=${text}`);
+    await messageToClick.moveTo();
+
     await window.client.keys([cmdOrCtrl, 'Shift']);
-    await sendClickElement(window.client, `span=${text}`);
+    await messageToClick.click();
     await window.client.keys([cmdOrCtrl, 'Shift']);
     await wait(300);
   }

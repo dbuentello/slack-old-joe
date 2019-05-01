@@ -45,6 +45,7 @@ export async function sendClickElement(
   type?: PointerEvents
 ) {
   const element = await client.$(selector);
+  await element.waitForDisplayed(1000);
   const location = await (client as any).getElementLocation(
     (element as any).elementId
   );

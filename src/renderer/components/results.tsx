@@ -25,9 +25,9 @@ export class Results extends React.Component<ResultsProps, {}> {
         ? results.map(this.renderResult)
         : [
             done ? (
-              <h5>Didn't run any tests, huh? You rascal!</h5>
+              <h5 key='did-not-run'>Didn't run any tests, huh? You rascal!</h5>
             ) : (
-              <h5>Waiting for test results...</h5>
+              <h5 key='waiting-for-results'>Waiting for test results...</h5>
             )
           ];
 
@@ -39,9 +39,15 @@ export class Results extends React.Component<ResultsProps, {}> {
     );
   }
 
+  /**
+   * The result. Will be displayed in reverse!
+   *
+   * @param {SuiteResult} suiteResult
+   * @returns {Array<JSX.Element>}
+   * @memberof Results
+   */
   public renderResult(suiteResult: SuiteResult): Array<JSX.Element> {
     return [
-      <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
       ...suiteResult.results.map(result => {
         const { error, name } = result;
         const errorElement = error ? <pre>{error.toString()}</pre> : null;
@@ -54,8 +60,9 @@ export class Results extends React.Component<ResultsProps, {}> {
             {errorElement}
           </div>
         );
-      })
-    ].reverse();
+      }).reverse(),
+      <h5 key={suiteResult.name}>{suiteResult.name}</h5>
+    ];
   }
 
   private getIcon({ skipped, ok }: Result) {

@@ -37,6 +37,7 @@ import { getAboutBoxValue } from '../native-commands/mac-about-dialog';
 import { getStartupItems } from '../helpers/get-startup-items';
 import { getRunningSlackProcessesCount } from '../helpers/get-running-slack-processes';
 import { focus } from '../native-commands/focus';
+import { traceClicks } from '../helpers/trace-clicks';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -73,6 +74,7 @@ export function registerHelpers() {
     sendPointerEvent,
     switchToChannel,
     switchToTeam,
+    traceClicks,
     waitForFile,
     waitForFileInDir
   };
