@@ -77,6 +77,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     await waitForFileInDir(targetDir, getFindLogFileTest(blacklist));
 
+    // Give Slack a second to show us the file in the Finder
+    await wait(1000);
+
     assert.ok(createdLogFile);
   });
 
@@ -100,7 +103,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     // A bit of wait padding on both sides to make things more robust
     await wait(700);
-    await waitUntilSlackReady(window.client, !isSignInDisabled(appState));
+    await waitUntilSlackReady(window.client, false);
     await wait(700);
 
     await getNetLogWindowHandle(window.client);

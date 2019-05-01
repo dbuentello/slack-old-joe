@@ -2,12 +2,14 @@ import { app } from 'electron';
 
 import { getOrCreateMainWindow } from './windows';
 import { shouldQuit } from './squirrel';
+import { setupMenu } from './menu';
 
 /**
  * Handle the app's "ready" event. This is essentially
  * the method that takes care of booting the application.
  */
 export async function onReady() {
+  setupMenu();
   getOrCreateMainWindow();
 }
 
