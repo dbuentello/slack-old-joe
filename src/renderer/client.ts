@@ -65,7 +65,7 @@ export async function getClient(appState: AppState) {
       await this.deleteSession();
       await waitUntilSlackClosed(appState);
     }
-  }
+  };
 
   console.groupEnd();
 

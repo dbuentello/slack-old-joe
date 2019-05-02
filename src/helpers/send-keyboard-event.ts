@@ -18,12 +18,18 @@ export interface KeyboardEventOptions {
   alt?: boolean;
   ctrl?: boolean;
   cmd?: boolean;
+  cmdOrCtrl?: boolean;
   noFocus?: boolean;
 }
 
 export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
-  const { text, shift, alt, ctrl, cmd, noFocus } = options;
+  const { text, shift, alt, ctrl, cmd, noFocus, cmdOrCtrl } = options;
   const modifier: Array<string> = [];
+
+  if (cmdOrCtrl) {
+    options.cmd = isMac();
+    options.ctrl = !isMac();
+  }
 
   // On a Mac, robotjs is kinda garbage. Let's use AppleScript, which works
   // so. much. better.
@@ -47,30 +53,12 @@ async function sendAppleScriptKeyboardEvent(options: KeyboardEventOptions) {
   const { text, shift, alt, ctrl, cmd, noFocus } = options;
   const instructions: Array<string> = [];
 
-  let command = `keystroke "${text}"`;
-  let lowercaseText = text.toLowerCase();
-
-  // Not to be confused with JS DOM key codes
-  // https://apple.stackexchange.com/questions/36943/how-do-i-automate-a-key-press-in-applescript
-  if (lowercaseText === 'enter') {
-    command = `key code 36`;
-  } else if (lowercaseText === 'right') {
-    command = `key code 124`;
-  } else if (lowercaseText === 'down') {
-    command = `key code 125`;
-  } else if (lowercaseText === 'left') {
-    command = `key code 123`;
-  } else if (lowercaseText === 'up') {
-    command = `key code 38`;
-  } else if (lowercaseText === 'escape') {
-    command = `key code 126`;
-  }
-
   cmd && instructions.push(`command down`);
   shift && instructions.push(`shift down`);
   alt && instructions.push(`option down`);
   ctrl && instructions.push(`control down`);
 
+  const command = getAppleScriptCommand(text);
   const usingText = `using {${instructions.join(', ')}}`;
 
   if (!noFocus) await focus();
@@ -118,4 +106,26 @@ export function sendKeyboardEvent(
     location: description.location,
     isKeypad: description.location === 3
   });
+}
+
+// Not to be confused with JS DOM key codes
+// https://apple.stackexchange.com/questions/36943/how-do-i-automate-a-key-press-in-applescript
+const AS_KEY_CODES = {
+  enter: 36,
+  delete: 51,
+  escape: 53,
+  left: 123,
+  right: 124,
+  down: 125,
+  up: 126
+};
+
+function getAppleScriptCommand(text: string) {
+  let lowercaseText = text.toLowerCase();
+
+  if (AS_KEY_CODES[lowercaseText]) {
+    return `key code ${AS_KEY_CODES[lowercaseText]}`;
+  } else {
+    return `keystroke "${text}"`;
+  }
 }

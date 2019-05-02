@@ -3,7 +3,8 @@ import { test as messagingTest } from './messaging';
 import { test as downloadTest } from './upload-download';
 import { test as windowTest } from './app-window';
 import { test as reloadTest } from './reloads-resets';
-import { test as menuTest } from './menus';
+import { test as menuWorkspaceTest } from './menu-workspaces';
+import { test as menuShortcutTest } from './menu-shortcuts';
 import { test as logTest } from './logs';
 import { test as childWindowTest } from './child-windows';
 import { test as deepLinkTest } from './deep-links';
@@ -24,7 +25,8 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'File Up- and Download', test: downloadTest },
   { name: 'App Window', test: windowTest },
   { name: 'Reloading', test: reloadTest },
-  { name: 'Menus', test: menuTest },
+  { name: 'Menus (Workspaces)', test: menuWorkspaceTest },
+  { name: 'Menus (Shortcuts)', test: menuShortcutTest },
   { name: 'Child Windows', test: childWindowTest },
   { name: 'Deep links', test: deepLinkTest },
   { name: 'Network', test: networkTest },

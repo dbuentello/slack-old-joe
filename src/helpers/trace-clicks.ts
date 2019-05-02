@@ -1,4 +1,5 @@
-const methodText = () => `
+const methodText = () =>
+  `
 window.addEventListener("click", event => {
   let dot = document.createElement("div");
   dot.style.height = "8px";
@@ -9,7 +10,9 @@ window.addEventListener("click", event => {
   dot.style.left = (event.pageX - 4) + "px";
   dot.style.top = (event.pageY - 4) + "px";
   document.body.appendChild(dot);
-});`.split('\n').join('');
+});`
+    .split('\n')
+    .join('');
 
 export async function traceClicks(client: BrowserObject) {
   return client.executeScript(methodText(), []);
