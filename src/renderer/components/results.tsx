@@ -1,79 +1,71 @@
-import { observer } from 'mobx-react';
 import * as React from 'react';
+import useStayScrolled from 'react-stay-scrolled';
 import { Card, Elevation, Icon } from '@blueprintjs/core';
 
-import { AppState } from '../state';
 import { SuiteResult, Result } from '../../interfaces';
 
 interface ResultsProps {
-  appState: AppState;
+  results: Array<SuiteResult>;
+  done: boolean;
 }
 
-@observer
-export class Results extends React.Component<ResultsProps, {}> {
-  constructor(props: ResultsProps) {
-    super(props);
+export const Results = ({ results, done }: ResultsProps) => {
+  const listRef = React.useRef();
+  const { stayScrolled } = useStayScrolled(listRef);
 
-    this.renderResult = this.renderResult.bind(this);
-    this.getIcon = this.getIcon.bind(this);
-  }
+  const resultElements =
+    results.length > 0
+      ? results.map(renderIndividualResult)
+      : [
+          done ? (
+            <h5 key='did-not-run'>Didn't run any tests, huh? You rascal!</h5>
+          ) : (
+            <h5 key='waiting-for-results'>Waiting for test results...</h5>
+          )
+        ];
 
-  public render() {
-    const { results, done } = this.props.appState;
-    const resultElements =
-      results.length > 0
-        ? results.map(this.renderResult)
-        : [
-            done ? (
-              <h5 key='did-not-run'>Didn't run any tests, huh? You rascal!</h5>
-            ) : (
-              <h5 key='waiting-for-results'>Waiting for test results...</h5>
-            )
-          ];
+  // Typically you will want to use stayScrolled or scrollBottom inside
+  // useLayoutEffect, because it measures and changes DOM attributes (scrollTop) directly
+  React.useLayoutEffect(() => {
+    stayScrolled();
+  }, [results.length])
 
-    // Warning: In CSS, we'll reverse this list!
-    return (
-      <Card elevation={Elevation.ONE} className="result-card">
+  return (
+    <Card elevation={Elevation.ONE} className="result-card">
+      <div ref={listRef as any}>
         {resultElements}
-      </Card>
-    );
+      </div>
+    </Card>
+  );
+};
+
+const renderIndividualResult = (suiteResult: SuiteResult): Array<JSX.Element> => {
+  return [
+    <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
+    ...suiteResult.results.map(result => {
+      const { error, name } = result;
+      const errorElement = error ? <pre>{error.toString()}</pre> : null;
+
+      return (
+        <div className="result" key={result.name}>
+          <p>
+            {getIcon(result)} {name}
+          </p>
+          {errorElement}
+        </div>
+      );
+    })
+  ];
+}
+
+function getIcon({ skipped, ok }: Result): JSX.Element {
+  if (skipped) {
+    return <Icon icon="moon" htmlTitle="Test skipped (wrong platform)" />;
   }
 
-  /**
-   * The result. Will be displayed in reverse!
-   *
-   * @param {SuiteResult} suiteResult
-   * @returns {Array<JSX.Element>}
-   * @memberof Results
-   */
-  public renderResult(suiteResult: SuiteResult): Array<JSX.Element> {
-    return [
-      ...suiteResult.results.map(result => {
-        const { error, name } = result;
-        const errorElement = error ? <pre>{error.toString()}</pre> : null;
-
-        return (
-          <div className="result" key={result.name}>
-            <p>
-              {this.getIcon(result)} {name}
-            </p>
-            {errorElement}
-          </div>
-        );
-      }).reverse(),
-      <h5 key={suiteResult.name}>{suiteResult.name}</h5>
-    ];
+  if (ok) {
+    return <Icon icon="endorsed" htmlTitle="Test passed" />;
   }
 
-  private getIcon({ skipped, ok }: Result) {
-    if (skipped) {
-      return <Icon icon="moon" htmlTitle="Test skipped (wrong platform)" />;
-    }
-
-    if (ok) {
-      return <Icon icon="endorsed" htmlTitle="Test passed" />;
-    }
-
-    return <Icon icon="error" intent="danger" htmlTitle="Test failed" />;
-  }
+  return <Icon icon="error" intent="danger" htmlTitle="Test failed" />;
 }

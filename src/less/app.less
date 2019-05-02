@@ -21,6 +21,7 @@
 
 .progress-card {
   display: flex;
+  flex-shrink: 0;
 
   .bp3-spinner {
     margin-right: 10px;
@@ -33,17 +34,16 @@
 
 .result-card {
   display: flex;
-  flex-direction: column-reverse;
-  overflow-y: auto;
+  flex-direction: column;
   flex-grow: 1;
   margin-bottom: 10px;
 
-  h5 {
-    margin: 20px 0 5px 0;
+  > div {
+    overflow-y: auto;
   }
 
-  h5:last-of-type {
-    margin: 0 0 5px 0;
+  h5 {
+    margin: 20px 0 5px 0;
   }
 
   p {

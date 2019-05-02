@@ -31,6 +31,7 @@
     "mobx-react": "^5.4.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-stay-scrolled": "^6.0.0",
     "robotjs": "^0.5.1",
     "screenshot-desktop": "^1.7.0",
     "semver": "^6.0.0",

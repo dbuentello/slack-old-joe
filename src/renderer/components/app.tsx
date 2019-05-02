@@ -104,7 +104,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     return (
       <>
-        <Results appState={appState} />
+        <Results done={appState.done} results={appState.results} />
         <Card
           interactive={appState.generateReportAtEnd}
           elevation={Elevation.TWO}
