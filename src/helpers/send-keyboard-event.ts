@@ -112,8 +112,11 @@ export function sendKeyboardEvent(
 // https://apple.stackexchange.com/questions/36943/how-do-i-automate-a-key-press-in-applescript
 const AS_KEY_CODES = {
   enter: 36,
+  '/': 44,
   delete: 51,
   escape: 53,
+  '+': 69,
+  '-': 78,
   left: 123,
   right: 124,
   down: 125,

@@ -12,6 +12,7 @@ import { isMac } from '../utils/os';
 import { getSelection } from '../helpers/get-selection';
 import { reopen } from '../native-commands/reopen';
 import { clipboard } from 'electron';
+import { switchToChannel } from '../helpers/switch-channel';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
@@ -171,4 +172,106 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     },
     ['darwin']
   );
+
+  it('can "zoom in"', async () => {
+    await sendNativeKeyboardEvent({
+      text: '+',
+      cmdOrCtrl: true,
+      noFocus: true
+    });
+    await wait(300);
+
+    const zoomLevelIndicator = await window.client.$('.zoom_level_indicator');
+    await zoomLevelIndicator.waitForExist(1000);
+    const zoomLevel = await zoomLevelIndicator.getText();
+
+    assert.equal(zoomLevel, 'zoom: 110%', 'zoom level indicator');
+  });
+
+  it('can "zoom in" (again)', async () => {
+    await sendNativeKeyboardEvent({
+      text: '+',
+      cmdOrCtrl: true,
+      noFocus: true
+    });
+    await wait(300);
+
+    const zoomLevelIndicator = await window.client.$('.zoom_level_indicator');
+    await zoomLevelIndicator.waitForExist(1000);
+    const zoomLevel = await zoomLevelIndicator.getText();
+
+    assert.equal(zoomLevel, 'zoom: 125%', 'zoom level indicator');
+  });
+
+  it('can "zoom out"', async () => {
+    await sendNativeKeyboardEvent({
+      text: '-',
+      cmdOrCtrl: true,
+      noFocus: true
+    });
+    await wait(300);
+
+    const zoomLevelIndicator = await window.client.$('.zoom_level_indicator');
+    await zoomLevelIndicator.waitForExist(1000);
+    const zoomLevel = await zoomLevelIndicator.getText();
+
+    assert.equal(zoomLevel, 'zoom: 110%', 'zoom level indicator');
+  });
+
+  it('can go back to "actual size"', async () => {
+    await sendNativeKeyboardEvent({
+      text: '0',
+      cmdOrCtrl: true,
+      noFocus: true
+    });
+    await wait(300);
+
+    const zoomLevelIndicator = await window.client.$('.zoom_level_indicator');
+    await zoomLevelIndicator.waitForExist(1000);
+    const zoomLevel = await zoomLevelIndicator.getText();
+
+    assert.equal(zoomLevel, 'zoom: 100%', 'zoom level indicator');
+  });
+
+  it('can go "back" in history', async () => {
+    await switchToChannel(window.client, 'ads');
+    await switchToChannel(window.client, 'downloads');
+
+    await sendNativeKeyboardEvent({
+      text: '[',
+      cmdOrCtrl: true,
+      noFocus: true
+    });
+    assert.include(await window.client.getTitle(), 'ads');
+  });
+
+  it('can go "forward" in history', async () => {
+    await sendNativeKeyboardEvent({
+      text: ']',
+      cmdOrCtrl: true,
+      noFocus: true
+    });
+    assert.include(await window.client.getTitle(), 'downloads');
+  });
+
+  it('can display keyboard shortcuts', async () => {
+    await sendNativeKeyboardEvent({ text: '/', cmdOrCtrl: true });
+
+    const keyboardShortcutsTitle = await window.client.$('h3=Navigation');
+    await keyboardShortcutsTitle.waitForExist(1000);
+    assert.ok(await keyboardShortcutsTitle.isExisting());
+  });
+
+  it('can close keyboard shortcuts', async () => {
+    await wait(300);
+    await sendNativeKeyboardEvent({
+      text: '/',
+      cmdOrCtrl: true,
+      noFocus: true
+    });
+    await wait(400);
+
+    const keyboardShortcutsTitle = await window.client.$('h3=Navigation');
+    assert.notOk(await keyboardShortcutsTitle.isDisplayed());
+  });
 };
