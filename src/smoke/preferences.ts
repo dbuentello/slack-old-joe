@@ -96,7 +96,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
     await openGpuInfoWindow(window.client);
 
     assert.isFalse(await getIsGpuEnabled(window.client));
-    await window.client.closeWindow();
+    // await window.client.closeWindow();
   });
 
   it('can enable hardware acceleration', async () => {

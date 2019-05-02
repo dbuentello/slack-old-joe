@@ -44,19 +44,17 @@ export async function getClient(appState: AppState) {
     if (sessions.length > 0) {
       // Simply stopping the session means that Slack will
       // likely not have time to save preferences and clean up
-      // before being killed. On Windows. Boy.
-      if (!isWin()) await this.deleteSession();
-
+      // before being killed
       await sendNativeKeyboardEvent({
         cmd: isMac(),
         ctrl: !isMac(),
         text: 'q'
       });
-      await waitUntilSlackClosed(appState);
 
-      // See comment above
-      if (isWin()) await this.deleteSession();
+      await waitUntilSlackClosed(appState);
+      await this.deleteSession();
     }
+
     console.groupEnd();
   };
 

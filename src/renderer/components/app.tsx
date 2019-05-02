@@ -167,6 +167,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
       signOutTest!.disabled = true;
     }
 
+    // Driver, then client
     const driver = await spawnChromeDriver();
     const client = await getClient(appState);
 
