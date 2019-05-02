@@ -66,6 +66,7 @@ export type WIOJoeBrowserObject = WebDriver.ClientOptions &
 export interface JoeBrowserObject extends BrowserObject {
   restart: () => Promise<void>;
   stop: () => Promise<void>;
+  kill: () => Promise<void>;
 }
 
 export interface Driver extends ChildProcess {

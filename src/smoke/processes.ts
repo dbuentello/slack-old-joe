@@ -7,7 +7,8 @@ import { appState } from '../renderer/state';
 
 export const test: SuiteMethod = async ({ it }) => {
   it('leaves no processes behind after closing', async () => {
-    await window.client.stop();
+    // No need to be nice about it
+    await window.client.kill();
 
     // Wait until we have no processes
     assert.equal(
