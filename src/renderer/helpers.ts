@@ -38,6 +38,7 @@ import { getStartupItems } from '../helpers/get-startup-items';
 import { getRunningSlackProcessesCount } from '../helpers/get-running-slack-processes';
 import { focus } from '../native-commands/focus';
 import { traceClicks } from '../helpers/trace-clicks';
+import { wait } from '../utils/wait';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -75,6 +76,7 @@ export function registerHelpers() {
     switchToChannel,
     switchToTeam,
     traceClicks,
+    wait,
     waitForFile,
     waitForFileInDir
   };

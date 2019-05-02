@@ -10,12 +10,8 @@ import { waitForFileInDir } from '../helpers/wait-for-file';
 import { wait } from '../utils/wait';
 import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
-import { appState } from '../renderer/state';
-import { isSignInDisabled } from '../utils/is-sign-in-disabled';
 import { isWin, isMac } from '../utils/os';
 import { getNetLogWindowHandle } from '../helpers/get-netlog-window';
-import { reject } from 'q';
-import { resolve } from 'url';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   const targetDir = remote.app.getPath('downloads');

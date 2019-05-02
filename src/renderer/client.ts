@@ -6,7 +6,7 @@ import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';
 import { waitUntilSlackClosed } from '../helpers/wait-until-slack-closed';
 import { AppState } from './state';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
-import { isMac, isWin } from '../utils/os';
+import { isMac } from '../utils/os';
 
 let _client: null | JoeBrowserObject = null;
 

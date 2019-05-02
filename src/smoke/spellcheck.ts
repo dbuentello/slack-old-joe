@@ -26,9 +26,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     await sendClickElement(window.client, 'p=mispelled', true);
     await wait(200);
-    await sendNativeKeyboardEvent({ text: 'down' });
+    await sendNativeKeyboardEvent({ text: 'down', noFocus: true });
     await wait(200);
-    await sendNativeKeyboardEvent({ text: 'enter' });
+    await sendNativeKeyboardEvent({ text: 'enter', noFocus: true });
 
     const messageElement = await window.client.$('p=misspelled');
     await messageElement.waitForExist(1000);
