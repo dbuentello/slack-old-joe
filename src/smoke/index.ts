@@ -26,7 +26,7 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'Notifications', test: notificationTest },
   { name: 'File Up- and Download', test: downloadTest },
   { name: 'App Window', test: windowTest },
-  { name: 'Reloading', test: reloadTest },
+  { name: 'Reloading & Resetting', test: reloadTest },
   { name: 'Menus (Workspaces)', test: menuWorkspaceTest },
   { name: 'Menus (Shortcuts)', test: menuShortcutTest },
   { name: 'Menus (Cancel)', test: menuCancelTest },

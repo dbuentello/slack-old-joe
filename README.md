@@ -14,7 +14,7 @@ work.
  * macOS: Let Old Joe control your computer (`System Preferences - Security & Privacy - Accessibility`). macOS will ask during your first run.
  * macOS: Close all other apps that might send notifications.
 
-## Tests (86 Cases :rocket:)
+## Tests (90 Cases :rocket:)
 
 Old Joe currently verifies the following:
 
@@ -51,9 +51,13 @@ Old Joe currently verifies the following:
 - Can enter fullscreen display (and leave it)
 - Can minimize the window
 
-#### Reloading
+#### Reloading & Resetting
 - Cmd/Ctrl + R reloads the workspace
 - Cmd/Ctrl + Shift + R reloads everything
+- Can "Restart and Clear Cache"
+- Can still switch teams post-reset (via shortcut)
+- Can switch to the #random channel post-reset
+- Can post a message post-reset
 
 #### Menus (Workspaces)
 - Can select the "next" workspace using the window menu

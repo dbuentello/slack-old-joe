@@ -22,7 +22,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it('can open a channel via deep link', async () => {
     await switchToTeam(window.client, 0);
 
-    const teamId = SMOKE_TEAMS[0].id;
+    const teamId = smokeTeams[0].id;
     const channelId = `DJ0EJKRC7`;
     shell.openExternal(`slack://channel?team=${teamId}&id=${channelId}`);
 
@@ -35,7 +35,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it('can open a file via deep link', async () => {
     await switchToTeam(window.client, 0);
 
-    const teamId = SMOKE_TEAMS[0].id;
+    const teamId = smokeTeams[0].id;
     const fileId = 'FHNDK7KAN';
     shell.openExternal(`slack://file?team=${teamId}&id=${fileId}`);
 
