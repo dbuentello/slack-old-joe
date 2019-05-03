@@ -14,7 +14,7 @@ work.
  * macOS: Let Old Joe control your computer (`System Preferences - Security & Privacy - Accessibility`). macOS will ask during your first run.
  * macOS: Close all other apps that might send notifications.
 
-## Tests
+## Tests (86 Cases :rocket:)
 
 Old Joe currently verifies the following:
 
@@ -83,6 +83,10 @@ Old Joe currently verifies the following:
 - Can go "forward" in history
 - Can display keyboard shortcuts
 - Can close the keyboard shortcuts
+
+### Menus (Cancel)
+- Can cancel the "Reset App Data" dialog
+- Can cancel the "Restart and Collect Net Logs" dialog
 
 #### Logs
 - Revealing logs (window menu) results in logs in the downloads folder

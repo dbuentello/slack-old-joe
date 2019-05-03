@@ -6,6 +6,7 @@ import { test as reloadTest } from './reloads-resets';
 import { test as menuWorkspaceTest } from './menu-workspaces';
 import { test as menuShortcutTest } from './menu-shortcuts';
 import { test as menuContextTest } from './menu-context';
+import { test as menuCancelTest } from './menu-cancel';
 import { test as logTest } from './logs';
 import { test as childWindowTest } from './child-windows';
 import { test as deepLinkTest } from './deep-links';
@@ -28,6 +29,7 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'Reloading', test: reloadTest },
   { name: 'Menus (Workspaces)', test: menuWorkspaceTest },
   { name: 'Menus (Shortcuts)', test: menuShortcutTest },
+  { name: 'Menus (Cancel)', test: menuCancelTest },
   // Unstable
   // { name: 'Menus (Context)', test: menuContextTest },
   { name: 'Child Windows', test: childWindowTest },
