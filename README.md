@@ -44,7 +44,7 @@ Old Joe currently verifies the following:
 - Downloading a file results in a file on disk that has the right content
 - Can pause and resume a larger download, file on disk remains unchanged while paused
 - Can cancel a download
-- Can change download location
+- Can change download locationz
 
 #### Application Window
 - Can maximize the window
@@ -55,7 +55,7 @@ Old Joe currently verifies the following:
 - Cmd/Ctrl + R reloads the workspace
 - Cmd/Ctrl + Shift + R reloads everything
 
-#### Menus
+#### Menus (Workspaces)
 - Can select the "next" workspace using the window menu
 - Can select the "previous" workspace using the window menu
 - Can select a workspace by name using the window menu
@@ -63,6 +63,26 @@ Old Joe currently verifies the following:
 - Can select the "previous" workspace using the shortcut
 - Can select a workspace using the Dock menu
 - Can select a workspace using the Quick Switcher
+
+### Menus (Shortcuts)
+- Can open the "Preferences"
+- Can "Close" the window
+- Can "undo"
+- Can "redo"
+- Can "select all"
+- Can "copy"
+- Can "paste"
+- Can "paste and match style"
+- Can "find"
+- Can "use selection to find"
+- Can "zoom in"
+- Can "zoom in" (again)
+- Can "zoom out"
+- Can go back to "actual size"
+- Can go "back" in history
+- Can go "forward" in history
+- Can display keyboard shortcuts
+- Can close the keyboard shortcuts
 
 #### Logs
 - Revealing logs (window menu) results in logs in the downloads folder
