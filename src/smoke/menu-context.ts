@@ -7,11 +7,10 @@ import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { focus } from '../native-commands/focus';
 import { enterMessage } from '../helpers/enter-message';
 import { clipboard } from 'electron';
-import { sendClickElement } from '../helpers/send-pointer-event';
+import { sendClickElement, PointerEvents } from '../helpers/send-pointer-event';
 import { switchToChannel } from '../helpers/switch-channel';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
-import { doTimes } from '../utils/do-times';
-
+import { clickContextMenuItem } from '../helpers/click-context-menu-item';
 // VERY unstable
 
 export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
@@ -34,14 +33,8 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
 
     await sendNativeKeyboardEvent({ text: 'a', cmdOrCtrl: true });
     await sendClickElement(window.client, 'p=hello', true);
-    await wait(600);
-
-    await doTimes(3, async () => {
-      await sendNativeKeyboardEvent({ text: 'up', noFocus: true });
-      await wait(600);
-    });
-
-    await sendNativeKeyboardEvent({ text: 'enter', noFocus: true });
+    await wait(300);
+    await clickContextMenuItem(2);
     await wait(600);
 
     assert.equal(clipboard.readText(), 'hello', 'the clipboard content');
@@ -63,14 +56,8 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     });
 
     await sendClickElement(window.client, 'p=replace', true);
-    await wait(600);
-
-    await doTimes(2, async () => {
-      await sendNativeKeyboardEvent({ text: 'up', noFocus: true });
-      await wait(600);
-    });
-
-    await sendNativeKeyboardEvent({ text: 'enter', noFocus: true });
+    await wait(300);
+    await clickContextMenuItem(1);
     await wait(600);
 
     const messageElement = await window.client.$('p=pasted');
@@ -81,6 +68,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
 
   it('can "cut"', async () => {
     clipboard.writeText('blob');
+    await focus();
     await sendNativeKeyboardEvent({
       text: 'a',
       cmdOrCtrl: true,
@@ -93,14 +81,8 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       noFocus: true
     });
     await sendClickElement(window.client, 'p=cut', true);
-    await wait(600);
-
-    await doTimes(4, async () => {
-      await sendNativeKeyboardEvent({ text: 'up', noFocus: true });
-      await wait(600);
-    });
-
-    await sendNativeKeyboardEvent({ text: 'enter', noFocus: true });
+    await wait(300);
+    await clickContextMenuItem(3);
     await wait(600);
 
     assert.equal(clipboard.readText(), 'cut', 'the clipboard content');

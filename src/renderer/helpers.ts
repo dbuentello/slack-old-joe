@@ -39,9 +39,11 @@ import { getRunningSlackProcessesCount } from '../helpers/get-running-slack-proc
 import { focus } from '../native-commands/focus';
 import { traceClicks } from '../helpers/trace-clicks';
 import { wait } from '../utils/wait';
+import { clickContextMenuItem } from '../helpers/click-context-menu-item';
 
 export function registerHelpers() {
   window['helpers'] = {
+    clickContextMenuItem,
     clickDockMenuItem,
     clickWindowMenuItem,
     closePreferences,
