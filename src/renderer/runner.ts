@@ -146,8 +146,9 @@ export async function runTestFile(
  * @returns {Promise<Result>}
  */
 async function runTest(
-  { name, fn }: ItTestParams,
-  updateCallback: (succeeded: boolean) => void
+  { name, fn, options }: ItTestParams,
+  updateCallback: (succeeded: boolean) => void,
+  retries: number = 0
 ): Promise<Result> {
   const result: Result = { name, ok: false };
 
@@ -156,6 +157,11 @@ async function runTest(
 
     result.ok = true;
   } catch (error) {
+    // Do we retry?
+    if (options && options.retries && options.retries > retries) {
+      return runTest({ name, fn, options}, updateCallback, retries + 1);
+    }
+
     result.ok = false;
     result.error = error;
 

@@ -4,14 +4,17 @@ import * as robot from 'robotjs';
 import { SuiteMethod } from '../interfaces';
 import { wait } from '../utils/wait';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
-import { focus } from '../native-commands/focus';
 import { enterMessage } from '../helpers/enter-message';
 import { clipboard } from 'electron';
 import { sendClickElement } from '../helpers/send-pointer-event';
 import { switchToChannel } from '../helpers/switch-channel';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { clickContextMenuItem } from '../helpers/click-context-menu-item';
-// VERY unstable
+import { clearMessageInput } from '../helpers/clear-message-input';
+
+// This suite is pretty unstable. It's not entirely clean
+// when exactly we're opening up the context menu, or when
+// we're closing it – so we'll retry these tests a few times.
 
 export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   beforeAll(async () => {
@@ -27,8 +30,8 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
 
   it('can "copy"', async () => {
     clipboard.writeText('content');
+    await clearMessageInput(window.client);
     await enterMessage(window.client, 'hello');
-    await focus();
     await wait(300);
 
     await sendNativeKeyboardEvent({ text: 'a', cmdOrCtrl: true });
@@ -38,16 +41,12 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     await wait(600);
 
     assert.equal(clipboard.readText(), 'hello', 'the clipboard content');
-  });
+  }, { retries: 3 });
 
   it('can "paste"', async () => {
     clipboard.writeText('pasted');
-    await sendNativeKeyboardEvent({
-      text: 'a',
-      cmdOrCtrl: true,
-      noFocus: true
-    });
-    await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
+    await clearMessageInput(window.client);
+
     await enterMessage(window.client, 'replace');
     await sendNativeKeyboardEvent({
       text: 'a',
@@ -64,19 +63,11 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     await messageElement.waitForExist(1000);
 
     assert.ok(await messageElement.isExisting(), 'the message input');
-
-    // Delete
-    await focus();
-    await sendNativeKeyboardEvent({
-      text: 'a',
-      cmdOrCtrl: true,
-      noFocus: true
-    });
-    await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
-  });
+  }, { retries: 3 });
 
   it('can "cut"', async () => {
     clipboard.writeText('blob');
+    await clearMessageInput(window.client);
 
     await enterMessage(window.client, 'cut');
     await sendNativeKeyboardEvent({
@@ -92,5 +83,5 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
 
     assert.equal(clipboard.readText(), 'cut', 'the clipboard content');
     await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
-  });
+  }, { retries: 3 });
 };
