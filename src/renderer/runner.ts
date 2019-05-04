@@ -11,6 +11,7 @@ import {
 } from '../interfaces';
 import { takeScreenshot } from '../report';
 import { AppState } from './state';
+import { wait } from '../utils/wait';
 
 const debug = require('debug')('old-joe');
 
@@ -94,6 +95,9 @@ export async function runTestFile(
   };
 
   console.groupCollapsed(file);
+
+  // Cool down between each suite
+  await wait(1500);
 
   // Run all "beforeAll"
   await runAll(suiteMethodResults.beforeAll, 'beforeAll');

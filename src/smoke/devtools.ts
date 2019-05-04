@@ -8,7 +8,7 @@ import { wait } from '../utils/wait';
 export const test: SuiteMethod = async ({ it }) => {
   it('can open the webapp devtools via menu', async () => {
     await clickWindowMenuItem(['View', 'Developer', 'Toggle Webapp DevTools']);
-    await wait(600);
+    await wait(2000);
 
     const devToolsWindow = await getDevToolsWindowHandle(window.client);
     assert.ok(devToolsWindow, 'window handle for the dev tools');
@@ -16,7 +16,7 @@ export const test: SuiteMethod = async ({ it }) => {
 
   it('can close the webapp devtools via menu', async () => {
     await clickWindowMenuItem(['View', 'Developer', 'Toggle Webapp DevTools']);
-    await wait(600);
+    await wait(2000);
 
     const devToolsWindow = await getDevToolsWindowHandle(window.client);
     assert.notOk(devToolsWindow, 'window handle for the devtools');
@@ -28,7 +28,7 @@ export const test: SuiteMethod = async ({ it }) => {
       'Developer',
       'Toggle Electron DevTools'
     ]);
-    await wait(600);
+    await wait(2000);
 
     const devToolsWindow = await getDevToolsWindowHandle(window.client);
     assert.ok(devToolsWindow, 'window handle for the dev tools');
@@ -40,7 +40,7 @@ export const test: SuiteMethod = async ({ it }) => {
       'Developer',
       'Toggle Electron DevTools'
     ]);
-    await wait(600);
+    await wait(2000);
 
     const devToolsWindow = await getDevToolsWindowHandle(window.client);
     assert.notOk(devToolsWindow, 'window handle for the devtools');
