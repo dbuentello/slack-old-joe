@@ -170,7 +170,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
       await searchCloseBtn.click();
     },
-    ['darwin']
+    { platforms: ['darwin'] }
   );
 
   it('can "zoom in"', async () => {

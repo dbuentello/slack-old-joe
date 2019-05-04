@@ -60,7 +60,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       // Close window
       await closeAboutBox();
     },
-    ['darwin']
+    { platforms: ['darwin'] }
   );
 
   it(
@@ -87,7 +87,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
         assert.include(versionText.toLowerCase(), 'beta', 'version string');
       }
     },
-    ['win32', 'linux']
+    { platforms: ['win32', 'linux'] }
   );
 
   it(
@@ -104,7 +104,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
       await window.client.closeWindow();
     },
-    ['win32', 'linux']
+    { platforms: ['win32', 'linux'] }
   );
 
   it('creates a post window', async () => {

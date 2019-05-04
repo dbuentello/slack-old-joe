@@ -3,11 +3,16 @@ import { ChildProcess } from 'child_process';
 export type LifeCycleFn = () => Promise<void> | void;
 export type TestFn = () => Promise<void> | void;
 
+export interface ItOptions {
+  platforms?: Array<NodeJS.Platform>;
+  retries?: number;
+}
+
 export interface SuiteMethods {
   it: (
     name: string,
     fn: TestFn,
-    onlyOnPlatforms?: Array<NodeJS.Platform>
+    options?: ItOptions
   ) => void;
   beforeAll: (fn: LifeCycleFn) => void;
   afterAll: (fn: LifeCycleFn) => void;
@@ -18,7 +23,7 @@ export interface SuiteMethods {
 export interface ItTestParams {
   name: string;
   fn: TestFn;
-  platforms?: Array<NodeJS.Platform>;
+  options?: ItOptions
 }
 
 export interface SuiteMethodResults {

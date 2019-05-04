@@ -160,7 +160,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
         assert.ok(newEnabled, 'Slack launch on login');
       }
     },
-    ['win32']
+    { platforms: ['win32'] }
   );
 
   it(
@@ -178,7 +178,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
 
       assert.equal(startupItems.length, 0, 'number of Slack startup items');
     },
-    ['win32']
+    { platforms: ['win32'] }
   );
 
   it(
@@ -205,7 +205,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
         assert.ok(await element.isExisting());
       }
     },
-    ['win32']
+    { platforms: ['win32'] }
   );
 
   it(
@@ -253,6 +253,6 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
       );
       assert.equal(notificatonMethod, 'html');
     },
-    ['win32']
+    { platforms: ['win32'] }
   );
 };

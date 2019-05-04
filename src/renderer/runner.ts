@@ -58,8 +58,8 @@ export async function readTestFile(
   };
 
   const suiteMethods: SuiteMethods = {
-    it: (name, fn, platforms?) =>
-      suiteMethodResults.it.push({ name, fn, platforms }),
+    it: (name, fn, options?) =>
+      suiteMethodResults.it.push({ name, fn, options }),
     beforeAll: fn => suiteMethodResults.beforeAll.push(fn),
     afterAll: fn => suiteMethodResults.afterAll.push(fn),
     beforeEach: fn => suiteMethodResults.beforeEach.push(fn),
@@ -102,7 +102,11 @@ export async function runTestFile(
   for (const test of suiteMethodResults.it) {
     console.groupCollapsed(test.name);
     // Can we skip this platform?
-    if (test.platforms && !test.platforms.includes(process.platform)) {
+    if (
+      test.options &&
+      test.options.platforms &&
+      !test.options.platforms.includes(process.platform)
+    ) {
       result.results.push({ name: test.name, ok: true, skipped: true });
 
       continue;

@@ -81,7 +81,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
       const afterTitle = await window.client.getTitle();
       assert.include(afterTitle, smokeTeams[1].name);
     },
-    ['darwin']
+    { platforms: ['darwin'] }
   );
 
   it('can select a workspace using the Quick Switcher', async () => {
