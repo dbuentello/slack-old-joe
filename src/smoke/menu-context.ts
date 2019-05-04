@@ -7,7 +7,7 @@ import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { focus } from '../native-commands/focus';
 import { enterMessage } from '../helpers/enter-message';
 import { clipboard } from 'electron';
-import { sendClickElement, PointerEvents } from '../helpers/send-pointer-event';
+import { sendClickElement } from '../helpers/send-pointer-event';
 import { switchToChannel } from '../helpers/switch-channel';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { clickContextMenuItem } from '../helpers/click-context-menu-item';
@@ -64,22 +64,27 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     await messageElement.waitForExist(1000);
 
     assert.ok(await messageElement.isExisting(), 'the message input');
-  });
 
-  it('can "cut"', async () => {
-    clipboard.writeText('blob');
+    // Delete
     await focus();
     await sendNativeKeyboardEvent({
       text: 'a',
       cmdOrCtrl: true,
       noFocus: true
     });
+    await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
+  });
+
+  it('can "cut"', async () => {
+    clipboard.writeText('blob');
+
     await enterMessage(window.client, 'cut');
     await sendNativeKeyboardEvent({
       text: 'a',
       cmdOrCtrl: true,
       noFocus: true
     });
+    await wait(300);
     await sendClickElement(window.client, 'p=cut', true);
     await wait(300);
     await clickContextMenuItem(3);

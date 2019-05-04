@@ -2,7 +2,8 @@ import { isMac } from '../utils/os';
 
 import { runAppleScript } from '../utils/applescript';
 
-const getAppleScript = (itemIndexFromBottom: number) => `
+const getAppleScript = (itemIndexFromBottom: number) =>
+  `
 tell application "System Events"
   repeat ${itemIndexFromBottom +
     1} times -- count number of items to the one you want
@@ -15,7 +16,7 @@ end tell
 `.trim();
 
 export async function clickContextMenuItem(itemIndexFromBottom: number) {
-  await focus();
+  //await focus();
 
   if (isMac()) {
     return runAppleScript(getAppleScript(itemIndexFromBottom));
