@@ -22,6 +22,7 @@ import { TestFile } from '../interfaces';
 
 export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'Sign in', test: loginTest },
+  { name: 'Developer Tools', test: devToolsTest },
   { name: 'Messaging', test: messagingTest },
   { name: 'Notifications', test: notificationTest },
   { name: 'File Up- and Download', test: downloadTest },
@@ -34,7 +35,6 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'Child Windows', test: childWindowTest },
   { name: 'Deep links', test: deepLinkTest },
   { name: 'Network', test: networkTest },
-  { name: 'Developer Tools', test: devToolsTest },
   { name: 'Preferences', test: preferencesTest },
   { name: 'Spellcheck', test: spellcheckTest },
   { name: 'Processes', test: processesTest },
