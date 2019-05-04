@@ -14,7 +14,7 @@ work.
  * macOS: Let Old Joe control your computer (`System Preferences - Security & Privacy - Accessibility`). macOS will ask during your first run.
  * macOS: Close all other apps that might send notifications.
 
-## Tests (90 Cases :rocket:)
+## Tests (98 Cases :rocket:)
 
 Old Joe currently verifies the following:
 
@@ -87,6 +87,16 @@ Old Joe currently verifies the following:
 - Can go "forward" in history
 - Can display keyboard shortcuts
 - Can close the keyboard shortcuts
+
+### Menus (Context)
+- Can "copy" (editable)
+- Can "paste" (editable)
+- Can "cut" (editable)
+- Can "copy" (static)
+- Can "inspect element" (static)
+- Can "copy image url"
+- Can "copy image"
+- Can "copy link"
 
 ### Menus (Cancel)
 - Can cancel the "Reset App Data" dialog

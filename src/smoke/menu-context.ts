@@ -33,115 +33,115 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     await wait(500);
   });
 
-  // it(
-  //   'can "copy" (editable)',
-  //   async () => {
-  //     clipboard.writeText('content');
-  //     await clearMessageInput(window.client);
-  //     await enterMessage(window.client, 'hello');
-  //     await wait(300);
+  it(
+    'can "copy" (editable)',
+    async () => {
+      clipboard.writeText('content');
+      await clearMessageInput(window.client);
+      await enterMessage(window.client, 'hello');
+      await wait(300);
 
-  //     await sendNativeKeyboardEvent({ text: 'a', cmdOrCtrl: true });
-  //     await sendClickElement(window.client, 'p=hello', true);
-  //     await wait(300);
-  //     await clickContextMenuItem(2);
-  //     await wait(600);
+      await sendNativeKeyboardEvent({ text: 'a', cmdOrCtrl: true });
+      await sendClickElement(window.client, 'p=hello', true);
+      await wait(300);
+      await clickContextMenuItem(2);
+      await wait(600);
 
-  //     assert.equal(clipboard.readText(), 'hello', 'the clipboard content');
-  //   },
-  //   { retries }
-  // );
+      assert.equal(clipboard.readText(), 'hello', 'the clipboard content');
+    },
+    { retries }
+  );
 
-  // it(
-  //   'can "paste" (editable)',
-  //   async () => {
-  //     clipboard.writeText('pasted');
-  //     await clearMessageInput(window.client);
+  it(
+    'can "paste" (editable)',
+    async () => {
+      clipboard.writeText('pasted');
+      await clearMessageInput(window.client);
 
-  //     await enterMessage(window.client, 'replace');
-  //     await sendNativeKeyboardEvent({
-  //       text: 'a',
-  //       cmdOrCtrl: true,
-  //       noFocus: true
-  //     });
+      await enterMessage(window.client, 'replace');
+      await sendNativeKeyboardEvent({
+        text: 'a',
+        cmdOrCtrl: true,
+        noFocus: true
+      });
 
-  //     await sendClickElement(window.client, 'p=replace', true);
-  //     await wait(300);
-  //     await clickContextMenuItem(1);
-  //     await wait(600);
+      await sendClickElement(window.client, 'p=replace', true);
+      await wait(300);
+      await clickContextMenuItem(1);
+      await wait(600);
 
-  //     const messageElement = await window.client.$('p=pasted');
-  //     await messageElement.waitForExist(1000);
+      const messageElement = await window.client.$('p=pasted');
+      await messageElement.waitForExist(1000);
 
-  //     assert.ok(await messageElement.isExisting(), 'the message input');
-  //   },
-  //   { retries }
-  // );
+      assert.ok(await messageElement.isExisting(), 'the message input');
+    },
+    { retries }
+  );
 
-  // it(
-  //   'can "cut" (editable)',
-  //   async () => {
-  //     clipboard.writeText('blob');
-  //     await clearMessageInput(window.client);
+  it(
+    'can "cut" (editable)',
+    async () => {
+      clipboard.writeText('blob');
+      await clearMessageInput(window.client);
 
-  //     await enterMessage(window.client, 'cut');
-  //     await sendNativeKeyboardEvent({
-  //       text: 'a',
-  //       cmdOrCtrl: true,
-  //       noFocus: true
-  //     });
-  //     await wait(300);
-  //     await sendClickElement(window.client, 'p=cut', true);
-  //     await wait(300);
-  //     await clickContextMenuItem(3);
-  //     await wait(600);
+      await enterMessage(window.client, 'cut');
+      await sendNativeKeyboardEvent({
+        text: 'a',
+        cmdOrCtrl: true,
+        noFocus: true
+      });
+      await wait(300);
+      await sendClickElement(window.client, 'p=cut', true);
+      await wait(300);
+      await clickContextMenuItem(3);
+      await wait(600);
 
-  //     assert.equal(clipboard.readText(), 'cut', 'the clipboard content');
-  //     await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
-  //   },
-  //   { retries }
-  // );
+      assert.equal(clipboard.readText(), 'cut', 'the clipboard content');
+      await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
+    },
+    { retries }
+  );
 
-  // it(
-  //   'can "copy" (static)',
-  //   async () => {
-  //     clipboard.clear();
-  //     await switchToChannel(window.client, 'threads');
+  it(
+    'can "copy" (static)',
+    async () => {
+      clipboard.clear();
+      await switchToChannel(window.client, 'threads');
 
-  //     await sendClickElement(window.client, 'span=I am a thread', true);
-  //     await wait(300);
-  //     await clickContextMenuItem(1);
-  //     await wait(600);
+      await sendClickElement(window.client, 'span=I am a thread', true);
+      await wait(300);
+      await clickContextMenuItem(1);
+      await wait(600);
 
-  //     // We're just selecting the first element
-  //     assert.equal(clipboard.readText(), 'I', 'the clipboard content');
-  //   },
-  //   { retries }
-  // );
+      // We're just selecting the first element
+      assert.equal(clipboard.readText(), 'I', 'the clipboard content');
+    },
+    { retries }
+  );
 
-  // it(
-  //   'can "inspect" element (static)',
-  //   async () => {
-  //     await switchToChannel(window.client, 'threads');
-  //     await sendClickElement(window.client, 'span=I am a thread', true);
-  //     await wait(300);
-  //     await clickContextMenuItem(0);
-  //     await wait(600);
+  it(
+    'can "inspect element" (static)',
+    async () => {
+      await switchToChannel(window.client, 'threads');
+      await sendClickElement(window.client, 'span=I am a thread', true);
+      await wait(300);
+      await clickContextMenuItem(0);
+      await wait(600);
 
-  //     const devToolsWindow = await getDevToolsWindowHandle(window.client);
-  //     assert.ok(devToolsWindow, 'window handle for the dev tools');
+      const devToolsWindow = await getDevToolsWindowHandle(window.client);
+      assert.ok(devToolsWindow, 'window handle for the dev tools');
 
-  //     // Let's close that again though
-  //     await clickWindowMenuItem([
-  //       'View',
-  //       'Developer',
-  //       'Toggle Webapp DevTools'
-  //     ]);
-  //     await wait(600);
-  //     await getBrowserViewHandle(window.client);
-  //   },
-  //   { retries }
-  // );
+      // Let's close that again though
+      await clickWindowMenuItem([
+        'View',
+        'Developer',
+        'Toggle Webapp DevTools'
+      ]);
+      await wait(600);
+      await getBrowserViewHandle(window.client);
+    },
+    { retries }
+  );
 
   it(
     'can "copy image url"',
@@ -218,6 +218,32 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
         await sendNativeKeyboardEvent({ text: 'escape' });
         await wait(1000);
       }
+    }
+  );
+
+  it(
+    'can "copy link"',
+    async () => {
+      clipboard.clear();
+
+      await switchToChannel(window.client, 'image');
+      await wait(1000);
+      await sendClickElement(
+        window.client,
+        'a.p-file_image_thumbnail__wrapper',
+        true
+      );
+
+      await wait(600);
+      await clickContextMenuItem(2);
+      await wait(600);
+
+      const image = clipboard.readText();
+      // https://files.slack.com/files-pri/THWUCHYD6-FJEBR9EJ1/photo-1467269204594-9661b134dd2b.jpeg
+      assert.ok(image.startsWith('https://files.slack'));
+    },
+    {
+      retries
     }
   );
 };
