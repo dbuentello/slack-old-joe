@@ -42,9 +42,11 @@ import { wait } from '../utils/wait';
 import { clickContextMenuItem } from '../helpers/click-context-menu-item';
 import { closeFullscreenModal } from '../helpers/close-fullscreen-modal';
 import { clearMessageInput } from '../helpers/clear-message-input';
+import { centerMouse } from '../native-commands/center-mouse';
 
 export function registerHelpers() {
   window['helpers'] = {
+    centerMouse,
     clearMessageInput,
     clickContextMenuItem,
     clickDockMenuItem,

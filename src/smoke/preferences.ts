@@ -30,14 +30,14 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
   it('can disable hardware acceleration', async () => {
     const advancedButton = await window.client.$('button=Advanced');
     await advancedButton.click();
-    await wait(100);
+    await wait(500);
 
     const disableHwButton = await window.client.$(
       'strong=Disable hardware acceleration'
     );
     await disableHwButton.waitForExist(1000);
     await disableHwButton.click();
-    await wait(200);
+    await wait(500);
 
     const setting = await window.client.executeScript(
       'return desktop.app.getPreference("useHwAcceleration")',
@@ -52,7 +52,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
   it('can open the `/slackgpuinfo` window by typing it into the message box', async () => {
     await closePreferences(window.client);
     await enterMessage(window.client, '/slackgpuinfo', true);
-    await wait(300);
+    await wait(500);
 
     assert.ok(
       await getGpuWindowHandle(window.client),
@@ -84,7 +84,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
 
     // Switch back
     await closePreferences(window.client);
-    await wait(100);
+    await wait(500);
     await selectNextTeamShortcut(window.client);
   });
 
@@ -107,7 +107,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
       'strong=Disable hardware acceleration'
     );
     await disableHwButton.click();
-    await wait(200);
+    await wait(500);
 
     const setting = await window.client.executeScript(
       'return desktop.app.getPreference("useHwAcceleration")',
@@ -152,7 +152,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
         assert.ok(currentlyEnabled, 'Slack launch on login');
       } else {
         await launchOnLoginSpan.click();
-        await wait(600);
+        await wait(1000);
 
         const newStartupItems = await getStartupItems();
         const newEnabled = newStartupItems.length > 0;
@@ -172,7 +172,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
         `span=Launch app on login`
       );
       await launchOnLoginSpan.click();
-      await wait(600);
+      await wait(1000);
 
       const startupItems = await getStartupItems();
 
@@ -201,7 +201,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
 
       for (const option of options) {
         const element = await window.client.$(option);
-        await element.waitForExist(500);
+        await element.waitForExist(1000);
         assert.ok(await element.isExisting());
       }
     },

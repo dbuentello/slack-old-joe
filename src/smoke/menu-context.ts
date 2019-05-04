@@ -14,6 +14,7 @@ import { clearMessageInput } from '../helpers/clear-message-input';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { closeFullscreenModal } from '../helpers/close-fullscreen-modal';
+import { centerMouse } from '../native-commands/center-mouse';
 
 // This suite is pretty unstable. It's not entirely clean
 // when exactly we're opening up the context menu, or when
@@ -27,11 +28,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     await switchToChannel(window.client, 'random');
   });
 
-  beforeEach(async () => {
-    const { width, height } = robot.getScreenSize();
-    robot.moveMouse(Math.round(width / 2), Math.round(height / 2));
-    await wait(500);
-  });
+  beforeEach(async () => centerMouse());
 
   it(
     'can "copy" (editable)',

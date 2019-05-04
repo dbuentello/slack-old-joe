@@ -9,6 +9,7 @@ import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { getIsResetAppDataSheetOpen } from '../native-commands/get-reset-app-data-sheet';
 import { getIsNetLogSheetOpen } from '../native-commands/get-restart-net-log-sheet';
 import { focus } from '../native-commands/focus';
+import { isMac } from '../utils/os';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
@@ -19,13 +20,13 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   const retries = 3;
   const cleanup = async () => {
     // We'll just mash escape twice 😂
-    await sendNativeKeyboardEvent({ text: 'escape' });
-    await sendNativeKeyboardEvent({ text: 'escape' });
+    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
+    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
   }
 
   it('can "cancel" the "Reset App Data" dialog', async () => {
     await clickWindowMenuItem(['Help', 'Troubleshooting', 'Reset App Data…']);
-    await wait(1200);
+    await wait(1500);
 
     // Dialog should now be open
     const dialogOpen = await getIsResetAppDataSheetOpen();
@@ -33,7 +34,8 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     await focus();
     await wait(500);
-    await sendNativeKeyboardEvent({ text: 'escape', noFocus: true });
+    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
+    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
 
     // Dialog should now be closed
     const dialogClosed = !(await getIsResetAppDataSheetOpen());
@@ -49,13 +51,14 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       'Troubleshooting',
       'Restart and Collect Net Logs…'
     ]);
-    await wait(1200);
+    await wait(1500);
 
     // Dialog should now be open
     const dialogOpen = await getIsNetLogSheetOpen();
     assert.ok(dialogOpen, 'the restart and collect net logs sheet (open)');
 
-    await sendNativeKeyboardEvent({ text: 'escape' });
+    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
+    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
 
     // Dialog should now be closed
     const dialogClosed = !(await getIsResetAppDataSheetOpen());

@@ -7,8 +7,11 @@ import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { switchToTeam } from '../helpers/switch-teams';
 import { smokeTeams } from '../smoke-teams';
+import { centerMouse } from '../native-commands/center-mouse';
 
-export const test: SuiteMethod = async ({ it }) => {
+export const test: SuiteMethod = async ({ it, beforeAll }) => {
+  beforeAll(async () => centerMouse());
+
   it('opens and loads a sign-in window', async () => {
     assert.ok(await getSignInWindow(window.client));
 
