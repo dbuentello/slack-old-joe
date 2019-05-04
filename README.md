@@ -11,8 +11,10 @@ work.
  * Ensure that Slack isn't already running. Old Joe will make backups of your user data dir and restore it after the test. It'll also kill Slack if you don't.
  * Do not interact with the computer while the test is running. Old Joe will restart Slack multiple times and automate mouse, keyboard, and app focus.
  * If you're running the `Sign In` test suite, ensure that your browser is signed into both the [Old Joe One](https://old-joe.slack.com) and [Old Joe Two](https://oldjoetwo.slack.com) workspaces. There is only one account, get in touch with Felix for credentials.
- * macOS: Let Old Joe control your computer (`System Preferences - Security & Privacy - Accessibility`). macOS will ask during your first run.
+ * macOS: Let Old Joe control your computer (`System Preferences - Security & Privacy - Accessibility`). macOS will ask during your first run. macOS might at any point decide that Old Joe's automation is too much automation and inform you accordingly.
  * macOS: Close all other apps that might send notifications.
+
+> :warning: If and when Chromedriver crashes, you'll see error messages complaining that Chrome crashed (which means that chromedriver crashed) or that there's no connection to Chrome (again, Chromedriver crashed). You'll see this happening because Slack is gone. Don't let that distract you, just restart the test.
 
 ## Tests (98 Cases :rocket:)
 
