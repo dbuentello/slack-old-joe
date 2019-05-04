@@ -11,6 +11,7 @@ import {
   sendNativeKeyboardEvent
 } from '../helpers/send-keyboard-event';
 import { doTimes } from '../utils/do-times';
+import { clearMessageInput } from '../helpers/clear-message-input';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
@@ -41,5 +42,8 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
         text: 'Backspace'
       })
     );
+  }, {
+    cleanup: () => clearMessageInput(window.client),
+    retries: 3
   });
 };
