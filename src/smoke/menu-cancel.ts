@@ -22,49 +22,60 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     // We'll just mash escape twice 😂
     await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
     await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
-  }
+  };
 
-  it('can "cancel" the "Reset App Data" dialog', async () => {
-    await clickWindowMenuItem(['Help', 'Troubleshooting', 'Reset App Data…']);
-    await wait(1500);
+  it(
+    'can "cancel" the "Reset App Data" dialog',
+    async () => {
+      await clickWindowMenuItem(['Help', 'Troubleshooting', 'Reset App Data…']);
+      await wait(1500);
 
-    // Dialog should now be open
-    const dialogOpen = await getIsResetAppDataSheetOpen();
-    assert.ok(dialogOpen, 'the reset app data dialog (open)');
+      // Dialog should now be open
+      const dialogOpen = await getIsResetAppDataSheetOpen();
+      assert.ok(dialogOpen, 'the reset app data dialog (open)');
 
-    await focus();
-    await wait(500);
-    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
-    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
+      await focus();
+      await wait(500);
+      await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
+      await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
 
-    // Dialog should now be closed
-    const dialogClosed = !(await getIsResetAppDataSheetOpen());
-    assert.ok(dialogClosed, 'the reset app data dialog (closed)');
-  }, {
-    cleanup,
-    retries
-  });
+      // Dialog should now be closed
+      const dialogClosed = !(await getIsResetAppDataSheetOpen());
+      assert.ok(dialogClosed, 'the reset app data dialog (closed)');
+    },
+    {
+      cleanup,
+      retries
+    }
+  );
 
-  it('can "cancel" the "Restart and Collect Net Logs" dialog', async () => {
-    await clickWindowMenuItem([
-      'Help',
-      'Troubleshooting',
-      'Restart and Collect Net Logs…'
-    ]);
-    await wait(1500);
+  it(
+    'can "cancel" the "Restart and Collect Net Logs" dialog',
+    async () => {
+      await clickWindowMenuItem([
+        'Help',
+        'Troubleshooting',
+        'Restart and Collect Net Logs…'
+      ]);
+      await wait(1500);
 
-    // Dialog should now be open
-    const dialogOpen = await getIsNetLogSheetOpen();
-    assert.ok(dialogOpen, 'the restart and collect net logs sheet (open)');
+      // Dialog should now be open
+      const dialogOpen = await getIsNetLogSheetOpen();
+      assert.ok(dialogOpen, 'the restart and collect net logs sheet (open)');
 
-    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
-    await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
+      await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
+      await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
 
-    // Dialog should now be closed
-    const dialogClosed = !(await getIsResetAppDataSheetOpen());
-    assert.ok(dialogClosed, 'the restart and collect net logs sheet (closed)');
-  }, {
-    cleanup,
-    retries
-  });
+      // Dialog should now be closed
+      const dialogClosed = !(await getIsResetAppDataSheetOpen());
+      assert.ok(
+        dialogClosed,
+        'the restart and collect net logs sheet (closed)'
+      );
+    },
+    {
+      cleanup,
+      retries
+    }
+  );
 };
