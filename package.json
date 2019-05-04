@@ -1,6 +1,6 @@
 {
-  "name": "slack-runtime-tests",
-  "version": "1.0.0",
+  "name": "old-joe",
+  "version": "0.1.0",
   "description": "",
   "main": "./dist/src/main/main",
   "scripts": {
