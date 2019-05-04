@@ -157,15 +157,19 @@ async function runTest(
 
     result.ok = true;
   } catch (error) {
+    console.warn(error);
+
     // Do we retry?
     if (options && options.retries && options.retries > retries) {
-      return runTest({ name, fn, options}, updateCallback, retries + 1);
+      return runTest({ name, fn, options }, updateCallback, retries + 1);
     }
 
     result.ok = false;
     result.error = error;
+  }
 
-    console.warn(error);
+  if (options && options.cleanup) {
+    await options.cleanup();
   }
 
   updateCallback(result.ok);

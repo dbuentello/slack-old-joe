@@ -40,12 +40,16 @@ import { focus } from '../native-commands/focus';
 import { traceClicks } from '../helpers/trace-clicks';
 import { wait } from '../utils/wait';
 import { clickContextMenuItem } from '../helpers/click-context-menu-item';
+import { closeFullscreenModal } from '../helpers/close-fullscreen-modal';
+import { clearMessageInput } from '../helpers/clear-message-input';
 
 export function registerHelpers() {
   window['helpers'] = {
+    clearMessageInput,
     clickContextMenuItem,
     clickDockMenuItem,
     clickWindowMenuItem,
+    closeFullscreenModal,
     closePreferences,
     disableWifi,
     enableWifi,

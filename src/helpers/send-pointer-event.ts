@@ -50,6 +50,8 @@ export async function sendClickElement(
     (element as any).elementId
   );
 
+  await window.client.moveToElement((element as any).elementId);
+
   await sendPointerEvent(client, {
     type: type || PointerEvents.MOUSEDOWN,
     // +2 so that we actually hit the element

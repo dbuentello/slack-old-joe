@@ -6,6 +6,7 @@ export type TestFn = () => Promise<void> | void;
 export interface ItOptions {
   platforms?: Array<NodeJS.Platform>;
   retries?: number;
+  cleanup?: () => Promise<void> | void;
 }
 
 export interface SuiteMethods {

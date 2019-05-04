@@ -30,7 +30,6 @@ export const SMOKE_TESTS: Array<TestFile> = [
   { name: 'Menus (Workspaces)', test: menuWorkspaceTest },
   { name: 'Menus (Shortcuts)', test: menuShortcutTest },
   { name: 'Menus (Cancel)', test: menuCancelTest },
-  // Unstable
   { name: 'Menus (Context)', test: menuContextTest },
   { name: 'Child Windows', test: childWindowTest },
   { name: 'Deep links', test: deepLinkTest },
