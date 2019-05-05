@@ -13,6 +13,7 @@ import { getSelection } from '../helpers/get-selection';
 import { reopen } from '../native-commands/reopen';
 import { clipboard } from 'electron';
 import { switchToChannel } from '../helpers/switch-channel';
+import { appState } from '../renderer/state';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
@@ -28,14 +29,20 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await closePreferences(window.client);
   });
 
-  it('can "close the window"', async () => {
-    await sendNativeKeyboardEvent({ text: 'w', cmdOrCtrl: true });
-    await wait(300);
-    assert.ok(await getIsHidden(window.client), 'client is hidden');
-
-    await reopen();
-    await focus();
-  });
+  it(
+    'can "close the window"',
+    async () => {
+      await sendNativeKeyboardEvent({ text: 'w', cmdOrCtrl: true });
+      await wait(300);
+      assert.ok(await getIsHidden(window.client), 'client is hidden');
+    },
+    {
+      cleanup: async () => {
+        await reopen(appState);
+        await focus();
+      }
+    }
+  );
 
   it('can "undo"', async () => {
     await getBrowserViewHandle(window.client);

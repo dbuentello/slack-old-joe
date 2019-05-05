@@ -23,7 +23,7 @@ export interface KeyboardEventOptions {
 }
 
 export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
-  const { text, shift, alt, ctrl, cmd, noFocus, cmdOrCtrl } = options;
+  const { text, noFocus, cmdOrCtrl } = options;
   const modifier: Array<string> = [];
 
   if (cmdOrCtrl) {
@@ -37,12 +37,12 @@ export async function sendNativeKeyboardEvent(options: KeyboardEventOptions) {
     return sendAppleScriptKeyboardEvent(options);
   }
 
-  cmd && modifier.push(`command`);
-  shift && modifier.push(`shift`);
-  alt && modifier.push(`alt`);
-  ctrl && modifier.push(`control`);
+  options.cmd && modifier.push(`command`);
+  options.shift && modifier.push(`shift`);
+  options.alt && modifier.push(`alt`);
+  options.ctrl && modifier.push(`control`);
 
-  debug(`Sending`, options);
+  debug(`Sending`, text, modifier);
 
   if (!noFocus) await focus();
   robot.keyTap(text, modifier);
