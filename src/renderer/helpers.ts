@@ -43,6 +43,9 @@ import { clickContextMenuItem } from '../helpers/click-context-menu-item';
 import { closeFullscreenModal } from '../helpers/close-fullscreen-modal';
 import { clearMessageInput } from '../helpers/clear-message-input';
 import { centerMouse } from '../native-commands/center-mouse';
+import { findHwnds } from '../native-commands/find-hwnds';
+import { getIsResetAppDataSheetOpen } from '../native-commands/get-reset-app-data-sheet';
+import { getIsNetLogSheetOpen } from '../native-commands/get-restart-net-log-sheet';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -56,12 +59,15 @@ export function registerHelpers() {
     disableWifi,
     enableWifi,
     enterMessage,
+    findHwnds,
     focus,
     getAboutBoxValue,
     getAboutWindowHandle,
     getBrowserViewHandle,
     getDevToolsWindowHandle,
     getGpuWindowHandle,
+    getIsNetLogSheetOpen,
+    getIsResetAppDataSheetOpen,
     getPostWindowHandle,
     getRendererWindowHandle,
     getRunningSlackProcessesCount,

@@ -1,7 +1,8 @@
 import * as assert from 'assert';
 
-import { isMac } from '../utils/os';
+import { isMac, isWin } from '../utils/os';
 import { runAppleScript } from '../utils/applescript';
+import { findHwnds } from './find-hwnds';
 
 const tryGetYesTitleScript = () =>
   `
@@ -31,5 +32,9 @@ export async function getIsNetLogSheetOpen() {
     }
 
     return !errored;
+  }
+
+  if (isWin()) {
+    return (await findHwnds('Restart and Collect Net Logs?')) > 0;
   }
 }
