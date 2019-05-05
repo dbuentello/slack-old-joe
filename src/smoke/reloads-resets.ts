@@ -93,7 +93,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     assert.include(title, 'Old Joe One');
   });
 
-  it('can "Restart and Clear Cache"', async () => {
+  it('can "Clear Cache and Restart"', async () => {
     await clickWindowMenuItem([
       'Help',
       'Troubleshooting',

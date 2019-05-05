@@ -89,6 +89,12 @@ const menuMap: Record<string, MenuMapEntry> = {
           },
           'Restart and Collect Net Logs…': {
             index: 3
+          },
+          'Clear Cache and Restart': {
+            index: 2
+          },
+          'Reset App Data…': {
+            index: 1
           }
         }
       },

@@ -108,27 +108,37 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     assert.ok(await messageElement.isExisting(), 'the message input');
   });
 
-  it('can "paste and match style"', async () => {
-    await sendNativeKeyboardEvent({ text: 'a', cmdOrCtrl: true });
-    await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
+  it(
+    'can "paste and match style"',
+    async () => {
+      await sendNativeKeyboardEvent({ text: 'a', cmdOrCtrl: true });
+      await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
 
-    clipboard.writeHTML('<strong>Hello</strong>');
+      clipboard.writeHTML('<strong>Hello</strong>');
 
-    await sendNativeKeyboardEvent({ text: 'v', cmdOrCtrl: true, shift: true });
+      await sendNativeKeyboardEvent({
+        text: 'v',
+        cmdOrCtrl: true,
+        shift: true
+      });
 
-    const messageElement = await window.client.$('p=Hello');
-    await messageElement.waitForExist(1000);
+      const messageElement = await window.client.$('p=Hello');
+      await messageElement.waitForExist(1000);
 
-    assert.ok(await messageElement.isExisting(), 'the message input');
+      assert.ok(await messageElement.isExisting(), 'the message input');
 
-    // Delete it again
-    await sendNativeKeyboardEvent({
-      text: 'a',
-      cmdOrCtrl: true,
-      noFocus: true
-    });
-    await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
-  });
+      // Delete it again
+      await sendNativeKeyboardEvent({
+        text: 'a',
+        cmdOrCtrl: true,
+        noFocus: true
+      });
+      await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
+    },
+    {
+      platforms: ['darwin']
+    }
+  );
 
   it('can "find"', async () => {
     await sendNativeKeyboardEvent({
