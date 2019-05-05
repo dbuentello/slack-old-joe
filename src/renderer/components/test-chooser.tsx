@@ -56,9 +56,7 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
 
   public renderTest(input: TestFile) {
     const { appState } = this.props;
-    let onChange = handleBooleanChange(
-      update => (input.disabled = !update)
-    );
+    let onChange = handleBooleanChange(update => (input.disabled = !update));
 
     let checked = !input.disabled;
     let label = input.name;
@@ -68,12 +66,10 @@ export class TestChooser extends React.Component<TestChooserProps, {}> {
     if (input.name === 'Sign out' && isSignInDisabled(appState)) {
       label = 'Sign out (Only available with Sign in)';
       checked = false;
-      onChange =  handleBooleanChange(
-        update => {
-          input.disabled = !update;
-          appState.availableTestFiles
-        }
-      )
+      onChange = handleBooleanChange(update => {
+        input.disabled = !update;
+        appState.availableTestFiles;
+      });
     }
 
     return (

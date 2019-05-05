@@ -10,11 +10,7 @@ export interface ItOptions {
 }
 
 export interface SuiteMethods {
-  it: (
-    name: string,
-    fn: TestFn,
-    options?: ItOptions
-  ) => void;
+  it: (name: string, fn: TestFn, options?: ItOptions) => void;
   beforeAll: (fn: LifeCycleFn) => void;
   afterAll: (fn: LifeCycleFn) => void;
   beforeEach: (fn: LifeCycleFn) => void;
@@ -24,7 +20,7 @@ export interface SuiteMethods {
 export interface ItTestParams {
   name: string;
   fn: TestFn;
-  options?: ItOptions
+  options?: ItOptions;
 }
 
 export interface SuiteMethodResults {
@@ -76,5 +72,5 @@ export interface JoeBrowserObject extends BrowserObject {
 }
 
 export interface Driver extends ChildProcess {
-  restart: () => Promise<void>
+  restart: () => Promise<void>;
 }

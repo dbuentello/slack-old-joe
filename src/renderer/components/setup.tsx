@@ -46,9 +46,7 @@ export class Setup extends React.Component<SetupProps, {}> {
         <Card elevation={Elevation.ONE} className="setup-card">
           <h3>Old Joe</h3>
           <ul>
-            <li>
-              Make sure your browser is signed into the teams.
-            </li>
+            <li>Make sure your browser is signed into the teams.</li>
             <li>
               Ensure that you're running a version of Old Joe that matches the
               Slack app's Electron version. It should be v{DRIVER_VERSION}.x.

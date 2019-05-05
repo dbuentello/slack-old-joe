@@ -50,53 +50,65 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     }
   });
 
-  it('can pause and resume a download', async () => {
-    // Switch to the downloads channel
-    await switchToChannel(window.client, 'downloads');
+  it(
+    'can pause and resume a download',
+    async () => {
+      // Switch to the downloads channel
+      await switchToChannel(window.client, 'downloads');
 
-    // Open the downloads panel
-    (await window.client.$('#flex_menu_toggle')).click();
-    const downloadsBtn = await window.client.$('#downloads');
-    assert.ok(await downloadsBtn.waitForDisplayed(2000));
-    await downloadsBtn.moveTo();
-    await downloadsBtn.click();
+      // Open the downloads panel
+      (await window.client.$('#flex_menu_toggle')).click();
+      const downloadsBtn = await window.client.$('#downloads');
+      assert.ok(await downloadsBtn.waitForDisplayed(2000));
+      await downloadsBtn.moveTo();
+      await downloadsBtn.click();
 
-    // Wait for the panel to show up
-    const downloadsHeader = await window.client.$('span=Downloads');
-    await downloadsHeader.waitForExist(2000);
-    await wait(500);
+      // Wait for the panel to show up
+      const downloadsHeader = await window.client.$('span=Downloads');
+      await downloadsHeader.waitForExist(2000);
+      await wait(500);
 
-    // Download the large file
-    const fileDesc = await window.client.$('span=test-large-file.zip');
-    await fileDesc.moveTo();
-    await fileDesc.click();
+      // Download the large file
+      const fileDesc = await window.client.$('span=test-large-file.zip');
+      await fileDesc.moveTo();
+      await fileDesc.click();
 
-    // Pause the download right away
-    const pauseBtn = await window.client.$('.p-download_item__link--pause');
-    assert.ok(await pauseBtn.waitForDisplayed(5000));
-    await pauseBtn.moveTo();
-    await pauseBtn.click();
+      // Pause the download right away
+      const pauseBtn = await window.client.$('.p-download_item__link--pause');
+      assert.ok(await pauseBtn.waitForDisplayed(5000));
+      await pauseBtn.moveTo();
+      await pauseBtn.click();
 
-    // We should now have a resume button
-    const resumeBtn = await window.client.$('.p-download_item__link--resume');
-    assert.ok(await resumeBtn.waitForDisplayed(5000));
+      // We should now have a resume button
+      const resumeBtn = await window.client.$('.p-download_item__link--resume');
+      assert.ok(await resumeBtn.waitForDisplayed(5000));
 
-    // Let the network pipes cool down (not required, I just want to wait a sec)
-    // and check if the file is actually no longer downloading
-    await wait(500);
-    const expectedFilePath = path.join(DOWNLOADS_DIR, `test-large-file.zip`);
-    const beforeBytes = fs.statSync(expectedFilePath).size;
-    await wait(1000);
-    const afterBytes = fs.statSync(expectedFilePath).size;
-    assert.equal(beforeBytes, afterBytes);
+      // Let the network pipes cool down (not required, I just want to wait a sec)
+      // and check if the file is actually no longer downloading
+      await wait(500);
+      const expectedFilePath = path.join(DOWNLOADS_DIR, `test-large-file.zip`);
+      const beforeBytes = fs.statSync(expectedFilePath).size;
+      await wait(1000);
+      const afterBytes = fs.statSync(expectedFilePath).size;
+      assert.equal(beforeBytes, afterBytes);
+    },
+    {
+      cleanup: async () => {
+        const expectedFilePath = path.join(
+          DOWNLOADS_DIR,
+          `test-large-file.zip`
+        );
 
-    // Cleanup, or attempted - Windows is weird sometimes
-    try {
-      await fs.remove(expectedFilePath);
-    } catch (error) {
-      console.warn(`Could not remove download file`, error);
+        // Cleanup, or attempted - Windows is weird sometimes
+        try {
+          await fs.remove(expectedFilePath);
+        } catch (error) {
+          console.warn(`Could not remove download file`, error);
+        }
+      },
+      retries: 2
     }
-  });
+  );
 
   it('can cancel a download', async () => {
     const cancelBtn = await window.client.$('.p-download_item__link--cancel');

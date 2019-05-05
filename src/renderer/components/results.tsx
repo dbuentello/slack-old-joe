@@ -18,9 +18,9 @@ export const Results = ({ results, done }: ResultsProps) => {
       ? results.map(renderIndividualResult)
       : [
           done ? (
-            <h5 key='did-not-run'>Didn't run any tests, huh? You rascal!</h5>
+            <h5 key="did-not-run">Didn't run any tests, huh? You rascal!</h5>
           ) : (
-            <h5 key='waiting-for-results'>Waiting for test results...</h5>
+            <h5 key="waiting-for-results">Waiting for test results...</h5>
           )
         ];
 
@@ -28,18 +28,18 @@ export const Results = ({ results, done }: ResultsProps) => {
   // useLayoutEffect, because it measures and changes DOM attributes (scrollTop) directly
   React.useLayoutEffect(() => {
     stayScrolled();
-  }, [results.length])
+  }, [results.length]);
 
   return (
     <Card elevation={Elevation.ONE} className="result-card">
-      <div ref={listRef as any}>
-        {resultElements}
-      </div>
+      <div ref={listRef as any}>{resultElements}</div>
     </Card>
   );
 };
 
-const renderIndividualResult = (suiteResult: SuiteResult): Array<JSX.Element> => {
+const renderIndividualResult = (
+  suiteResult: SuiteResult
+): Array<JSX.Element> => {
   return [
     <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
     ...suiteResult.results.map(result => {
@@ -56,7 +56,7 @@ const renderIndividualResult = (suiteResult: SuiteResult): Array<JSX.Element> =>
       );
     })
   ];
-}
+};
 
 function getIcon({ skipped, ok }: Result): JSX.Element {
   if (skipped) {

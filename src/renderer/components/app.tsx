@@ -84,7 +84,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
           rightIcon={
             this.state.startingIn > 0 ? (
               <Spinner
-                value={this.state.startingIn / this.getExpectedLauchTime()}
+                value={this.state.startingIn / this.getExpectedLaunchTime()}
                 size={20}
               />
             ) : null
@@ -150,11 +150,14 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     this.setState({
       hasCountdownStarted: true,
-      startingIn: this.getExpectedLauchTime()
+      startingIn: this.getExpectedLaunchTime()
     });
 
-    await killSlack(appState);
-    await killChromedriver();
+    // Okay, get ready to run this
+    const countdownInterval = setInterval(() => {
+      this.setState({ startingIn: this.state.startingIn - 50 });
+    }, 50);
+
     await clean();
 
     // Should we seed a user data dir? We'll do so if
@@ -163,83 +166,79 @@ export class App extends React.Component<AppProps, LocalAppState> {
       await seedUserDataDir();
 
       // Also, we'll disable the sign-out test
-      const signOutTest = appState.availableTestFiles.find(({ name }) => name === 'Sign out');
+      const signOutTest = appState.availableTestFiles.find(
+        ({ name }) => name === 'Sign out'
+      );
       signOutTest!.disabled = true;
     }
 
-    // Driver, then client
-    const driver = await spawnChromeDriver();
-    const client = await getClient(appState);
-
-    // Okay, get ready to run this
-    const countdownInterval = setInterval(() => {
-      this.setState({ startingIn: this.state.startingIn - 50 });
-    }, 50);
-
-    // Wait for the client to be ready
-    await wait(1000);
-    await waitUntilSlackReady(client, !isSignInDisabled(appState));
+    await this.startClientDriver(!isSignInDisabled(appState));
 
     clearInterval(countdownInterval);
     this.setNewExpectedLaunchTime();
     this.setState({ startingIn: 0 });
 
-    await this.runTests(driver);
-    await this.stopTests(driver, client);
+    await this.startTests();
+    await this.stopTests();
   }
 
-  public async runTests(_driver: ChildProcess) {
-    const { appState } = this.props;
-
+  /**
+   * Start running the tests.
+   */
+  public async startTests() {
     this.setState({ hasStarted: true });
 
     try {
-      appState.tests = await readTests(appState.availableTestFiles);
-      appState.testsTotal = appState.tests.reduce((prev, test) => {
-        return prev + test.suiteMethodResults.it.length;
-      }, 0);
-
-      for (const test of appState.tests) {
-        // Now run the suite, updating after each test
-        try {
-          appState.results.push(
-            await runTestFile(
-              test.name,
-              test.suiteMethodResults,
-              this.testCallback,
-              appState
-            )
-          );
-        } catch (error) {
-          console.warn(`Failed to run test suite ${test.name}`, error);
-        }
-      }
-
-      appState.done = true;
-
-      if (appState.generateReportAtEnd) {
-        try {
-          await writeReport(appState.results);
-        } catch (error) {
-          console.warn(`Failed to write report`, error);
-        }
-      }
+      await this.readTests();
+      await this.runTests();
+      await this.writeReportMaybe();
     } catch (error) {
       console.warn(`Failed to run tests`, error);
     }
   }
 
-  public async stopTests(driver: ChildProcess, client: JoeBrowserObject) {
+  /**
+   * Runs all tests, restarting driver and client every four suites.
+   */
+  public async runTests() {
+    const { appState } = this.props;
+
+    for (const [index, test] of appState.tests.entries()) {
+      // Every four tests we restart client and driver.
+      // That increases stability, client and driver seem to
+      // become less stable when you run tons of tests on them.
+      if (index && index % 4 === 0) {
+        await this.stopClientDriver();
+        await this.startClientDriver(false);
+      }
+
+      // Now run the suite, updating after each test
+      try {
+        appState.results.push(
+          await runTestFile(
+            test.name,
+            test.suiteMethodResults,
+            this.testCallback,
+            appState
+          )
+        );
+      } catch (error) {
+        console.warn(`Failed to run test suite ${test.name}`, error);
+      }
+    }
+
+    appState.done = true;
+  }
+
+  /**
+   * Called once all tests have finished.
+   */
+  public async stopTests() {
     const { appState } = this.props;
 
     if (appState.closeAppAtEnd) {
       try {
-        // Kill driver and session
-        await window.client.deleteSession();
-        await window.driver.kill();
-
-        // Kill Slack, if still running
-        await killSlack(appState);
+        await this.stopClientDriver();
 
         // Restore a possible user data backup
         await wait(300);
@@ -247,6 +246,48 @@ export class App extends React.Component<AppProps, LocalAppState> {
       } catch (error) {
         console.warn(error);
       }
+    }
+  }
+
+  /**
+   * Start both client and driver.
+   *
+   * @param {boolean} expectSignIn
+   */
+  public async startClientDriver(expectSignIn: boolean) {
+    const { appState } = this.props;
+
+    // Kill a possibly still running Slack and Chromedriver
+    await killSlack(appState);
+    await killChromedriver();
+
+    // Driver, then client
+    await spawnChromeDriver();
+    await getClient(appState);
+
+    // Wait for the client to be ready
+    await wait(1000);
+    await waitUntilSlackReady(window.client, expectSignIn);
+  }
+
+  /**
+   * Stop both client and driver.
+   */
+  public async stopClientDriver() {
+    const { appState } = this.props;
+
+    try {
+      // Kill driver and session
+      await window.client.deleteSession();
+      await window.driver.kill();
+
+      // Optional, but harder
+      await killChromedriver();
+
+      // Kill Slack, if still running
+      await killSlack(appState);
+    } catch (error) {
+      console.warn(error);
     }
   }
 
@@ -271,13 +312,13 @@ export class App extends React.Component<AppProps, LocalAppState> {
     }
   }
 
-  private getExpectedLauchTime() {
+  private getExpectedLaunchTime() {
     return parseInt(this.props.appState.expectedLaunchTime, 10);
   }
 
   private setNewExpectedLaunchTime() {
     const { startingIn } = this.state;
-    const expectedLaunchTime = this.getExpectedLauchTime();
+    const expectedLaunchTime = this.getExpectedLaunchTime();
 
     this.props.appState.expectedLaunchTime = `${expectedLaunchTime -
       startingIn}`;
@@ -294,5 +335,26 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     if (done) return 1;
     return testsTotal > 0 ? (testsFailed + testsDone) / testsTotal : 0;
+  }
+
+  private async readTests() {
+    const { appState } = this.props;
+
+    appState.tests = await readTests(appState.availableTestFiles);
+    appState.testsTotal = appState.tests.reduce((prev, test) => {
+      return prev + test.suiteMethodResults.it.length;
+    }, 0);
+  }
+
+  private async writeReportMaybe() {
+    const { appState } = this.props;
+
+    if (appState.generateReportAtEnd) {
+      try {
+        await writeReport(appState.results);
+      } catch (error) {
+        console.warn(`Failed to write report`, error);
+      }
+    }
   }
 }
