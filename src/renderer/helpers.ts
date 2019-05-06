@@ -46,6 +46,8 @@ import { centerMouse } from '../native-commands/center-mouse';
 import { findHwnds } from '../native-commands/find-hwnds';
 import { getIsResetAppDataSheetOpen } from '../native-commands/get-reset-app-data-sheet';
 import { getIsNetLogSheetOpen } from '../native-commands/get-restart-net-log-sheet';
+import { openContextMenuForElement } from '../helpers/open-context-menu';
+import { setSelection } from '../helpers/set-selection';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -77,6 +79,7 @@ export function registerHelpers() {
     getTeamsCount,
     openBrowserAndSignIn,
     openBrowserAndWaitForSignIn,
+    openContextMenuForElement,
     openGpuInfoWindow,
     openPreferences,
     openQuickSwitcher,
@@ -87,6 +90,7 @@ export function registerHelpers() {
     sendKeyboardEvent,
     sendNativeKeyboardEvent,
     sendPointerEvent,
+    setSelection,
     switchToChannel,
     switchToTeam,
     traceClicks,

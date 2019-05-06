@@ -11,16 +11,20 @@ import { switchToChannel } from '../helpers/switch-channel';
 import { switchToTeam } from '../helpers/switch-teams';
 import { setPreference } from '../helpers/set-preference';
 import { openPreferences, closePreferences } from '../helpers/open-preferences';
+import { getPreference } from '../helpers/get-preference';
 
 const DOWNLOADS_DIR = remote.app.getPath('downloads');
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   const desktop = remote.app.getPath('desktop');
   const newDir = path.join(desktop, 'old-joe-download-dir');
+  let oldDir = '';
 
   beforeAll(async () => {
     await getBrowserViewHandle(window.client);
     await switchToTeam(window.client, 0);
+
+    oldDir = await getPreference(window.client, 'PrefSSBFileDownloadPath');
   });
 
   it('can download a file in-channel', async () => {
@@ -148,23 +152,31 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     );
   });
 
-  it('can download a file to the new location', async () => {
-    const expectedFilePath = path.join(newDir, 'second test file.txt');
+  it(
+    'can download a file to the new location',
+    async () => {
+      const expectedFilePath = path.join(newDir, 'second test file.txt');
 
-    // Download a file there
-    await closePreferences(window.client);
+      // Download a file there
+      await closePreferences(window.client);
 
-    // Remove old file
-    if (fs.existsSync(expectedFilePath)) {
-      await fs.remove(expectedFilePath);
+      // Remove old file
+      if (fs.existsSync(expectedFilePath)) {
+        await fs.remove(expectedFilePath);
+      }
+
+      // Download a file
+      const fileDesc = await window.client.$('span=second-test-file');
+      await fileDesc.moveTo();
+      await fileDesc.click();
+      await wait(1000);
+
+      assert.ok(fs.existsSync(expectedFilePath), 'the downloaded file');
+    },
+    {
+      cleanup: async () => {
+        await setPreference(window.client, 'PrefSSBFileDownloadPath', oldDir);
+      }
     }
-
-    // Download a file
-    const fileDesc = await window.client.$('span=second-test-file');
-    await fileDesc.moveTo();
-    await fileDesc.click();
-    await wait(1000);
-
-    assert.ok(fs.existsSync(expectedFilePath), 'the downloaded file');
-  });
+  );
 };

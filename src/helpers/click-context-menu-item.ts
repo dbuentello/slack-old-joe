@@ -1,6 +1,9 @@
-import { isMac } from '../utils/os';
+import * as robot from 'robotjs';
 
+import { isMac } from '../utils/os';
 import { runAppleScript } from '../utils/applescript';
+import { doTimes } from '../utils/do-times';
+import { wait } from '../utils/wait';
 
 const getAppleScript = (itemIndexFromBottom: number) =>
   `
@@ -16,9 +19,15 @@ end tell
 `.trim();
 
 export async function clickContextMenuItem(itemIndexFromBottom: number) {
-  //await focus();
-
   if (isMac()) {
     return runAppleScript(getAppleScript(itemIndexFromBottom));
   }
+
+  await doTimes(itemIndexFromBottom + 1, async () => {
+    robot.keyTap('up');
+    await wait(250);
+  });
+
+  robot.keyTap('enter');
+  await wait(250);
 }

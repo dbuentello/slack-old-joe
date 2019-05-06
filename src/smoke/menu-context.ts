@@ -1,5 +1,4 @@
 import { assert } from 'chai';
-import * as robot from 'robotjs';
 
 import { SuiteMethod } from '../interfaces';
 import { wait } from '../utils/wait';
@@ -15,6 +14,11 @@ import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { closeFullscreenModal } from '../helpers/close-fullscreen-modal';
 import { centerMouse } from '../native-commands/center-mouse';
+import { openContextMenuForElement } from '../helpers/open-context-menu';
+import { setSelection } from '../helpers/set-selection';
+import { reopen } from '../native-commands/reopen';
+import { isWin } from '../utils/os';
+import { appState } from '../renderer/state';
 
 // This suite is pretty unstable. It's not entirely clean
 // when exactly we're opening up the context menu, or when
@@ -26,21 +30,28 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   beforeAll(async () => {
     await getBrowserViewHandle(window.client);
     await switchToChannel(window.client, 'random');
+
+    if (isWin()) {
+      await reopen(appState);
+    }
   });
 
-  beforeEach(async () => centerMouse());
+  beforeEach(async () => {
+    // We could clear, but then "Paste" would be disabled and the
+    // indexes would be off
+    clipboard.writeText('beforeEach');
+    centerMouse();
+  });
 
   it(
     'can "copy" (editable)',
     async () => {
-      clipboard.writeText('content');
       await clearMessageInput(window.client);
       await enterMessage(window.client, 'hello');
       await wait(300);
 
       await sendNativeKeyboardEvent({ text: 'a', cmdOrCtrl: true });
-      await sendClickElement(window.client, 'p=hello', true);
-      await wait(300);
+      await openContextMenuForElement(window.client, 'p=hello');
       await clickContextMenuItem(2);
       await wait(600);
 
@@ -61,9 +72,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
         cmdOrCtrl: true,
         noFocus: true
       });
-
-      await sendClickElement(window.client, 'p=replace', true);
-      await wait(300);
+      await openContextMenuForElement(window.client, 'p=replace');
       await clickContextMenuItem(1);
       await wait(600);
 
@@ -78,7 +87,6 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   it(
     'can "cut" (editable)',
     async () => {
-      clipboard.writeText('blob');
       await clearMessageInput(window.client);
 
       await enterMessage(window.client, 'cut');
@@ -87,9 +95,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
         cmdOrCtrl: true,
         noFocus: true
       });
-      await wait(300);
-      await sendClickElement(window.client, 'p=cut', true);
-      await wait(300);
+      await openContextMenuForElement(window.client, 'p=cut');
       await clickContextMenuItem(3);
       await wait(600);
 
@@ -102,16 +108,24 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   it(
     'can "copy" (static)',
     async () => {
-      clipboard.clear();
+      if (isWin()) await reopen(appState);
       await switchToChannel(window.client, 'threads');
 
-      await sendClickElement(window.client, 'span=I am a thread', true);
-      await wait(300);
+      // This selector will probably break eventually
+      await setSelection(
+        window.client,
+        `.c-message__body:not(.c-message__body--automated)`
+      );
+
+      await openContextMenuForElement(window.client, 'span=I am a thread');
       await clickContextMenuItem(1);
       await wait(600);
 
-      // We're just selecting the first element
-      assert.equal(clipboard.readText(), 'I', 'the clipboard content');
+      assert.equal(
+        clipboard.readText(),
+        'I am a thread',
+        'the clipboard content'
+      );
     },
     { retries }
   );
@@ -120,22 +134,18 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     'can "inspect element" (static)',
     async () => {
       await switchToChannel(window.client, 'threads');
-      await sendClickElement(window.client, 'span=I am a thread', true);
-      await wait(300);
+      await openContextMenuForElement(window.client, 'span=I am a thread');
       await clickContextMenuItem(0);
-      await wait(600);
+      await wait(1200);
 
       const devToolsWindow = await getDevToolsWindowHandle(window.client);
       assert.ok(devToolsWindow, 'window handle for the dev tools');
 
       // Let's close that again though
-      await clickWindowMenuItem([
-        'View',
-        'Developer',
-        'Toggle Webapp DevTools'
-      ]);
-      await wait(600);
+      await window.client.closeWindow();
+      await wait(1000);
       await getBrowserViewHandle(window.client);
+      await wait(600);
     },
     { retries }
   );
@@ -143,27 +153,21 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   it(
     'can "copy image url"',
     async () => {
-      clipboard.clear();
-
       await switchToChannel(window.client, 'image');
       await wait(1000);
       await sendClickElement(
         window.client,
         'a.p-file_image_thumbnail__wrapper',
         false,
-        PointerEvents.MOUSEDOWN
+        PointerEvents.MOUSEDOWNUP
       );
 
-      await sendClickElement(
+      await openContextMenuForElement(
         window.client,
         'a.p-file_image_thumbnail__wrapper',
-        false,
-        PointerEvents.MOUSEUP
+        1000
       );
 
-      await wait(1000);
-      await sendClickElement(window.client, '.p-image_viewer__image', true);
-      await wait(600);
       await clickContextMenuItem(1);
       await wait(600);
 
@@ -182,27 +186,21 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   it(
     'can "copy image"',
     async () => {
-      clipboard.clear();
-
       await switchToChannel(window.client, 'image');
       await wait(1000);
       await sendClickElement(
         window.client,
         'a.p-file_image_thumbnail__wrapper',
         false,
-        PointerEvents.MOUSEDOWN
+        PointerEvents.MOUSEDOWNUP
       );
 
-      await sendClickElement(
+      await openContextMenuForElement(
         window.client,
-        'a.p-file_image_thumbnail__wrapper',
-        false,
-        PointerEvents.MOUSEUP
+        '.p-image_viewer__image',
+        1000
       );
 
-      await wait(1000);
-      await sendClickElement(window.client, '.p-image_viewer__image', true);
-      await wait(600);
       await clickContextMenuItem(2);
       await wait(600);
 
@@ -221,17 +219,13 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   it(
     'can "copy link"',
     async () => {
-      clipboard.clear();
-
       await switchToChannel(window.client, 'image');
-      await wait(1000);
-      await sendClickElement(
+      await openContextMenuForElement(
         window.client,
         'a.p-file_image_thumbnail__wrapper',
-        true
+        1000
       );
 
-      await wait(600);
       await clickContextMenuItem(2);
       await wait(600);
 

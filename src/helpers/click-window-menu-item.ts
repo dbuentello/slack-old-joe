@@ -67,7 +67,7 @@ const menuMap: Record<string, MenuMapEntry> = {
       Developer: {
         index: 1,
         items: {
-          'Toggle Webapp DevTools': { index: 3 },
+          'Toggle Webapp DevTools': { index: 4 },
           'Toggle Electron DevTools': { index: 3 },
           'Reload Everything': { index: 2 },
           'Open Settings Editor': { index: 1 }
