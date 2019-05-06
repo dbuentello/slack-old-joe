@@ -48,7 +48,6 @@ module.exports = {
           authors: 'Felix Rieseberg',
           exe: 'old-joe.exe',
           iconUrl: 'https://raw.githubusercontent.com/electron/fiddle/0119f0ce697f5ff7dec4fe51f17620c78cfd488b/assets/icons/fiddle.ico',
-          loadingGif: './assets/loading.gif',
           noMsi: true,
           remoteReleases: '',
           setupExe: `old-joe-${version}-${arch}-setup.exe`,
