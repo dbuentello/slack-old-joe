@@ -87,7 +87,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
         assert.include(versionText.toLowerCase(), 'beta', 'version string');
       }
     },
-    { platforms: ['win32', 'linux'] }
+    { platforms: ['win32'] }
   );
 
   it(
@@ -104,7 +104,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
       await window.client.closeWindow();
     },
-    { platforms: ['win32', 'linux'] }
+    { platforms: ['win32'] }
   );
 
   it('creates a post window', async () => {

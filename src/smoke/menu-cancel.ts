@@ -30,7 +30,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await wait(1500);
 
       // Dialog should now be open. Asking twice helps, somehow.
-      const dialogOpen = (await getIsResetAppDataSheetOpen()) || (await getIsResetAppDataSheetOpen());
+      const dialogOpen =
+        (await getIsResetAppDataSheetOpen()) ||
+        (await getIsResetAppDataSheetOpen());
       assert.ok(dialogOpen, 'the reset app data dialog (open)');
 
       await wait(500);
@@ -46,8 +48,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       assert.ok(dialogClosed, 'the reset app data dialog (closed)');
     },
     {
-      //cleanup,
-      //retries
+      cleanup,
+      retries,
+      platforms: ['win32', 'darwin']
     }
   );
 
@@ -62,7 +65,8 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await wait(1500);
 
       // Dialog should now be open
-      const dialogOpen = (await getIsNetLogSheetOpen()) || (await getIsNetLogSheetOpen());
+      const dialogOpen =
+        (await getIsNetLogSheetOpen()) || (await getIsNetLogSheetOpen());
       assert.ok(dialogOpen, 'the restart and collect net logs sheet (open)');
 
       await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
@@ -80,7 +84,8 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     },
     {
       cleanup,
-      retries
+      retries,
+      platforms: ['win32', 'darwin']
     }
   );
 };

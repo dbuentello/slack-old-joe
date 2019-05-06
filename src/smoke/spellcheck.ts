@@ -53,7 +53,8 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     },
     {
       cleanup: () => clearMessageInput(window.client),
-      retries: 3
+      retries: 3,
+      platforms: ['win32', 'darwin']
     }
   );
 };

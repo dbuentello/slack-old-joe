@@ -11,7 +11,6 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { clickContextMenuItem } from '../helpers/click-context-menu-item';
 import { clearMessageInput } from '../helpers/clear-message-input';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
-import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { closeFullscreenModal } from '../helpers/close-fullscreen-modal';
 import { centerMouse } from '../native-commands/center-mouse';
 import { openContextMenuForElement } from '../helpers/open-context-menu';

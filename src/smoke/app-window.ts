@@ -61,16 +61,20 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await wait(1000);
   });
 
-  it('can minimize the window', async () => {
-    assert.ok(!(await getIsHidden(window.client)), 'document.hidden');
+  it(
+    'can minimize the window',
+    async () => {
+      assert.ok(!(await getIsHidden(window.client)), 'document.hidden');
 
-    await minimize();
-    await wait(1000);
+      await minimize();
+      await wait(1000);
 
-    assert.ok(await getIsHidden(window.client), 'document.hidden');
+      assert.ok(await getIsHidden(window.client), 'document.hidden');
 
-    // Restore
-    await minimize(true);
-    await wait(1000);
-  });
+      // Restore
+      await minimize(true);
+      await wait(1000);
+    },
+    { platforms: ['win32', 'darwin'] }
+  );
 };

@@ -57,50 +57,74 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     );
   });
 
-  it('can click on the notification and open the right channel', async () => {
-    await switchToChannel(window.client, 'ads');
-    await clickFirstNativeNotification(window.client);
+  it(
+    'can click on the notification and open the right channel',
+    async () => {
+      await switchToChannel(window.client, 'ads');
+      await clickFirstNativeNotification(window.client);
 
-    // We should now be back at the notification item
-    const messageToFind = await window.client.$(
-      `span=Hi, it's me, the notification`
-    );
-    assert.ok(messageToFind.waitForExist(1000), 'the notification message');
-  });
+      // We should now be back at the notification item
+      const messageToFind = await window.client.$(
+        `span=Hi, it's me, the notification`
+      );
+      assert.ok(messageToFind.waitForExist(1000), 'the notification message');
+    },
+    {
+      platforms: ['win32', 'darwin']
+    }
+  );
 
-  it('can click on the notification and open Slack', async () => {
-    await sendNotification(`Hi, it's me, the notification`);
-    await close();
-    await wait(100);
-    await clickFirstNativeNotification(window.client);
-    await wait(300);
+  it(
+    'can click on the notification and open Slack',
+    async () => {
+      await sendNotification(`Hi, it's me, the notification`);
+      await close();
+      await wait(100);
+      await clickFirstNativeNotification(window.client);
+      await wait(300);
 
-    assert.isFalse(await getIsHidden(window.client), 'document.hidden');
-  });
+      assert.isFalse(await getIsHidden(window.client), 'document.hidden');
+    },
+    {
+      platforms: ['win32', 'darwin']
+    }
+  );
 
-  it('can send notifications for threaded messages', async () => {
-    const threadBtn = await window.client.$(`=1 reply`);
-    await threadBtn.click();
+  it(
+    'can send notifications for threaded messages',
+    async () => {
+      const threadBtn = await window.client.$(`=1 reply`);
+      await threadBtn.click();
 
-    await sendNotification('The thread notification');
-    assert.equal(
-      await getNativeOpenNotificationCount(window.client),
-      1,
-      'count of native notifications'
-    );
-  });
+      await sendNotification('The thread notification');
+      assert.equal(
+        await getNativeOpenNotificationCount(window.client),
+        1,
+        'count of native notifications'
+      );
+    },
+    {
+      platforms: ['win32', 'darwin']
+    }
+  );
 
-  it('can click on the notification and open the right thread', async () => {
-    // Close the thread
-    await closeFlexpane(window.client);
-    await wait(200);
+  it(
+    'can click on the notification and open the right thread',
+    async () => {
+      // Close the thread
+      await closeFlexpane(window.client);
+      await wait(200);
 
-    // Hopefully open it again
-    await clickFirstNativeNotification(window.client);
-    const threadMsg = await window.client.$('span=The thread notification');
-    assert.ok(threadMsg.waitForExist(2000));
+      // Hopefully open it again
+      await clickFirstNativeNotification(window.client);
+      const threadMsg = await window.client.$('span=The thread notification');
+      assert.ok(threadMsg.waitForExist(2000));
 
-    await getBrowserViewHandle(window.client);
-    await closeFlexpane(window.client);
-  });
+      await getBrowserViewHandle(window.client);
+      await closeFlexpane(window.client);
+    },
+    {
+      platforms: ['win32', 'darwin']
+    }
+  );
 };

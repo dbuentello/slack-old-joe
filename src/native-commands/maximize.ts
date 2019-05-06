@@ -13,7 +13,6 @@ export async function maximize() {
     return runAppleScriptFile(scriptPath);
   }
 
-  if (isWin()) {
-    return sendNativeKeyboardEvent({ text: 'up', cmd: true });
-  }
+  // Windows, Linux
+  return sendNativeKeyboardEvent({ text: 'up', cmd: true });
 }
