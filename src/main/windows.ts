@@ -27,7 +27,7 @@ export function getMainWindowOptions(): Electron.BrowserWindowConstructorOptions
     x,
     y,
     acceptFirstMouse: true,
-    transparent: true,
+    transparent: process.platform === 'darwin',
     alwaysOnTop: true,
     titleBarStyle: 'hiddenInset',
     webPreferences: {

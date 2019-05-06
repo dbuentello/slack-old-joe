@@ -46,7 +46,7 @@ Old Joe currently verifies the following:
 - Downloading a file results in a file on disk that has the right content
 - Can pause and resume a larger download, file on disk remains unchanged while paused
 - Can cancel a download
-- Can change download locationz
+- Can change download location
 
 #### Application Window
 - Can maximize the window
