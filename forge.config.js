@@ -52,7 +52,7 @@ module.exports = {
           noMsi: true,
           remoteReleases: '',
           setupExe: `old-joe-${version}-${arch}-setup.exe`,
-          setupIcon: path.resolve(iconDir, 'fiddle.ico'),
+          setupIcon: path.resolve(iconDir, 'icon.ico'),
           certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD,
           certificateFile
         }

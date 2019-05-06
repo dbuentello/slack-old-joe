@@ -1,7 +1,7 @@
 {
   "name": "old-joe",
   "version": "0.1.0",
-  "description": "",
+  "description": "A test framework for Slack",
   "main": "./dist/src/main/main",
   "scripts": {
     "start": "rimraf ./dist && electron-forge start",
