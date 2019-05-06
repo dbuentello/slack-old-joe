@@ -37,7 +37,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
       // On Windows, we need to first select the element
       if (isWin()) {
-        await setSelection(window.client, '#msg_input .ql-editor > p')
+        await setSelection(window.client, '#msg_input .ql-editor > p');
       }
 
       await openContextMenuForElement(window.client, 'p=mispelled');

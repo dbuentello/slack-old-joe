@@ -26,6 +26,7 @@ import { Results } from './results';
 import { waitUntilSlackReady } from '../../helpers/wait-until-slack-ready';
 import { JoeBrowserObject } from '../../interfaces';
 import { killChromedriver } from '../../native-commands/kill-chromedriver';
+import { stopClientDriver, startClientDriver } from '../client-driver';
 
 interface AppProps {
   appState: AppState;
@@ -172,7 +173,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
       signOutTest!.disabled = true;
     }
 
-    await this.startClientDriver(!isSignInDisabled(appState));
+    await startClientDriver(!isSignInDisabled(appState));
 
     clearInterval(countdownInterval);
     this.setNewExpectedLaunchTime();
@@ -208,8 +209,8 @@ export class App extends React.Component<AppProps, LocalAppState> {
       // That increases stability, client and driver seem to
       // become less stable when you run tons of tests on them.
       if (index && index % 4 === 0) {
-        await this.stopClientDriver();
-        await this.startClientDriver(false);
+        await stopClientDriver();
+        await startClientDriver(false);
       }
 
       // Now run the suite, updating after each test
@@ -238,7 +239,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     if (appState.closeAppAtEnd) {
       try {
-        await this.stopClientDriver();
+        await stopClientDriver();
 
         // Restore a possible user data backup
         await wait(300);
@@ -246,48 +247,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
       } catch (error) {
         console.warn(error);
       }
-    }
-  }
-
-  /**
-   * Start both client and driver.
-   *
-   * @param {boolean} expectSignIn
-   */
-  public async startClientDriver(expectSignIn: boolean) {
-    const { appState } = this.props;
-
-    // Kill a possibly still running Slack and Chromedriver
-    await killSlack(appState);
-    await killChromedriver();
-
-    // Driver, then client
-    await spawnChromeDriver();
-    await getClient(appState);
-
-    // Wait for the client to be ready
-    await wait(1000);
-    await waitUntilSlackReady(window.client, expectSignIn);
-  }
-
-  /**
-   * Stop both client and driver.
-   */
-  public async stopClientDriver() {
-    const { appState } = this.props;
-
-    try {
-      // Kill driver and session
-      await window.client.deleteSession();
-      await window.driver.kill();
-
-      // Optional, but harder
-      await killChromedriver();
-
-      // Kill Slack, if still running
-      await killSlack(appState);
-    } catch (error) {
-      console.warn(error);
     }
   }
 
