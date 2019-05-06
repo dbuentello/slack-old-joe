@@ -8,7 +8,6 @@ import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { getIsResetAppDataSheetOpen } from '../native-commands/get-reset-app-data-sheet';
 import { getIsNetLogSheetOpen } from '../native-commands/get-restart-net-log-sheet';
-import { focus } from '../native-commands/focus';
 import { isMac } from '../utils/os';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
@@ -30,13 +29,13 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await clickWindowMenuItem(['Help', 'Troubleshooting', 'Reset App Data…']);
       await wait(1500);
 
-      // Dialog should now be open
-      const dialogOpen = await getIsResetAppDataSheetOpen();
+      // Dialog should now be open. Asking twice helps, somehow.
+      const dialogOpen = (await getIsResetAppDataSheetOpen()) || (await getIsResetAppDataSheetOpen());
       assert.ok(dialogOpen, 'the reset app data dialog (open)');
 
-      if (isMac()) await focus();
       await wait(500);
       await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
+      await wait(500);
 
       if (isMac()) {
         await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
@@ -47,8 +46,8 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       assert.ok(dialogClosed, 'the reset app data dialog (closed)');
     },
     {
-      cleanup,
-      retries
+      //cleanup,
+      //retries
     }
   );
 
@@ -63,15 +62,17 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await wait(1500);
 
       // Dialog should now be open
-      const dialogOpen = await getIsNetLogSheetOpen();
+      const dialogOpen = (await getIsNetLogSheetOpen()) || (await getIsNetLogSheetOpen());
       assert.ok(dialogOpen, 'the restart and collect net logs sheet (open)');
 
       await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
       if (isMac()) {
         await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
       }
+      await wait(500);
+
       // Dialog should now be closed
-      const dialogClosed = !(await getIsResetAppDataSheetOpen());
+      const dialogClosed = !(await getIsNetLogSheetOpen());
       assert.ok(
         dialogClosed,
         'the restart and collect net logs sheet (closed)'

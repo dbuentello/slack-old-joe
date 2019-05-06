@@ -4,9 +4,9 @@ import { findHwnds } from './find-hwnds';
 
 const tryGetYesTitleScript = () =>
   `
-tell application "Slack" to activate
+tell application "Slack" to reopen
 tell application "System Events"
-	tell UI element 3 of (first application process whose frontmost is true)
+	tell UI element 3 of process "Slack"
 		return title of button 1
 	end tell
 end tell`.trim();
@@ -24,6 +24,7 @@ export async function getIsResetAppDataSheetOpen() {
     try {
       await runAppleScript(tryGetYesTitleScript());
     } catch (ignoredError) {
+      console.log(ignoredError);
       errored = true;
     }
 
