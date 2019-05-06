@@ -7,7 +7,8 @@ export async function setPreference(
 ) {
   await getBrowserViewHandle(client);
 
-  const val = typeof value === 'string' ? `"${value}"` : value;
+  const val =
+    typeof value === 'string' ? `"${value.replace(/\\/g, '\\\\')}"` : value;
 
   const script = `return window.desktop.app.setPreference({ name: "${name}", value: ${val}})`;
 
