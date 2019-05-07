@@ -1,7 +1,7 @@
 import * as robot from 'robotjs';
 
 import { runAppleScript } from '../utils/applescript';
-import { isWin, isMac } from '../utils/os';
+import { isWin, isMac, isLinux } from '../utils/os';
 import { focus } from '../native-commands/focus';
 import { doTimes } from '../utils/do-times';
 import { wait } from '../utils/wait';
@@ -23,11 +23,16 @@ export async function clickWindowMenuItem(clickList: Array<string>) {
   if (isWin()) {
     return clickWindowMenuItemWin(clickList);
   }
+
+  if (isLinux()) {
+    return clickWindowMenuItemLinux(clickList);
+  }
 }
 
 type MenuMapEntry = {
   index: number;
   items?: Record<string, MenuMapEntry>;
+  linuxShortcut?: string;
 };
 
 const getAppleScript = (menuName: string, itemName: string) =>
@@ -53,6 +58,7 @@ end tell
 
 const menuMap: Record<string, MenuMapEntry> = {
   Window: {
+    linuxShortcut: 'w',
     index: 2,
     items: {
       'Old Joe One': { index: 5 },
@@ -62,6 +68,7 @@ const menuMap: Record<string, MenuMapEntry> = {
     }
   },
   View: {
+    linuxShortcut: 'v',
     index: 4,
     items: {
       Developer: {
@@ -76,6 +83,7 @@ const menuMap: Record<string, MenuMapEntry> = {
     }
   },
   Help: {
+    linuxShortcut: 'h',
     index: 1,
     items: {
       'Check for Updates': { index: 6 },
@@ -126,7 +134,7 @@ async function clickWindowMenuItemWin(clickList: Array<string>) {
 
   let currentFocus = menuMap;
   for (const entry of clickList) {
-    await performWinMenuAction(currentFocus[entry]);
+    await performWinLinuxMenuAction(currentFocus[entry]);
 
     if (currentFocus[entry].items) {
       currentFocus = currentFocus[entry].items!;
@@ -137,7 +145,7 @@ async function clickWindowMenuItemWin(clickList: Array<string>) {
   robot.keyTap('enter');
 }
 
-async function performWinMenuAction(item: MenuMapEntry) {
+async function performWinLinuxMenuAction(item: MenuMapEntry) {
   debug(`Navigating to menu item`);
 
   await doTimes(item.index, async () => {
@@ -150,4 +158,33 @@ async function performWinMenuAction(item: MenuMapEntry) {
     robot.keyTap('right');
     await wait(250);
   }
+}
+
+async function clickWindowMenuItemLinux(clickList: Array<string>) {
+  // Close to a menu, if still open
+  await robot.keyTap('escape');
+  await wait(200);
+
+  // Open the top menu item
+  const firstShortcut = menuMap[clickList[0]].linuxShortcut;
+
+  if (!firstShortcut) {
+    throw new Error(`Could not find Linux shortcut for top menu item ${clickList[0]}`);
+  }
+
+  await robot.keyTap(firstShortcut, 'alt');
+  await wait(500);
+
+  // Let's go
+  let currentFocus = menuMap[clickList[0]].items!;
+  for (const entry of clickList.slice(1)) {
+    await performWinLinuxMenuAction(currentFocus[entry]);
+
+    if (currentFocus[entry].items) {
+      currentFocus = currentFocus[entry].items!;
+    }
+  }
+
+  // Do the thing
+  robot.keyTap('enter');
 }

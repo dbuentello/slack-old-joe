@@ -12,6 +12,8 @@ export function getAppDataDir() {
     return path.join(homedir, `Library/Application Support`);
   } else if (process.platform === 'win32') {
     return path.join(homedir, `AppData/Roaming`);
+  } else if (process.platform === 'linux') {
+    return path.join(homedir, '.config')
   } else {
     throw new Error(`Platform ${process.platform} not implemented yet`);
   }

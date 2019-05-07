@@ -23,6 +23,10 @@ export async function getSlackPath(version?: string): Promise<string> {
     ({ expectedDir, expectedPath } = await getSlackPathMac());
   }
 
+  if (process.platform === 'linux') {
+    ({ expectedDir, expectedPath } = await getSlackPathLinux());
+  }
+
   if (!fs.existsSync(expectedPath)) {
     const contents = `\n - ` + (await fs.readdir(expectedDir)).join(`\n - `);
     const warning = `Could not find Slack for v${version}. Here is what we have: ${contents}`;
@@ -79,5 +83,15 @@ async function getSlackPathMac() {
   return {
     expectedDir: slackDir,
     expectedPath: slackBin
+  };
+}
+
+async function getSlackPathLinux() {
+  const slackDir = `/usr/bin`
+  const slackBin = `slack`;
+
+  return {
+    expectedDir: slackDir,
+    expectedPath: path.join(slackDir, slackBin)
   };
 }

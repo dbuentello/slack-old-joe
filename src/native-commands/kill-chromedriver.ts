@@ -1,7 +1,8 @@
 import * as path from 'path';
 
-import { isWin } from '../utils/os';
+import { isWin, isLinux } from '../utils/os';
 import { runPowerShellScript } from '../utils/powershell';
+import { execSync } from 'child_process';
 
 /**
  * During rapid development, Chromedriver often sticks around. I'm lazy.
@@ -14,5 +15,9 @@ export async function killChromedriver() {
     );
 
     await runPowerShellScript(scriptPath);
+  }
+
+  if (isLinux()) {
+    execSync('killall chromedriver || true');
   }
 }
