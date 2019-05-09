@@ -74,3 +74,7 @@ export interface JoeBrowserObject extends BrowserObject {
 export interface Driver extends ChildProcess {
   restart: () => Promise<void>;
 }
+
+export const enum IpcChannels {
+  log = 'log'
+}

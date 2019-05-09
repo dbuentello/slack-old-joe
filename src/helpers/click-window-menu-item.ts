@@ -169,7 +169,9 @@ async function clickWindowMenuItemLinux(clickList: Array<string>) {
   const firstShortcut = menuMap[clickList[0]].linuxShortcut;
 
   if (!firstShortcut) {
-    throw new Error(`Could not find Linux shortcut for top menu item ${clickList[0]}`);
+    throw new Error(
+      `Could not find Linux shortcut for top menu item ${clickList[0]}`
+    );
   }
 
   await robot.keyTap(firstShortcut, 'alt');

@@ -215,14 +215,14 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
       // Now run the suite, updating after each test
       try {
-        appState.results.push(
-          await runTestFile(
-            test.name,
-            test.suiteMethodResults,
-            this.testCallback,
-            appState
-          )
+        const result = await runTestFile(
+          test.name,
+          test.suiteMethodResults,
+          this.testCallback,
+          appState
         );
+
+        appState.results.push(result);
       } catch (error) {
         console.warn(`Failed to run test suite ${test.name}`, error);
       }

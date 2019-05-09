@@ -16,7 +16,7 @@ work.
 
 > :warning: If and when Chromedriver crashes, you'll see error messages complaining that Chrome crashed (which means that chromedriver crashed) or that there's no connection to Chrome (again, Chromedriver crashed). You'll see this happening because Slack is gone. Don't let that distract you, just restart the test.
 
-## Tests (98 Cases :rocket:)
+## Tests
 
 Old Joe currently verifies the following:
 
@@ -50,8 +50,10 @@ Old Joe currently verifies the following:
 
 #### Application Window
 - Can maximize the window
-- Can enter fullscreen display (and leave it)
+- Can enter fullscreen display
+- Can leave fullscreen display
 - Can minimize the window
+- Can un-minimize the window
 
 #### Reloading & Resetting
 - Cmd/Ctrl + R reloads the workspace
@@ -119,6 +121,8 @@ Old Joe currently verifies the following:
 
 #### Deep Links
 - `slack://open?team=` works and opens the correct team
+- `slack://channel` works and opens the correct channel
+- `slack://file` works and opens the right file
 
 #### Network
 - Disconnecting from Wi-fi eventually results in the usual `Slack is trying to connect` messages

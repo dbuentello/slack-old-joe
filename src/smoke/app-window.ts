@@ -55,10 +55,23 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     console.log(beforeDimensions, afterDimensions);
 
     assert.notEqual(beforeDimensions, afterDimensions);
+  });
 
-    // Restore
+  it('can leave fullscreen', async () => {
+    const beforeDimensions = await window.client.executeScript(
+      'return window.outerHeight',
+      []
+    );
+
     await fullscreen();
     await wait(1000);
+
+    const afterDimensions = await window.client.executeScript(
+      'return window.outerHeight',
+      []
+    );
+
+    assert.notEqual(beforeDimensions, afterDimensions);
   });
 
   it(
@@ -74,6 +87,17 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       // Restore
       await minimize(true);
       await wait(1000);
+    },
+    { platforms: ['win32', 'darwin'] }
+  );
+
+  it(
+    'can un-minimize the window',
+    async () => {
+      await minimize(true);
+      await wait(1000);
+
+      assert.ok(!(await getIsHidden(window.client), 'document.hidden'));
     },
     { platforms: ['win32', 'darwin'] }
   );

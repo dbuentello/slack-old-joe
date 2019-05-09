@@ -87,7 +87,7 @@ async function getSlackPathMac() {
 }
 
 async function getSlackPathLinux() {
-  const slackDir = `/usr/bin`
+  const slackDir = `/usr/bin`;
   const slackBin = `slack`;
 
   return {

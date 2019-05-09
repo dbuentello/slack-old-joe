@@ -3,6 +3,7 @@ import { app } from 'electron';
 import { getOrCreateMainWindow } from './windows';
 import { shouldQuit } from './squirrel';
 import { setupMenu } from './menu';
+import { setupReporter } from './reporter';
 
 /**
  * Handle the app's "ready" event. This is essentially
@@ -54,6 +55,8 @@ export function main() {
   app.on('before-quit', onBeforeQuit);
   app.on('window-all-closed', onWindowsAllClosed);
   app.on('activate', getOrCreateMainWindow);
+
+  setupReporter();
 }
 
 main();
