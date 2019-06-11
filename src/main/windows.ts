@@ -31,7 +31,8 @@ export function getMainWindowOptions(): Electron.BrowserWindowConstructorOptions
     alwaysOnTop: true,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      webviewTag: false
+      webviewTag: false,
+      nodeIntegration: true,
     },
     show: false
   };
