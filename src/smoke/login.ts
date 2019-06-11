@@ -17,8 +17,8 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     const url = await window.client.getUrl();
     assert.ok(
-      url.startsWith('https://slack.com/ssb/first'),
-      'Starts with slack.com/ssb/first'
+      url.startsWith('https://app.slack.com/ssb/first'),
+      'Starts with app.slack.com/ssb/first'
     );
   });
 
@@ -55,11 +55,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it('has a quick switcher', async () => {
     await getRendererWindowHandle(window.client);
 
-    const body = await window.client.$('body');
-    const html = await body.getHTML();
-    const hasSidebar = html.includes('TeamSidebar');
+    const teamSidebar = await window.client.$('.p-team_sidebar__teams');
 
-    assert.ok(hasSidebar);
+    assert.ok(await teamSidebar.waitForDisplayed(1000));
   });
 
   it('can switch teams (via shortcut)', async () => {
