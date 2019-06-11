@@ -1,14 +1,16 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as shortId from 'shortid';
-import { getUserDir, getAppDataDir } from './get-user-dir';
+import { getUserDir, getAppDataDir, USER_DATA_FOLDER_NAME } from './get-user-dir';
+import { setSonicBoot } from './set-sonic-boot';
 
 const debug = require('debug')('old-joe');
 
+
 const userDir = getUserDir();
 let backupUserDir = userDir.replace(
-  'SlackDevMode',
-  `SlackDevMode-${shortId.generate()}`
+  USER_DATA_FOLDER_NAME,
+  `${USER_DATA_FOLDER_NAME}-${shortId.generate()}`
 );
 
 export async function clean() {
@@ -30,6 +32,8 @@ export async function clean() {
 
   await fs.mkdirp(userDir);
   await fs.outputFile(path.join(userDir, '.oldjoe'), '🐪');
+  await setSonicBoot();
+
   console.groupEnd();
 }
 
@@ -50,11 +54,11 @@ export function restore() {
 
 export async function deleteOldJoeFolders() {
   const appDataDir = getAppDataDir();
-  const slackDevModeBackupFolders = (await fs.readdir(appDataDir)).filter(
-    f => f.startsWith('SlackDevMode-') && f.length === 22
+  const slackBackupFolders = (await fs.readdir(appDataDir)).filter(
+    f => f.startsWith(`${USER_DATA_FOLDER_NAME}-`) && f.length === 22
   );
 
-  for (const folder of slackDevModeBackupFolders) {
+  for (const folder of slackBackupFolders) {
     const folderPath = path.join(appDataDir, folder);
     if (hasOldJoeFile(folderPath)) {
       await fs.remove(folderPath);
