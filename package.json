@@ -36,7 +36,7 @@
     "screenshot-desktop": "^1.8.0",
     "semver": "^6.1.1",
     "shortid": "^2.2.14",
-    "webdriverio": "^5.10.1"
+    "webdriverio": "^5.7.13"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.39",
@@ -49,18 +49,17 @@
     "@types/cross-spawn": "^6.0.0",
     "@types/extract-zip": "^1.6.2",
     "@types/fs-extra": "^7.0.0",
-    "@types/node": "^12.0.7",
-    "@types/react": "^16.8.13",
+    "@types/node": "^11.13.4",
+    "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
     "@types/semver": "^6.0.0",
     "@types/shortid": "0.0.29",
     "cross-env": "^5.2.0",
-    "electron": "6.0.0-beta.6",
+    "electron": "^4.2.4",
     "less": "^3.9.0",
-    "node-abi": "patrickrobbins/node-abi",
     "parcel-bundler": "^1.12.3",
     "prettier": "1.18.2",
     "rimraf": "^2.6.3",
-    "typescript": "^3.5.1"
+    "typescript": "^3.4.3"
   }
 }
