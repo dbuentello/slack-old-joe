@@ -3,6 +3,8 @@ import { getBrowserViewHandle } from './get-browser-view';
 import { wait } from '../utils/wait';
 import { GetWindowResult } from './get-window-handle';
 
+import { BrowserObject } from 'webdriverio';
+
 const debug = require('debug')('old-joe');
 
 /**
@@ -20,7 +22,7 @@ export function waitUntilSlackReady(
   debug(`Waiting for Slack to be ready`);
 
   const getHasWindows = async () =>
-    (await client.getWindowHandles()).length > 1;
+    (await client.getWindowHandles()).length > 0;
 
   return new Promise((resolve, reject) => {
     let target: GetWindowResult | null = null;
@@ -44,7 +46,7 @@ export function waitUntilSlackReady(
     }, timeout);
 
     const testInterval = setInterval(async () => {
-      // Not at least two window objects? Goodbye
+      // Not at least one window object? Goodbye
       if (!(await getHasWindows())) {
         return;
       }
