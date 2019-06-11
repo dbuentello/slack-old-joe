@@ -1,3 +1,5 @@
+import { BrowserObject } from 'webdriverio';
+
 export const enum PointerEvents {
   MOUSEMOVE = 'mouseMoved',
   MOUSEDOWN = 'mousePressed',

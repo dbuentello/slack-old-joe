@@ -1,3 +1,5 @@
+import { BrowserObject } from 'webdriverio';
+
 export async function enterMessage(
   client: BrowserObject,
   message: string,

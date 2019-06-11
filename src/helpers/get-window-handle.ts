@@ -1,3 +1,5 @@
+import { BrowserObject } from 'webdriverio';
+
 export type GetWindowHandleTestFn = (
   url: string,
   title: string

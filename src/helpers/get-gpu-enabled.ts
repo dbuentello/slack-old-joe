@@ -1,3 +1,5 @@
+import { BrowserObject } from 'webdriverio';
+
 /**
  * Assumes that the GPU window is open and selected.
  *

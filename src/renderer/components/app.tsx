@@ -12,20 +12,13 @@ import { shell } from 'electron';
 
 import { AppState } from '../state';
 import { clean, restore } from '../../helpers/clean-restore';
-import { spawnChromeDriver } from '../driver';
-import { getClient } from '../client';
 import { runTestFile, readTests } from '../runner';
-import { ChildProcess } from 'child_process';
 import { getReportDir, writeReport } from '../../report';
 import { Setup } from './setup';
 import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
 import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
 import { wait } from '../../utils/wait';
-import { killSlack } from '../../native-commands/kill-slack';
 import { Results } from './results';
-import { waitUntilSlackReady } from '../../helpers/wait-until-slack-ready';
-import { JoeBrowserObject } from '../../interfaces';
-import { killChromedriver } from '../../native-commands/kill-chromedriver';
 import { stopClientDriver, startClientDriver } from '../client-driver';
 
 interface AppProps {

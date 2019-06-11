@@ -3,6 +3,8 @@ import { isMac } from '../utils/os';
 import { getBrowserViewHandle } from './get-browser-view';
 import { wait } from '../utils/wait';
 
+import { BrowserObject } from 'webdriverio';
+
 export async function openPreferences(
   client: BrowserObject,
   preferenceGroup?: string

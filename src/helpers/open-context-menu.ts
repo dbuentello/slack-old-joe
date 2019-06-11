@@ -1,6 +1,8 @@
 import { wait } from '../utils/wait';
 import { sendClickElement, PointerEvents } from './send-pointer-event';
 
+import { BrowserObject } from 'webdriverio';
+
 /**
  * Opens the context menu for a given element.
  *

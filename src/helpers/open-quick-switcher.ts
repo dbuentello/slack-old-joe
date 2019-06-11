@@ -1,6 +1,8 @@
 import { getBrowserViewHandle } from './get-browser-view';
 import { sendKeyboardEvent, KeyboardEventType } from './send-keyboard-event';
 
+import { BrowserObject } from 'webdriverio';
+
 export async function openQuickSwitcher(client: BrowserObject) {
   await getBrowserViewHandle(client);
   await sendKeyboardEvent(client, {

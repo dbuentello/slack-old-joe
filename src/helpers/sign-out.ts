@@ -2,6 +2,8 @@ import { getBrowserViewHandle } from './get-browser-view';
 import { wait } from '../utils/wait';
 import { focus } from '../native-commands/focus';
 
+import { BrowserObject } from 'webdriverio';
+
 export async function signOut(client: BrowserObject) {
   await focus();
   await getBrowserViewHandle(client);

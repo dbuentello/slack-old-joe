@@ -1,4 +1,5 @@
 import { ChildProcess } from 'child_process';
+import { BrowserObject } from 'webdriverio';
 
 export type LifeCycleFn = () => Promise<void> | void;
 export type TestFn = () => Promise<void> | void;

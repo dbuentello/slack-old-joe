@@ -1,3 +1,5 @@
+import { BrowserObject } from 'webdriverio';
+
 const getScriptText = (selector: string) =>
   `
 let selection = window.getSelection();

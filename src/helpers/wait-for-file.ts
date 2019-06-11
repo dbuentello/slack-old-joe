@@ -1,4 +1,5 @@
 import * as fs from 'fs-extra';
+
 import { wait } from '../utils/wait';
 
 export function waitForFile(

@@ -2,6 +2,8 @@ import { getBrowserViewHandle } from './get-browser-view';
 import { wait } from '../utils/wait';
 import { getGpuWindowHandle } from './get-gpu-info-window';
 
+import { BrowserObject } from 'webdriverio';
+
 /**
  * Open the GPU info window
  *

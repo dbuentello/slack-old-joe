@@ -1,5 +1,7 @@
 import { getWindowHandle, GetWindowResult } from './get-window-handle';
 
+import { BrowserObject } from 'webdriverio';
+
 export async function getAboutWindowHandle(
   client: BrowserObject
 ): Promise<GetWindowResult | null> {

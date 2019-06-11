@@ -1,3 +1,5 @@
+import { BrowserObject } from 'webdriverio';
+
 export async function waitUntilElementGone(
   client: BrowserObject,
   selector: string,

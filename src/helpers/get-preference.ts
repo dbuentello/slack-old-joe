@@ -1,5 +1,7 @@
 import { getBrowserViewHandle } from './get-browser-view';
 
+import { BrowserObject } from 'webdriverio';
+
 export async function getPreference(client: BrowserObject, name: string) {
   await getBrowserViewHandle(client);
 

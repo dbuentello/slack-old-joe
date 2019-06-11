@@ -1,5 +1,7 @@
 import { getWindowHandle, GetWindowResult } from './get-window-handle';
 
+import { BrowserObject } from 'webdriverio';
+
 /**
  * Get the main window handle
  *

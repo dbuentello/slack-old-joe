@@ -1,3 +1,5 @@
+import { BrowserObject } from 'webdriverio';
+
 const methodText = () =>
   `
 window.addEventListener("click", event => {

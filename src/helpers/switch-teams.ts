@@ -2,6 +2,8 @@ import { sendNativeKeyboardEvent } from './send-keyboard-event';
 import { clickWindowMenuItem } from './click-window-menu-item';
 import { getBrowserViewHandle } from './get-browser-view';
 
+import { BrowserObject } from 'webdriverio';
+
 const PLATFORM_MODIFIER =
   process.platform === 'darwin' ? { cmd: true } : { ctrl: true };
 
@@ -10,7 +12,8 @@ export async function switchToTeam(client: BrowserObject, index: number) {
     ...PLATFORM_MODIFIER,
     text: (index + 1).toString()
   });
-  await getBrowserViewHandle(client, 300);
+
+  await getBrowserViewHandle(client, 600);
 }
 
 export async function selectNextTeamShortcut(client: BrowserObject) {

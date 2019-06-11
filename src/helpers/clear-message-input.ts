@@ -1,5 +1,7 @@
 import { sendNativeKeyboardEvent } from './send-keyboard-event';
 
+import { BrowserObject } from 'webdriverio';
+
 /**
  * Attempts to clear the message input
  *

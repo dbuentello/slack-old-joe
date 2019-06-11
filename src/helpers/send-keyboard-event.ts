@@ -1,4 +1,5 @@
 import * as robot from 'robotjs';
+import { BrowserObject } from 'webdriverio';
 
 import { focus } from '../native-commands/focus';
 import { keyDescriptionForString } from '../lib/keyboard-description-for-string';
