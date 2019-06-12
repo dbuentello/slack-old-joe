@@ -13,5 +13,6 @@ export async function setSonicBoot() {
 
   settingsToWrite.bootSonic = 'always';
 
+  await fs.mkdirp(userDir);
   await fs.writeJSON(settingsPath, settingsToWrite);
 }

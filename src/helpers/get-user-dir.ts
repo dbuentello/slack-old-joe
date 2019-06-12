@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as os from 'os';
 
-export const USER_DATA_FOLDER_NAME = `Slack`;
+export const USER_DATA_FOLDER_NAME = `SlackDevMode`;
 
 export function getUserDir() {
   return path.join(getAppDataDir(), USER_DATA_FOLDER_NAME);

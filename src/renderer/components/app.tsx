@@ -20,6 +20,7 @@ import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
 import { wait } from '../../utils/wait';
 import { Results } from './results';
 import { stopClientDriver, startClientDriver } from '../client-driver';
+import { setSonicBoot } from '../../helpers/set-sonic-boot';
 
 interface AppProps {
   appState: AppState;
@@ -153,6 +154,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
     }, 50);
 
     await clean();
+    await setSonicBoot();
 
     // Should we seed a user data dir? We'll do so if
     // the sign-in test is disabled

@@ -12,11 +12,11 @@ let _client: null | JoeBrowserObject = null;
 
 export async function getClient(appState: AppState) {
   console.groupCollapsed('Creating client');
-  const options: any = {
+  const options: WebdriverIO.RemoteOptions = {
     port: 9515, // "9515" is the port opened by chrome driver.
     capabilities: {
       browserName: 'chrome',
-      chromeOptions: {
+      'goog:chromeOptions': {
         binary: appState.appToTest,
         args: ['--remote-debugging-port=12209', '--testType=webdriver'] // Optional, perhaps 'app=' + /path/to/your/app/
       }

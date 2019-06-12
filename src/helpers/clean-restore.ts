@@ -32,7 +32,6 @@ export async function clean() {
 
   await fs.mkdirp(userDir);
   await fs.outputFile(path.join(userDir, '.oldjoe'), '🐪');
-  await setSonicBoot();
 
   console.groupEnd();
 }
