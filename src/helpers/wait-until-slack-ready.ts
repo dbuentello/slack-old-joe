@@ -1,9 +1,9 @@
 import { getSignInWindow } from './get-sign-in-window';
-import { getBrowserViewHandle } from './get-browser-view';
 import { wait } from '../utils/wait';
 import { GetWindowResult } from './get-window-handle';
 
 import { BrowserObject } from 'webdriverio';
+import { getSonicWindow } from './get-sonic-window';
 
 const debug = require('debug')('old-joe');
 
@@ -55,7 +55,7 @@ export function waitUntilSlackReady(
       target =
         target || expectSignIn
           ? await getSignInWindow(client)
-          : await getBrowserViewHandle(client);
+          : await getSonicWindow(client);
       const isLoading = target && (await client.isLoading());
 
       if (target && !isLoading) return finish();

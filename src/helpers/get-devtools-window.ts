@@ -6,6 +6,7 @@ export async function getDevToolsWindowHandle(
   client: BrowserObject
 ): Promise<GetWindowResult | null> {
   return getWindowHandle(client, url => {
-    return url.startsWith('chrome-devtools://devtools');
+    console.log(url);
+    return url.startsWith('devtools://devtools');
   });
 }
