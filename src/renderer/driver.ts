@@ -8,7 +8,7 @@ const spawn = require('cross-spawn');
 
 let driver: ChildProcess;
 
-export const DRIVER_VERSION = 4;
+export const DRIVER_VERSION = 6;
 
 function handleChromeDriverData(data: Buffer) {
   const message = data.toString();
