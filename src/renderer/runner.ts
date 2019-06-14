@@ -9,7 +9,6 @@ import {
   Result,
   LifeCycleFn
 } from '../interfaces';
-import { takeScreenshot } from '../report';
 import { AppState } from './state';
 import { wait } from '../utils/wait';
 
@@ -119,15 +118,9 @@ export async function runTestFile(
     // Run all "beforeEach"
     await runAll(suiteMethodResults.beforeEach, 'beforeEach');
 
-    // Screenshot
-    if (generateReportAtEnd) await takeScreenshot(`before ${name}`);
-
     // Run the test
     debug(`Now running test "${test.name}"`);
     result.results.push(await runTest(test, updateCallback));
-
-    // Screenshot
-    if (generateReportAtEnd) await takeScreenshot(`after ${name}`);
 
     // Run all "afterEach"
     await runAll(suiteMethodResults.afterEach, 'afterEach');

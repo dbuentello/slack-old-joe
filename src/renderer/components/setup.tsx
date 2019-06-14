@@ -70,7 +70,7 @@ export class Setup extends React.Component<SetupProps, {}> {
           />
           <Checkbox
             checked={appState.generateReportAtEnd}
-            label="Generate a report with screenshots"
+            label="Generate a report"
             onChange={this.generateReportChange}
           />
         </Card>

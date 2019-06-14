@@ -125,11 +125,11 @@ export class App extends React.Component<AppProps, LocalAppState> {
   public renderDone() {
     const { appState } = this.props;
     const text = appState.generateReportAtEnd ? (
-      <>
-        All done! Click here for screenshots <Icon icon="camera" />
-      </>
+    <>
+      'All done! Report should be found in Directory here?'
+    </>
     ) : (
-      'All done!'
+      'End of tests'
     );
 
     return appState.done ? (
@@ -183,7 +183,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
    */
   public async startTests() {
     this.setState({ hasStarted: true });
-
     try {
       await this.readTests();
       await this.runTests();
@@ -302,7 +301,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
   private async writeReportMaybe() {
     const { appState } = this.props;
-
+    
     if (appState.generateReportAtEnd) {
       try {
         await writeReport(appState.results);
