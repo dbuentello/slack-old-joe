@@ -118,7 +118,6 @@ export async function runTestFile(
     // Run all "beforeEach"
     await runAll(suiteMethodResults.beforeEach, 'beforeEach');
 
-    
     // Run the test
     debug(`Now running test "${test.name}"`);
     result.results.push(await runTest(test, updateCallback));
