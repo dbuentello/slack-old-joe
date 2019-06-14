@@ -33,7 +33,6 @@
     "react-dom": "^16.8.6",
     "react-stay-scrolled": "^7.0.0",
     "robotjs": "^0.5.1",
-    "screenshot-desktop": "^1.8.0",
     "semver": "^6.1.1",
     "shortid": "^2.2.14",
     "webdriverio": "^5.7.13"
