@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { wait } from '../utils/wait';
 import { openPreferences, closePreferences } from '../helpers/open-preferences';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
@@ -14,10 +13,12 @@ import { reopen } from '../native-commands/reopen';
 import { clipboard } from 'electron';
 import { switchToChannel } from '../helpers/switch-channel';
 import { appState } from '../renderer/state';
+import { getSonicWindow } from '../helpers/get-sonic-window';
+import { getZoomLevel } from '../helpers/get-zoom';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
   });
 
   it('can open the preferences', async () => {
@@ -45,7 +46,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   );
 
   it('can "undo"', async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
     await enterMessage(window.client, 'F');
     const messageElement = await window.client.$('p=F');
     await messageElement.waitForExist(1000);
@@ -121,7 +122,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await sendNativeKeyboardEvent({ text: 'a', cmdOrCtrl: true });
       await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
 
-      clipboard.writeHTML('<strong>Hello</strong>');
+      clipboard.writeText('Hello');
 
       await sendNativeKeyboardEvent({
         text: 'v',
@@ -164,31 +165,33 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await searchCloseBtn.click();
   });
 
-  it(
-    'can "use selection to find"',
-    async () => {
-      await enterMessage(window.client, 'selection');
-      await sendNativeKeyboardEvent({
-        text: 'a',
-        cmdOrCtrl: true,
-        noFocus: true
-      });
-      await sendNativeKeyboardEvent({ text: 'e', cmd: true, noFocus: true });
+  // Disabled: Currently not available in Sonic
 
-      const searchEntry = await window.client.$(`span=selection`);
-      await searchEntry.waitForExist(1000);
+  // it(
+  //   'can "use selection to find"',
+  //   async () => {
+  //     await enterMessage(window.client, 'selection');
+  //     await sendNativeKeyboardEvent({
+  //       text: 'a',
+  //       cmdOrCtrl: true,
+  //       noFocus: true
+  //     });
+  //     await sendNativeKeyboardEvent({ text: 'e', cmd: true, noFocus: true });
 
-      const searchCloseBtn = await window.client.$(
-        '.c-search__input_and_close__close'
-      );
-      await searchCloseBtn.waitForExist(1000);
+  //     const searchEntry = await window.client.$(`span=selection`);
+  //     await searchEntry.waitForExist(1000);
 
-      assert.ok(await searchCloseBtn.isExisting(), 'the search box');
+  //     const searchCloseBtn = await window.client.$(
+  //       '.c-search__input_and_close__close'
+  //     );
+  //     await searchCloseBtn.waitForExist(1000);
 
-      await searchCloseBtn.click();
-    },
-    { platforms: ['darwin'] }
-  );
+  //     assert.ok(await searchCloseBtn.isExisting(), 'the search box');
+
+  //     await searchCloseBtn.click();
+  //   },
+  //   { platforms: ['darwin'] }
+  // );
 
   it('can "zoom in"', async () => {
     await sendNativeKeyboardEvent({
@@ -198,11 +201,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     });
     await wait(300);
 
-    const zoomLevelIndicator = await window.client.$('.zoom_level_indicator');
-    await zoomLevelIndicator.waitForExist(1000);
-    const zoomLevel = await zoomLevelIndicator.getText();
+    const zoomLevel = await getZoomLevel(window.client);
 
-    assert.equal(zoomLevel, 'zoom: 110%', 'zoom level indicator');
+    assert.equal(zoomLevel, 1, 'zoom level indicator');
   });
 
   it('can "zoom in" (again)', async () => {
@@ -213,11 +214,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     });
     await wait(300);
 
-    const zoomLevelIndicator = await window.client.$('.zoom_level_indicator');
-    await zoomLevelIndicator.waitForExist(1000);
-    const zoomLevel = await zoomLevelIndicator.getText();
-
-    assert.equal(zoomLevel, 'zoom: 125%', 'zoom level indicator');
+    assert.equal(await getZoomLevel(window.client), 2, 'zoom level indicator');
   });
 
   it('can "zoom out"', async () => {
@@ -228,11 +225,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     });
     await wait(300);
 
-    const zoomLevelIndicator = await window.client.$('.zoom_level_indicator');
-    await zoomLevelIndicator.waitForExist(1000);
-    const zoomLevel = await zoomLevelIndicator.getText();
-
-    assert.equal(zoomLevel, 'zoom: 110%', 'zoom level indicator');
+    assert.equal(await getZoomLevel(window.client), 1, 'zoom level indicator');
   });
 
   it('can go back to "actual size"', async () => {
@@ -243,11 +236,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     });
     await wait(300);
 
-    const zoomLevelIndicator = await window.client.$('.zoom_level_indicator');
-    await zoomLevelIndicator.waitForExist(1000);
-    const zoomLevel = await zoomLevelIndicator.getText();
-
-    assert.equal(zoomLevel, 'zoom: 100%', 'zoom level indicator');
+    assert.equal(await getZoomLevel(window.client), 0, 'zoom level indicator');
   });
 
   it('can go "back" in history', async () => {

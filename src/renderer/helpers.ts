@@ -48,6 +48,8 @@ import { getIsResetAppDataSheetOpen } from '../native-commands/get-reset-app-dat
 import { getIsNetLogSheetOpen } from '../native-commands/get-restart-net-log-sheet';
 import { openContextMenuForElement } from '../helpers/open-context-menu';
 import { setSelection } from '../helpers/set-selection';
+import { getSonicWindow } from '../helpers/get-sonic-window';
+import { getZoomLevel } from '../helpers/get-zoom';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -75,8 +77,10 @@ export function registerHelpers() {
     getRunningSlackProcessesCount,
     getSignInWindow,
     getSlackPath,
+    getSonicWindow,
     getStartupItems,
     getTeamsCount,
+    getZoomLevel,
     openBrowserAndSignIn,
     openBrowserAndWaitForSignIn,
     openContextMenuForElement,

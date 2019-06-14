@@ -5,11 +5,15 @@ export async function enterMessage(
   message: string,
   send?: boolean
 ) {
-  const msgInput = await client.$('#msg_input .ql-editor');
+  const msgInput = await client.$('.p-message_input .ql-editor');
   await msgInput.click();
 
-  // Enter out time stamp, followed by the enter key
-  const keys = [...message.split('')];
-  if (send) keys.push('\uE007');
-  await client.sendKeys(keys);
+  await (client as any).elementSendKeys((msgInput as any).elementId, message);
+
+  if (send) {
+    await (client as any).elementSendKeys(
+      (msgInput as any).elementId,
+      '\uE007'
+    );
+  }
 }

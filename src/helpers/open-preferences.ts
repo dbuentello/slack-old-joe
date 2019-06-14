@@ -1,7 +1,7 @@
 import { sendNativeKeyboardEvent } from './send-keyboard-event';
 import { isMac } from '../utils/os';
-import { getBrowserViewHandle } from './get-browser-view';
 import { wait } from '../utils/wait';
+import { getSonicWindow } from './get-sonic-window';
 
 import { BrowserObject } from 'webdriverio';
 
@@ -9,7 +9,7 @@ export async function openPreferences(
   client: BrowserObject,
   preferenceGroup?: string
 ) {
-  await getBrowserViewHandle(client);
+  await getSonicWindow(client);
 
   if (!(await getIsPreferencesOpen(client))) {
     await sendNativeKeyboardEvent({
