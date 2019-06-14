@@ -17,7 +17,7 @@ export async function getBrowserViewHandle(
   waitForMsBefore = 0,
   teamUrl = ''
 ): Promise<GetWindowResult | null> {
-  if (wait) await wait(waitForMsBefore);
+  if (waitForMsBefore) await wait(waitForMsBefore);
 
   console.groupCollapsed('getBrowserViewHandle');
   console.trace();
