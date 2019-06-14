@@ -173,7 +173,14 @@ async function runTest(
   }
 
   if (options && options.cleanup) {
-    await options.cleanup();
+    try {
+      await options.cleanup();
+    } catch (error) {
+      console.error(`Cleanup for ${name} failed`, error);
+
+      result.ok = false;
+      result.error = error;
+    }
   }
 
   updateCallback(result.ok);
