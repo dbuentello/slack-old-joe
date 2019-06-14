@@ -20,15 +20,16 @@ end tell`.trim();
 export async function getIsResetAppDataSheetOpen() {
   if (isMac()) {
     let errored;
+    let result;
 
     try {
-      await runAppleScript(tryGetYesTitleScript());
+      result = await runAppleScript(tryGetYesTitleScript());
     } catch (ignoredError) {
       console.log(ignoredError);
       errored = true;
     }
 
-    return !errored;
+    return !errored && result === 'Yes';
   }
 
   if (isWin()) {
