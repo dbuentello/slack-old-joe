@@ -183,9 +183,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
    */
   public async startTests() {
     this.setState({ hasStarted: true });
-    console.log("starting tests.....");
     try {
-      console.log("RUNNING TESTS.............");
       await this.readTests();
       await this.runTests();
       await this.writeReportMaybe();
@@ -303,6 +301,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
   private async writeReportMaybe() {
     const { appState } = this.props;
+    
     if (appState.generateReportAtEnd) {
       try {
         await writeReport(appState.results);
