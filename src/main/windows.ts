@@ -32,7 +32,7 @@ export function getMainWindowOptions(): Electron.BrowserWindowConstructorOptions
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       webviewTag: false,
-      nodeIntegration: true,
+      nodeIntegration: true
     },
     show: false
   };

@@ -52,9 +52,7 @@ export const test: SuiteMethod = async ({ it }) => {
     );
 
     const url = await window.client.getUrl();
-    const expected = `https://${
-      smokeTeams[0].url
-    }.slack.com/?redir=%2Fmessages`;
+    const expected = `https://${smokeTeams[0].url}.slack.com/?redir=%2Fmessages`;
 
     assert.equal(url, expected, 'the url');
   });

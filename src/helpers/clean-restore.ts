@@ -1,11 +1,13 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as shortId from 'shortid';
-import { getUserDir, getAppDataDir, USER_DATA_FOLDER_NAME } from './get-user-dir';
-import { setSonicBoot } from './set-sonic-boot';
+import {
+  getUserDir,
+  getAppDataDir,
+  USER_DATA_FOLDER_NAME
+} from './get-user-dir';
 
 const debug = require('debug')('old-joe');
-
 
 const userDir = getUserDir();
 let backupUserDir = userDir.replace(
