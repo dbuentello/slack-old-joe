@@ -49,11 +49,12 @@ export async function sendClickElement(
 ) {
   const element = await client.$(selector);
   await element.waitForDisplayed(1000);
-  const location = await (client as any).getElementLocation(
-    (element as any).elementId
+  const location = await client.executeScript(
+    `return document.querySelector("${selector}").getBoundingClientRect()`,
+    []
   );
 
-  await window.client.moveToElement((element as any).elementId);
+  await element.moveTo();
 
   let _type = type || PointerEvents.MOUSEDOWN;
 
@@ -65,8 +66,8 @@ export async function sendClickElement(
   await sendPointerEvent(client, {
     type: _type,
     // +2 so that we actually hit the element
-    x: location.x + 2,
-    y: location.y + 2,
+    x: location.left + 2,
+    y: location.top + 2,
     rightClick
   });
 
