@@ -6,13 +6,9 @@ import {
   selectPreviousTeamWindowMenu,
   selectTeamWindowMenu,
   selectNextTeamShortcut,
-  selectPreviousTeamShortcut,
-  switchToTeam
-} from '../helpers/switch-teams';
+  selectPreviousTeamShortcut} from '../helpers/switch-teams';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
-import { openQuickSwitcher } from '../helpers/open-quick-switcher';
 import { smokeTeams } from '../smoke-teams';
-import { wait } from '../utils/wait';
 import { getSonicWindow } from '../helpers/get-sonic-window';
 
 export const test: SuiteMethod = async ({ it, beforeEach }) => {

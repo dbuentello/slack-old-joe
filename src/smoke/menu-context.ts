@@ -18,6 +18,7 @@ import { isWin } from '../utils/os';
 import { appState } from '../renderer/state';
 import { getSonicWindow } from '../helpers/get-sonic-window';
 import { focus } from '../native-commands/focus';
+import { switchToTeam } from '../helpers/switch-teams';
 
 // This suite is pretty unstable. It's not entirely clean
 // when exactly we're opening up the context menu, or when
@@ -28,6 +29,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
 
   beforeAll(async () => {
     await getSonicWindow(window.client);
+    await switchToTeam(1);
     await switchToChannel(window.client, 'random');
 
     if (isWin()) {
