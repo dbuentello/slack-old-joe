@@ -131,13 +131,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
   public renderDone() {
     const { appState } = this.props;
-    const text = appState.generateReportAtEnd ? (
-      <>
-      All done!
-      </>
-    ) : (
-      'End of tests'
-    );
+    const text = appState.generateReportAtEnd ? <>All done!</> : 'End of tests';
 
     return appState.done ? (
       <>
