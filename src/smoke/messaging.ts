@@ -1,14 +1,15 @@
 import { assert } from 'chai';
 
 import { SuiteMethod, JoeBrowserObject } from '../interfaces';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { switchToChannel } from '../helpers/switch-channel';
 import { enterMessage } from '../helpers/enter-message';
+import { getSonicWindow } from '../helpers/get-sonic-window';
 
 async function assertVideo(client: JoeBrowserObject) {
   // Play the video
-  await (await client.$('.c-message_attachment__video_play')).moveTo();
-  await client.positionClick();
+  const playBtn = await client.$('.c-message_attachment__video_play');
+  await playBtn.moveTo();
+  await playBtn.click();
 
   // Expect the iframe to show up
   let iframe = await client.$('iframe');
@@ -36,7 +37,7 @@ async function assertVideo(client: JoeBrowserObject) {
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
   });
 
   it('can switch to the #random channel', async () => {

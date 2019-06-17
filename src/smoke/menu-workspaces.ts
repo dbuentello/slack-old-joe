@@ -6,13 +6,9 @@ import {
   selectPreviousTeamWindowMenu,
   selectTeamWindowMenu,
   selectNextTeamShortcut,
-  selectPreviousTeamShortcut,
-  switchToTeam
-} from '../helpers/switch-teams';
+  selectPreviousTeamShortcut} from '../helpers/switch-teams';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
-import { openQuickSwitcher } from '../helpers/open-quick-switcher';
 import { smokeTeams } from '../smoke-teams';
-import { wait } from '../utils/wait';
 import { getSonicWindow } from '../helpers/get-sonic-window';
 
 export const test: SuiteMethod = async ({ it, beforeEach }) => {
@@ -21,10 +17,10 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
   });
 
   it('can select the "next" workspace using the window menu', async () => {
-    await selectNextTeamWindowMenu(window.client);
+    await selectNextTeamWindowMenu();
     const beforeTitle = await window.client.getTitle();
 
-    await selectNextTeamWindowMenu(window.client);
+    await selectNextTeamWindowMenu();
     const afterTitle = await window.client.getTitle();
 
     assert.notEqual(beforeTitle, afterTitle);
@@ -32,7 +28,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
 
   it('can select the "previous" workspace using the window menu', async () => {
     const beforeTitle = await window.client.getTitle();
-    await selectPreviousTeamWindowMenu(window.client);
+    await selectPreviousTeamWindowMenu();
 
     const afterTitle = await window.client.getTitle();
     assert.notEqual(beforeTitle, afterTitle);
@@ -50,7 +46,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
 
   it('can select the "next" workspace using the shortcut', async () => {
     const beforeTitle = await window.client.getTitle();
-    await selectNextTeamShortcut(window.client);
+    await selectNextTeamShortcut();
     const afterTitle = await window.client.getTitle();
 
     assert.notEqual(beforeTitle, afterTitle);
@@ -58,7 +54,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
 
   it('can select the "previous" workspace using the shortcut', async () => {
     const beforeTitle = await window.client.getTitle();
-    await selectPreviousTeamShortcut(window.client);
+    await selectPreviousTeamShortcut();
     const afterTitle = await window.client.getTitle();
 
     assert.notEqual(beforeTitle, afterTitle);
@@ -87,7 +83,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
   // Deactivated: This currently doesn't work in Sonic
 
   // it('can select a workspace using the Quick Switcher', async () => {
-  //   await switchToTeam(window.client, 1);
+  //   await switchToTeam(1);
   //   await getSonicWindow(window.client, 300);
   //   await openQuickSwitcher(window.client);
 

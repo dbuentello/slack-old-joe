@@ -15,10 +15,12 @@ import { switchToChannel } from '../helpers/switch-channel';
 import { appState } from '../renderer/state';
 import { getSonicWindow } from '../helpers/get-sonic-window';
 import { getZoomLevel } from '../helpers/get-zoom';
+import { switchToTeam } from '../helpers/switch-teams';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
     await getSonicWindow(window.client);
+    await switchToTeam(1);
   });
 
   it('can open the preferences', async () => {
