@@ -3,9 +3,15 @@ import * as os from 'os';
 import * as fs from 'fs-extra';
 import { SuiteResult } from './interfaces';
 
-const now = new Date().toLocaleTimeString().replace(/:/g, '-').replace(' ', '');
+const now = new Date()
+  .toLocaleTimeString()
+  .replace(/:/g, '-')
+  .replace(' ', '');
 
-export async function writeReport(input: Array<SuiteResult>, pathChosen: string) {
+export async function writeReport(
+  input: Array<SuiteResult>,
+  pathChosen: string
+) {
   const reportPath = path.join(pathChosen, `${now}.txt`);
   let text = `# Slack Old Joe Run ${new Date().toLocaleString()}\n`;
   text += `-`.padEnd(50, '-');

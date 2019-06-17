@@ -21,6 +21,7 @@ import { wait } from '../../utils/wait';
 import { Results } from './results';
 import { stopClientDriver, startClientDriver } from '../client-driver';
 import { setSonicBoot } from '../../helpers/set-sonic-boot';
+import { getOrCreateMainWindow } from '../../main/windows';
 
 interface AppProps {
   appState: AppState;
@@ -56,7 +57,15 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     return (
       <div>
-        <h2 style={{ textAlign: 'right', marginTop: 0, '-webkit-app-region': 'drag'}}>🐪</h2>
+        <h2
+          style={{
+            textAlign: 'right',
+            marginTop: 0,
+            '-webkit-app-region': 'drag'
+          }}
+        >
+          🐪
+        </h2>
 
         {progressOrStandby}
       </div>
@@ -123,9 +132,9 @@ export class App extends React.Component<AppProps, LocalAppState> {
   public renderDone() {
     const { appState } = this.props;
     const text = appState.generateReportAtEnd ? (
-    <>
+      <>
       All done!
-    </>
+      </>
     ) : (
       'End of tests'
     );
@@ -184,7 +193,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     try {
       await this.readTests();
       await this.runTests();
-      await this.writeReportMaybe();
     } catch (error) {
       console.warn(`Failed to run tests`, error);
     }
@@ -257,7 +265,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     }
   }
 
-
   private getExpectedLaunchTime() {
     return parseInt(this.props.appState.expectedLaunchTime, 10);
   }
@@ -291,5 +298,4 @@ export class App extends React.Component<AppProps, LocalAppState> {
       return prev + test.suiteMethodResults.it.length;
     }, 0);
   }
-
 }
