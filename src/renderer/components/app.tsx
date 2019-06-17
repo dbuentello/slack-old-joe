@@ -13,7 +13,7 @@ import { shell } from 'electron';
 import { AppState } from '../state';
 import { clean, restore } from '../../helpers/clean-restore';
 import { runTestFile, readTests } from '../runner';
-import { getReportDir, writeReport } from '../../report';
+import { writeReport } from '../../report';
 import { Setup } from './setup';
 import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
 import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
@@ -126,7 +126,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
     const { appState } = this.props;
     const text = appState.generateReportAtEnd ? (
     <>
-      'All done! Report should be found in Directory here?'
+      All done!
     </>
     ) : (
       'End of tests'
@@ -259,11 +259,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     }
   }
 
-  public showReportMaybe() {
-    if (this.props.appState.generateReportAtEnd) {
-      shell.showItemInFolder(getReportDir());
-    }
-  }
 
   private getExpectedLaunchTime() {
     return parseInt(this.props.appState.expectedLaunchTime, 10);
@@ -299,15 +294,4 @@ export class App extends React.Component<AppProps, LocalAppState> {
     }, 0);
   }
 
-  private async writeReportMaybe() {
-    const { appState } = this.props;
-    
-    if (appState.generateReportAtEnd) {
-      try {
-        await writeReport(appState.results);
-      } catch (error) {
-        console.warn(`Failed to write report`, error);
-      }
-    }
-  }
 }

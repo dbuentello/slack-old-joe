@@ -68,11 +68,6 @@ export class Setup extends React.Component<SetupProps, {}> {
             label="Close Slack at end of test"
             onChange={this.closeAtEndChange}
           />
-          <Checkbox
-            checked={appState.generateReportAtEnd}
-            label="Generate a report"
-            onChange={this.generateReportChange}
-          />
         </Card>
         <TestChooser appState={appState} />
       </>
