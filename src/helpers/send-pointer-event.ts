@@ -51,7 +51,7 @@ export async function sendClickElement(
   type?: PointerEvents
 ) {
   const element = await client.$(selector);
-  await element.waitForDisplayed(1000);
+  await element.waitForExist(1000);
   const location = await client.executeScript(
     `return document.querySelector("${selector}").getBoundingClientRect()`,
     []
