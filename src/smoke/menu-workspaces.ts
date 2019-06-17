@@ -6,7 +6,8 @@ import {
   selectPreviousTeamWindowMenu,
   selectTeamWindowMenu,
   selectNextTeamShortcut,
-  selectPreviousTeamShortcut} from '../helpers/switch-teams';
+  selectPreviousTeamShortcut
+} from '../helpers/switch-teams';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { smokeTeams } from '../smoke-teams';
 import { getSonicWindow } from '../helpers/get-sonic-window';

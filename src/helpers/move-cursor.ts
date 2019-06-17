@@ -2,7 +2,10 @@ import * as robot from 'robotjs';
 
 import { BrowserObject } from 'webdriverio';
 
-export async function moveCursorToElement(client: BrowserObject, selector: string) {
+export async function moveCursorToElement(
+  client: BrowserObject,
+  selector: string
+) {
   // desktop.window.getGeometryForWindow({ window_token: 1 })
 
   // Step 1: Get element's location
@@ -17,4 +20,3 @@ export async function moveCursorToElement(client: BrowserObject, selector: strin
     elementLocation.y + windowLocation.y
   );
 }
-

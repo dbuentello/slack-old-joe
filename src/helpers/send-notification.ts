@@ -8,17 +8,17 @@ import * as robot from 'robotjs';
 import { BrowserObject } from 'webdriverio';
 
 /**
-   * Clicks on a message with Cmd / Ctrl and shift to send a notification.
-   *
-   * @param {string} text
-   */
+ * Clicks on a message with Cmd / Ctrl and shift to send a notification.
+ *
+ * @param {string} text
+ */
 export async function sendNotification(client: BrowserObject, text: string) {
   const cmdOrCtrl = isMac() ? 'command' : 'control';
 
   await switchToTeam(1);
   await switchToChannel(window.client, 'notify');
 
-  await window.client.keys([cmdOrCtrl, 'Shift'])
+  await window.client.keys([cmdOrCtrl, 'Shift']);
   robot.keyToggle('shift', 'down', [cmdOrCtrl]);
   await wait(200);
   await sendClickElementRobot(client, `span=${text}`);
