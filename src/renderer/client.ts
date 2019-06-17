@@ -39,32 +39,25 @@ export async function getClient(appState: AppState) {
 
   _client.stop = async function stop() {
     console.groupCollapsed('Stopping client');
-    const sessions = await this.getSessions();
 
-    if (sessions.length > 0) {
-      // Simply stopping the session means that Slack will
-      // likely not have time to save preferences and clean up
-      // before being killed
-      await sendNativeKeyboardEvent({
-        cmd: isMac(),
-        ctrl: !isMac(),
-        text: 'q'
-      });
+    // Simply stopping the session means that Slack will
+    // likely not have time to save preferences and clean up
+    // before being killed
+    await sendNativeKeyboardEvent({
+      cmd: isMac(),
+      ctrl: !isMac(),
+      text: 'q'
+    });
 
-      await waitUntilSlackClosed(appState);
-      await this.deleteSession();
-    }
+    await waitUntilSlackClosed(appState);
+    await this.deleteSession();
 
     console.groupEnd();
   };
 
   _client.kill = async function kill() {
-    const sessions = await this.getSessions();
-
-    if (sessions.length > 0) {
-      await this.deleteSession();
-      await waitUntilSlackClosed(appState);
-    }
+    await this.deleteSession();
+    await waitUntilSlackClosed(appState);
   };
 
   console.groupEnd();
