@@ -3,16 +3,16 @@ import * as os from 'os';
 import * as fs from 'fs-extra';
 import { SuiteResult } from './interfaces';
 
-const now = new Date().toLocaleTimeString().replace(/:/g, '-');
+const now = new Date()
+  .toLocaleTimeString()
+  .replace(/:/g, '-')
+  .replace(' ', '');
 
-export function getReportDir() {
-  const desktop = path.join(os.homedir(), `Desktop`);
-  return path.join(desktop, `Old Joe Run at ${now}`);
-}
-
-
-export async function writeReport(input: Array<SuiteResult>) {
-  const reportPath = path.join(getReportDir(), 'results.txt');
+export async function writeReport(
+  input: Array<SuiteResult>,
+  pathChosen: string
+) {
+  const reportPath = path.join(pathChosen, `${now}.txt`);
   let text = `# Slack Old Joe Run ${new Date().toLocaleString()}\n`;
   text += `-`.padEnd(50, '-');
   text += `\n\n`;
@@ -36,6 +36,5 @@ export async function writeReport(input: Array<SuiteResult>) {
       text += `\n`;
     }
   }
-
   return fs.writeFile(reportPath, text);
 }
