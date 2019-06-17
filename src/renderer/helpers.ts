@@ -27,7 +27,8 @@ import { waitForFile, waitForFileInDir } from '../helpers/wait-for-file';
 import { switchToTeam } from '../helpers/switch-teams';
 import {
   sendPointerEvent,
-  sendClickElement
+  sendClickElement,
+  sendClickElementRobot
 } from '../helpers/send-pointer-event';
 import { enableWifi, disableWifi } from '../native-commands/wifi';
 import { getGpuWindowHandle } from '../helpers/get-gpu-info-window';
@@ -50,6 +51,8 @@ import { openContextMenuForElement } from '../helpers/open-context-menu';
 import { setSelection } from '../helpers/set-selection';
 import { getSonicWindow } from '../helpers/get-sonic-window';
 import { getZoomLevel } from '../helpers/get-zoom';
+import { sendNotification } from '../helpers/send-notification';
+import { moveCursorToElement } from '../helpers/move-cursor';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -81,6 +84,7 @@ export function registerHelpers() {
     getStartupItems,
     getTeamsCount,
     getZoomLevel,
+    moveCursorToElement,
     openBrowserAndSignIn,
     openBrowserAndWaitForSignIn,
     openContextMenuForElement,
@@ -91,8 +95,10 @@ export function registerHelpers() {
     runAppleScriptFile,
     runPowerShellScript,
     sendClickElement,
+    sendClickElementRobot,
     sendKeyboardEvent,
     sendNativeKeyboardEvent,
+    sendNotification,
     sendPointerEvent,
     setSelection,
     switchToChannel,
