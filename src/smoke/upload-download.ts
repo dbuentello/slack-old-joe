@@ -22,7 +22,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
   beforeAll(async () => {
     await getBrowserViewHandle(window.client);
-    await switchToTeam(window.client, 0);
+    await switchToTeam(0);
 
     oldDir = await getPreference(window.client, 'PrefSSBFileDownloadPath');
   });

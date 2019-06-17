@@ -1,4 +1,7 @@
+import * as robot from 'robotjs';
+
 import { BrowserObject } from 'webdriverio';
+import { moveCursorToElement } from './move-cursor';
 
 export const enum PointerEvents {
   MOUSEMOVE = 'mouseMoved',
@@ -75,4 +78,9 @@ export async function sendClickElement(
   if (type === PointerEvents.MOUSEDOWNUP) {
     await sendClickElement(client, selector, rightClick, PointerEvents.MOUSEUP);
   }
+}
+
+export async function sendClickElementRobot(client: BrowserObject, selector: string) {
+  await moveCursorToElement(client, selector);
+  robot.mouseClick();
 }

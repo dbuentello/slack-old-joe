@@ -72,7 +72,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
   });
 
   it('persists these setting across teams', async () => {
-    await selectNextTeamShortcut(window.client);
+    await selectNextTeamShortcut();
     await openPreferences(window.client, 'Advanced');
 
     const checkboxes = await window.client.$$('.c-input_checkbox');
@@ -85,7 +85,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
     // Switch back
     await closePreferences(window.client);
     await wait(500);
-    await selectNextTeamShortcut(window.client);
+    await selectNextTeamShortcut();
   });
 
   it('launches without hardware acceleration on next launch', async () => {

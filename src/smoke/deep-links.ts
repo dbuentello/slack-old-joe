@@ -3,7 +3,7 @@ import { shell } from 'electron';
 
 import { SuiteMethod } from '../interfaces';
 import { getBrowserViewHandle } from '../helpers/get-browser-view';
-import { smokeTeams, SMOKE_TEAMS } from '../smoke-teams';
+import { smokeTeams } from '../smoke-teams';
 import { switchToTeam } from '../helpers/switch-teams';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
@@ -20,7 +20,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can open a channel via deep link', async () => {
-    await switchToTeam(window.client, 0);
+    await switchToTeam(0);
 
     const teamId = smokeTeams[0].id;
     const channelId = `DJ0EJKRC7`;
@@ -33,7 +33,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can open a file via deep link', async () => {
-    await switchToTeam(window.client, 0);
+    await switchToTeam(0);
 
     const teamId = smokeTeams[0].id;
     const fileId = 'FHNDK7KAN';
