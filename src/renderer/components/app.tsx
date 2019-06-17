@@ -57,7 +57,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     return (
       <div>
-        <h2 style={{ textAlign: 'right', marginTop: 0, '-webkit-app-region': 'drag'}}>🐪</h2>
+        <h2 style={{ textAlign: 'right', marginTop: 0, 'WebkitAppRegion': 'drag'}}>🐪</h2>
 
         {progressOrStandby}
       </div>
