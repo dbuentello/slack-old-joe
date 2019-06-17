@@ -1,4 +1,4 @@
-import { getBrowserViewHandle } from './get-browser-view';
+import { getSonicWindow } from './get-sonic-window';
 
 import { BrowserObject } from 'webdriverio';
 
@@ -7,7 +7,7 @@ export async function setPreference(
   name: string,
   value: any
 ) {
-  await getBrowserViewHandle(client);
+  await getSonicWindow(client);
 
   const val =
     typeof value === 'string' ? `"${value.replace(/\\/g, '\\\\')}"` : value;

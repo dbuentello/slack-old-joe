@@ -1,13 +1,13 @@
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { disableWifi, enableWifi } from '../native-commands/wifi';
 import { waitUntilElementGone } from '../helpers/wait-until-gone';
+import { getSonicWindow } from '../helpers/get-sonic-window';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
   });
 
   it(

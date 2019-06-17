@@ -4,15 +4,15 @@ import { SuiteMethod } from '../interfaces';
 import { wait } from '../utils/wait';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { switchToChannel } from '../helpers/switch-channel';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { getIsResetAppDataSheetOpen } from '../native-commands/get-reset-app-data-sheet';
 import { getIsNetLogSheetOpen } from '../native-commands/get-restart-net-log-sheet';
 import { isMac } from '../utils/os';
+import { getSonicWindow } from '../helpers/get-sonic-window';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
     await switchToChannel(window.client, 'random');
   });
 

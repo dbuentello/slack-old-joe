@@ -4,7 +4,6 @@ import { runAppleScript, runAppleScriptFile } from '../utils/applescript';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { enterMessage } from '../helpers/enter-message';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
@@ -71,7 +70,6 @@ export function registerHelpers() {
     focus,
     getAboutBoxValue,
     getAboutWindowHandle,
-    getBrowserViewHandle,
     getDevToolsWindowHandle,
     getGpuWindowHandle,
     getIsNetLogSheetOpen,

@@ -1,12 +1,12 @@
-import { getBrowserViewHandle } from './get-browser-view';
 import { wait } from '../utils/wait';
 import { focus } from '../native-commands/focus';
 
 import { BrowserObject } from 'webdriverio';
+import { getSonicWindow } from './get-sonic-window';
 
 export async function signOut(client: BrowserObject) {
   await focus();
-  await getBrowserViewHandle(client);
+  await getSonicWindow(client);
 
   // Try to sign out
   const teamMenu = await client.$('#team_menu');
