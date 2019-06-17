@@ -16,7 +16,7 @@ export async function getSonicWindow(
 ): Promise<GetWindowResult | null> {
   if (waitForMsBefore) await wait(waitForMsBefore);
 
-  console.groupCollapsed('getBrowserViewHandle');
+  console.groupCollapsed('getSonicWindow');
   console.trace();
 
   let handle: GetWindowResult | null = null;
