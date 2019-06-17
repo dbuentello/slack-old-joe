@@ -12,13 +12,14 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await getSonicWindow(window.client);
   });
 
-  it('can open a workspace via deep link', async () => {
-    for (const { id, name } of smokeTeams) {
-      shell.openExternal(`slack://open?team=${id}`);
-      await wait(1000);
-      assert.include(await window.client.getTitle(), name);
-    }
-  });
+  // (Disabled: Not available in Sonic as of 6/16)
+  // it('can open a workspace via deep link', async () => {
+  //   for (const { id, name } of smokeTeams) {
+  //     shell.openExternal(`slack://open?team=${id}`);
+  //     await wait(1000);
+  //     assert.include(await window.client.getTitle(), name);
+  //   }
+  // });
 
   it('can open a channel via deep link', async () => {
     await switchToTeam(0);

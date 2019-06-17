@@ -6,19 +6,12 @@ import { getTeamsCount } from '../helpers/get-teams-count';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { signOut } from '../helpers/sign-out';
 import { getSignInWindow } from '../helpers/get-sign-in-window';
-import { SMOKE_TEAMS, smokeTeams } from '../smoke-teams';
+import { smokeTeams } from '../smoke-teams';
 
 export const test: SuiteMethod = async ({ it }) => {
   it('signs out', async () => {
     const numberOfTeams = await getTeamsCount();
     await signOut(window.client);
-
-    // On Enterprise, we'll do this twice :D
-    // const signoutBtnEnterprise = await window.client.$('*=Sign out');
-    // if (signoutBtnEnterprise) {
-    //   await signoutBtn.click();
-    //   await wait(1000);
-    // }
 
     // We hopefully lost a team, at least after a while
     await wait(3000);
