@@ -38,7 +38,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     super(props);
 
     this.run = this.run.bind(this);
-    this.showReportMaybe = this.showReportMaybe.bind(this);
     this.testCallback = this.testCallback.bind(this);
 
     this.state = {
@@ -104,7 +103,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
           interactive={appState.generateReportAtEnd}
           elevation={Elevation.TWO}
           className="progress-card"
-          onClick={this.showReportMaybe}
         >
           <Spinner value={this.getPercentageDone()} />
           <div>
