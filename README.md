@@ -27,7 +27,7 @@ Old Joe currently verifies the following:
 - Does not display a quick switcher when only one team is signed in
 - Signs into a second team
 - Displays a quick switcher when a second team is present
-- Can now switch teams using the quick switcher (via shortcut)
+- Can now switch teams using the quick switcher (via shortcut) (Disabled: Not available in Sonic as of 6/16)
 
 #### Messaging
 - Can switch to a channel
@@ -116,11 +116,11 @@ Old Joe currently verifies the following:
 - "About Slack" box contains the expected version number and modifiers (macOS)
 - "About Slack" window contains the expected version number and modifiers (Windows, Linux)
 - "About Slack" window contains an acknowledgements button
-- Creating a new post opens a posts window
-- Can create a post that's being saved and shared back to the correct channel
+- Creating a new post opens a posts window (Disabled: Not available in Sonic as of 6/16)
+- Can create a post that's being saved and shared back to the correct channel (Disabled: Not available in Sonic as of 6/16)
 
 #### Deep Links
-- `slack://open?team=` works and opens the correct team
+- `slack://open?team=` works and opens the correct team ((Disabled: Not available in Sonic as of 6/16))
 - `slack://channel` works and opens the correct channel
 - `slack://file` works and opens the right file
 
