@@ -80,7 +80,10 @@ export async function sendClickElement(
   }
 }
 
-export async function sendClickElementRobot(client: BrowserObject, selector: string) {
+export async function sendClickElementRobot(
+  client: BrowserObject,
+  selector: string
+) {
   await moveCursorToElement(client, selector);
   robot.mouseClick();
 }

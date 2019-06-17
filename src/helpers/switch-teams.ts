@@ -44,9 +44,7 @@ export async function selectPreviousTeamWindowMenu() {
   await wait(300);
 }
 
-export async function selectTeamWindowMenu(
-  name: string
-) {
+export async function selectTeamWindowMenu(name: string) {
   await clickWindowMenuItem(['Window', name]);
   await wait(300);
 }

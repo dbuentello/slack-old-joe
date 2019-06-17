@@ -5,9 +5,7 @@ import { switchToTeam } from '../helpers/switch-teams';
 import { switchToChannel } from '../helpers/switch-channel';
 import { wait } from '../utils/wait';
 import { enterMessage } from '../helpers/enter-message';
-import {
-  sendNativeKeyboardEvent
-} from '../helpers/send-keyboard-event';
+import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { clearMessageInput } from '../helpers/clear-message-input';
 import { isWin } from '../utils/os';
 import { setSelection } from '../helpers/set-selection';

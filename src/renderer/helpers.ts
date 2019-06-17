@@ -53,6 +53,7 @@ import { getSonicWindow } from '../helpers/get-sonic-window';
 import { getZoomLevel } from '../helpers/get-zoom';
 import { sendNotification } from '../helpers/send-notification';
 import { moveCursorToElement } from '../helpers/move-cursor';
+import { topLeftMouse } from '../native-commands/top-left-mouse';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -103,6 +104,7 @@ export function registerHelpers() {
     setSelection,
     switchToChannel,
     switchToTeam,
+    topLeftMouse,
     traceClicks,
     wait,
     waitForFile,
