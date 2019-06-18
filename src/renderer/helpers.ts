@@ -4,7 +4,6 @@ import { runAppleScript, runAppleScriptFile } from '../utils/applescript';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { enterMessage } from '../helpers/enter-message';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
@@ -27,7 +26,8 @@ import { waitForFile, waitForFileInDir } from '../helpers/wait-for-file';
 import { switchToTeam } from '../helpers/switch-teams';
 import {
   sendPointerEvent,
-  sendClickElement
+  sendClickElement,
+  sendClickElementRobot
 } from '../helpers/send-pointer-event';
 import { enableWifi, disableWifi } from '../native-commands/wifi';
 import { getGpuWindowHandle } from '../helpers/get-gpu-info-window';
@@ -50,6 +50,9 @@ import { openContextMenuForElement } from '../helpers/open-context-menu';
 import { setSelection } from '../helpers/set-selection';
 import { getSonicWindow } from '../helpers/get-sonic-window';
 import { getZoomLevel } from '../helpers/get-zoom';
+import { sendNotification } from '../helpers/send-notification';
+import { moveCursorToElement } from '../helpers/move-cursor';
+import { topLeftMouse } from '../native-commands/top-left-mouse';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -67,7 +70,6 @@ export function registerHelpers() {
     focus,
     getAboutBoxValue,
     getAboutWindowHandle,
-    getBrowserViewHandle,
     getDevToolsWindowHandle,
     getGpuWindowHandle,
     getIsNetLogSheetOpen,
@@ -81,6 +83,7 @@ export function registerHelpers() {
     getStartupItems,
     getTeamsCount,
     getZoomLevel,
+    moveCursorToElement,
     openBrowserAndSignIn,
     openBrowserAndWaitForSignIn,
     openContextMenuForElement,
@@ -91,12 +94,15 @@ export function registerHelpers() {
     runAppleScriptFile,
     runPowerShellScript,
     sendClickElement,
+    sendClickElementRobot,
     sendKeyboardEvent,
     sendNativeKeyboardEvent,
+    sendNotification,
     sendPointerEvent,
     setSelection,
     switchToChannel,
     switchToTeam,
+    topLeftMouse,
     traceClicks,
     wait,
     waitForFile,

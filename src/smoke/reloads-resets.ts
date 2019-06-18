@@ -2,18 +2,17 @@ import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
 import { wait } from '../utils/wait';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
-import { reload, reloadEverything } from '../native-commands/reload';
-import { getRendererWindowHandle } from '../helpers/get-renderer-window';
+import { reload } from '../native-commands/reload';
 import { switchToTeam } from '../helpers/switch-teams';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';
 import { switchToChannel } from '../helpers/switch-channel';
 import { enterMessage } from '../helpers/enter-message';
+import { getSonicWindow } from '../helpers/get-sonic-window';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
   });
 
   it('can reload a workspace', async () => {
@@ -29,50 +28,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await wait(500);
 
     // Wait for the client ui
-    await (await window.client.$('#client-ui')).waitForExist(10000);
+    await (await window.client.$('.p-client_container')).waitForExist(10000);
 
     // Our breadcrumb should be gone now
-    assert.ok(
-      !(await window.client.executeScript(
-        'return window.__old_joe_was_here',
-        []
-      ))
-    );
-  });
-
-  it('can reload everything', async () => {
-    // Leave a breadcrumb to check that we've reloaded (renderer)
-    await getRendererWindowHandle(window.client);
-    assert.ok(
-      await window.client.executeScript(
-        'return window.__old_joe_was_here = true',
-        []
-      )
-    );
-
-    // Leave a breadcrumb to check that we've reloaded (webapp)
-    await getBrowserViewHandle(window.client);
-    assert.ok(
-      await window.client.executeScript(
-        'return window.__old_joe_was_here = true',
-        []
-      )
-    );
-
-    await reloadEverything();
-    await wait(500);
-
-    // Wait for the client ui
-    await (await window.client.$('#client-ui')).waitForExist(10000);
-
-    // Our breadcrumb should be gone now
-    assert.ok(
-      !(await window.client.executeScript(
-        'return window.__old_joe_was_here',
-        []
-      ))
-    );
-    await getRendererWindowHandle(window.client);
     assert.ok(
       !(await window.client.executeScript(
         'return window.__old_joe_was_here',
@@ -82,12 +40,12 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can still switch teams post-reload (via shortcut)', async () => {
-    await switchToTeam(window.client, 1);
+    await switchToTeam(0);
 
     let title = await window.client.getTitle();
     assert.include(title, 'Old Joe Two');
 
-    await switchToTeam(window.client, 0);
+    await switchToTeam(1);
 
     title = await window.client.getTitle();
     assert.include(title, 'Old Joe One');
@@ -107,12 +65,12 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can still switch teams post-reset (via shortcut)', async () => {
-    await switchToTeam(window.client, 1);
+    await switchToTeam(0);
 
     let title = await window.client.getTitle();
     assert.include(title, 'Old Joe Two');
 
-    await switchToTeam(window.client, 0);
+    await switchToTeam(1);
 
     title = await window.client.getTitle();
     assert.include(title, 'Old Joe One');

@@ -4,10 +4,10 @@ import { SuiteMethod } from '../interfaces';
 import { getSignInWindow } from '../helpers/get-sign-in-window';
 import { openBrowserAndWaitForSignIn } from '../helpers/open-browser-and-sign-in';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { switchToTeam } from '../helpers/switch-teams';
 import { smokeTeams } from '../smoke-teams';
 import { centerMouse } from '../native-commands/center-mouse';
+import { getSonicWindow } from '../helpers/get-sonic-window';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => centerMouse());
@@ -61,12 +61,12 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can switch teams (via shortcut)', async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
 
     let title = await window.client.getTitle();
     assert.ok(title.includes('Old Joe Two'));
 
-    await switchToTeam(window.client, 0);
+    await switchToTeam(0);
 
     title = await window.client.getTitle();
     assert.include(title, 'Old Joe One');

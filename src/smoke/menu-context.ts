@@ -7,17 +7,18 @@ import { enterMessage } from '../helpers/enter-message';
 import { clipboard } from 'electron';
 import { sendClickElement, PointerEvents } from '../helpers/send-pointer-event';
 import { switchToChannel } from '../helpers/switch-channel';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { clickContextMenuItem } from '../helpers/click-context-menu-item';
 import { clearMessageInput } from '../helpers/clear-message-input';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
-import { closeFullscreenModal } from '../helpers/close-fullscreen-modal';
 import { centerMouse } from '../native-commands/center-mouse';
 import { openContextMenuForElement } from '../helpers/open-context-menu';
 import { setSelection } from '../helpers/set-selection';
 import { reopen } from '../native-commands/reopen';
 import { isWin } from '../utils/os';
 import { appState } from '../renderer/state';
+import { getSonicWindow } from '../helpers/get-sonic-window';
+import { focus } from '../native-commands/focus';
+import { switchToTeam } from '../helpers/switch-teams';
 
 // This suite is pretty unstable. It's not entirely clean
 // when exactly we're opening up the context menu, or when
@@ -27,7 +28,8 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   const retries = 3;
 
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
+    await switchToTeam(1);
     await switchToChannel(window.client, 'random');
 
     if (isWin()) {
@@ -40,6 +42,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     // indexes would be off
     clipboard.writeText('beforeEach');
     centerMouse();
+    await focus();
   });
 
   it(
@@ -50,7 +53,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await wait(300);
 
       await sendNativeKeyboardEvent({ text: 'a', cmdOrCtrl: true });
-      await openContextMenuForElement(window.client, 'p=hello');
+      await openContextMenuForElement(
+        window.client,
+        '.p-message_input .ql-editor p'
+      );
       await clickContextMenuItem(2);
       await wait(600);
 
@@ -71,7 +77,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
         cmdOrCtrl: true,
         noFocus: true
       });
-      await openContextMenuForElement(window.client, 'p=replace');
+      await openContextMenuForElement(
+        window.client,
+        '.p-message_input .ql-editor p'
+      );
       await clickContextMenuItem(1);
       await wait(600);
 
@@ -94,7 +103,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
         cmdOrCtrl: true,
         noFocus: true
       });
-      await openContextMenuForElement(window.client, 'p=cut');
+      await openContextMenuForElement(
+        window.client,
+        '.p-message_input .ql-editor p'
+      );
       await clickContextMenuItem(3);
       await wait(600);
 
@@ -110,13 +122,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       if (isWin()) await reopen(appState);
       await switchToChannel(window.client, 'threads');
 
-      // This selector will probably break eventually
-      await setSelection(
-        window.client,
-        `.c-message__body:not(.c-message__body--automated)`
-      );
+      const selector = `.c-message__body:not(.c-message__body--automated)`;
 
-      await openContextMenuForElement(window.client, 'span=I am a thread');
+      await setSelection(window.client, selector);
+      await openContextMenuForElement(window.client, selector);
       await clickContextMenuItem(1);
       await wait(600);
 
@@ -132,8 +141,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   it(
     'can "inspect element" (static)',
     async () => {
+      const selector = `.c-message__body:not(.c-message__body--automated)`;
+
       await switchToChannel(window.client, 'threads');
-      await openContextMenuForElement(window.client, 'span=I am a thread');
+      await openContextMenuForElement(window.client, selector);
       await clickContextMenuItem(0);
       await wait(1200);
 
@@ -143,7 +154,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       // Let's close that again though
       await window.client.closeWindow();
       await wait(1000);
-      await getBrowserViewHandle(window.client);
+      await getSonicWindow(window.client);
       await wait(600);
     },
     { retries }
@@ -176,7 +187,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     {
       retries,
       cleanup: async () => {
-        await closeFullscreenModal(window.client);
+        await sendNativeKeyboardEvent({ text: 'escape' });
         await wait(1000);
       }
     }

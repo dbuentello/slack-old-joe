@@ -2,25 +2,27 @@ import { assert } from 'chai';
 import { shell } from 'electron';
 
 import { SuiteMethod } from '../interfaces';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
-import { smokeTeams, SMOKE_TEAMS } from '../smoke-teams';
+import { smokeTeams } from '../smoke-teams';
 import { switchToTeam } from '../helpers/switch-teams';
+import { getSonicWindow } from '../helpers/get-sonic-window';
+import { wait } from '../utils/wait';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
   });
 
-  it('can open a workspace via deep link', async () => {
-    for (const { id, name } of smokeTeams) {
-      shell.openExternal(`slack://open?team=${id}`);
-      await getBrowserViewHandle(window.client, 300);
-      assert.include(await window.client.getTitle(), name);
-    }
-  });
+  // (Disabled: Not available in Sonic as of 6/16)
+  // it('can open a workspace via deep link', async () => {
+  //   for (const { id, name } of smokeTeams) {
+  //     shell.openExternal(`slack://open?team=${id}`);
+  //     await wait(1000);
+  //     assert.include(await window.client.getTitle(), name);
+  //   }
+  // });
 
   it('can open a channel via deep link', async () => {
-    await switchToTeam(window.client, 0);
+    await switchToTeam(0);
 
     const teamId = smokeTeams[0].id;
     const channelId = `DJ0EJKRC7`;
@@ -33,7 +35,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can open a file via deep link', async () => {
-    await switchToTeam(window.client, 0);
+    await switchToTeam(0);
 
     const teamId = smokeTeams[0].id;
     const fileId = 'FHNDK7KAN';

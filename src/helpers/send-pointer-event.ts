@@ -1,4 +1,7 @@
+import * as robot from 'robotjs';
+
 import { BrowserObject } from 'webdriverio';
+import { moveCursorToElement } from './move-cursor';
 
 export const enum PointerEvents {
   MOUSEMOVE = 'mouseMoved',
@@ -48,12 +51,13 @@ export async function sendClickElement(
   type?: PointerEvents
 ) {
   const element = await client.$(selector);
-  await element.waitForDisplayed(1000);
-  const location = await (client as any).getElementLocation(
-    (element as any).elementId
+  await element.waitForExist(1000);
+  const location = await client.executeScript(
+    `return document.querySelector("${selector}").getBoundingClientRect()`,
+    []
   );
 
-  await window.client.moveToElement((element as any).elementId);
+  await element.moveTo();
 
   let _type = type || PointerEvents.MOUSEDOWN;
 
@@ -65,8 +69,8 @@ export async function sendClickElement(
   await sendPointerEvent(client, {
     type: _type,
     // +2 so that we actually hit the element
-    x: location.x + 2,
-    y: location.y + 2,
+    x: location.left + 2,
+    y: location.top + 2,
     rightClick
   });
 
@@ -74,4 +78,12 @@ export async function sendClickElement(
   if (type === PointerEvents.MOUSEDOWNUP) {
     await sendClickElement(client, selector, rightClick, PointerEvents.MOUSEUP);
   }
+}
+
+export async function sendClickElementRobot(
+  client: BrowserObject,
+  selector: string
+) {
+  await moveCursorToElement(client, selector);
+  robot.mouseClick();
 }

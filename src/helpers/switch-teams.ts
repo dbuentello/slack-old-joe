@@ -1,55 +1,50 @@
 import { sendNativeKeyboardEvent } from './send-keyboard-event';
 import { clickWindowMenuItem } from './click-window-menu-item';
-import { getBrowserViewHandle } from './get-browser-view';
-
-import { BrowserObject } from 'webdriverio';
+import { wait } from '../utils/wait';
 
 const PLATFORM_MODIFIER =
   process.platform === 'darwin' ? { cmd: true } : { ctrl: true };
 
-export async function switchToTeam(client: BrowserObject, index: number) {
+export async function switchToTeam(index: number) {
   await sendNativeKeyboardEvent({
     ...PLATFORM_MODIFIER,
     text: (index + 1).toString()
   });
 
-  await getBrowserViewHandle(client, 600);
+  await wait(600);
 }
 
-export async function selectNextTeamShortcut(client: BrowserObject) {
+export async function selectNextTeamShortcut() {
   const options =
     process.platform === 'darwin'
       ? { text: '}', shift: true }
       : { text: '\u0009' };
 
   await sendNativeKeyboardEvent({ ...options, ...PLATFORM_MODIFIER });
-  await getBrowserViewHandle(client, 300);
+  await wait(300);
 }
 
-export async function selectPreviousTeamShortcut(client: BrowserObject) {
+export async function selectPreviousTeamShortcut() {
   const options =
     process.platform === 'darwin'
       ? { text: '{', shift: true }
       : { text: '\u0009', shift: true };
 
   await sendNativeKeyboardEvent({ ...options, ...PLATFORM_MODIFIER });
-  await getBrowserViewHandle(client, 300);
+  await wait(300);
 }
 
-export async function selectNextTeamWindowMenu(client: BrowserObject) {
+export async function selectNextTeamWindowMenu() {
   await clickWindowMenuItem(['Window', 'Select Next Workspace']);
-  await getBrowserViewHandle(client, 300);
+  await wait(300);
 }
 
-export async function selectPreviousTeamWindowMenu(client: BrowserObject) {
+export async function selectPreviousTeamWindowMenu() {
   await clickWindowMenuItem(['Window', 'Select Previous Workspace']);
-  await getBrowserViewHandle(client, 300);
+  await wait(300);
 }
 
-export async function selectTeamWindowMenu(
-  name: string,
-  client: BrowserObject
-) {
+export async function selectTeamWindowMenu(name: string) {
   await clickWindowMenuItem(['Window', name]);
-  await getBrowserViewHandle(client, 300);
+  await wait(300);
 }

@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { selectNextTeamShortcut } from '../helpers/switch-teams';
 import { openPreferences, closePreferences } from '../helpers/open-preferences';
 import { wait } from '../utils/wait';
@@ -14,10 +13,11 @@ import { focus } from '../native-commands/focus';
 import { sendClickElement, PointerEvents } from '../helpers/send-pointer-event';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { getPreference } from '../helpers/get-preference';
+import { getSonicWindow } from '../helpers/get-sonic-window';
 
-export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
+export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
   });
 
   it('can open the preferences', async () => {
@@ -68,24 +68,7 @@ export const test: SuiteMethod = async ({ it, afterAll, beforeAll }) => {
 
     // Close the window
     await window.client.closeWindow();
-    await getBrowserViewHandle(window.client);
-  });
-
-  it('persists these setting across teams', async () => {
-    await selectNextTeamShortcut(window.client);
-    await openPreferences(window.client, 'Advanced');
-
-    const checkboxes = await window.client.$$('.c-input_checkbox');
-    const disableHwCheckbox = checkboxes[checkboxes.length - 1];
-    assert.ok(
-      await disableHwCheckbox.getAttribute('checked'),
-      'hardware acceleration checkbox'
-    );
-
-    // Switch back
-    await closePreferences(window.client);
-    await wait(500);
-    await selectNextTeamShortcut(window.client);
+    await getSonicWindow(window.client);
   });
 
   it('launches without hardware acceleration on next launch', async () => {

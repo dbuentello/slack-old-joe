@@ -2,9 +2,9 @@ import { assert } from 'chai';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { remote } from 'electron';
+import * as robot from 'robotjs';
 
 import { SuiteMethod } from '../interfaces';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { waitForFile } from '../helpers/wait-for-file';
 import { wait } from '../utils/wait';
 import { switchToChannel } from '../helpers/switch-channel';
@@ -12,19 +12,25 @@ import { switchToTeam } from '../helpers/switch-teams';
 import { setPreference } from '../helpers/set-preference';
 import { openPreferences, closePreferences } from '../helpers/open-preferences';
 import { getPreference } from '../helpers/get-preference';
+import { getSonicWindow } from '../helpers/get-sonic-window';
+import { topLeftMouse } from '../native-commands/top-left-mouse';
 
 const DOWNLOADS_DIR = remote.app.getPath('downloads');
 
-export const test: SuiteMethod = async ({ it, beforeAll }) => {
+export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   const desktop = remote.app.getPath('desktop');
   const newDir = path.join(desktop, 'old-joe-download-dir');
   let oldDir = '';
 
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
-    await switchToTeam(window.client, 0);
+    await getSonicWindow(window.client);
+    await switchToTeam(1);
 
     oldDir = await getPreference(window.client, 'PrefSSBFileDownloadPath');
+  });
+
+  beforeEach(async () => {
+    await topLeftMouse();
   });
 
   it('can download a file in-channel', async () => {
@@ -32,7 +38,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await switchToChannel(window.client, 'downloads');
 
     // Wait for the description to show up
-    const fileDesc = await window.client.$('span=test-file');
+    const fileDesc = await window.client.$(
+      'a[aria-label="Download test-file"]'
+    );
     await fileDesc.waitForExist(1000);
     await fileDesc.moveTo();
     await fileDesc.click();
@@ -61,11 +69,20 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await switchToChannel(window.client, 'downloads');
 
       // Open the downloads panel
-      (await window.client.$('#flex_menu_toggle')).click();
-      const downloadsBtn = await window.client.$('#downloads');
-      assert.ok(await downloadsBtn.waitForDisplayed(2000));
+      (await window.client.$(
+        'button.p-classic_nav__right__button--flexpanes'
+      )).click();
+      const downloadsBtn = await window.client.$(
+        'div.c-menu_item__label=Downloads'
+      );
+      assert.ok(await downloadsBtn.waitForExist(2000));
+      await wait(500);
       await downloadsBtn.moveTo();
       await downloadsBtn.click();
+
+      // Sometimes, the menu stays open. Close it by hitting ESC
+      await robot.keyTap('escape');
+      await wait(500);
 
       // Wait for the panel to show up
       const downloadsHeader = await window.client.$('span=Downloads');
@@ -73,19 +90,27 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await wait(500);
 
       // Download the large file
-      const fileDesc = await window.client.$('span=test-large-file.zip');
+      const fileDesc = await window.client.$(
+        'a[aria-label="Download test-large-file.zip"]'
+      );
       await fileDesc.moveTo();
+      await wait(300);
       await fileDesc.click();
 
       // Pause the download right away
-      const pauseBtn = await window.client.$('.p-download_item__link--pause');
-      assert.ok(await pauseBtn.waitForDisplayed(5000));
+      const pauseBtn = await window.client.$(
+        'button.p-download_item__link--pause'
+      );
+      assert.ok(await pauseBtn.waitForExist(5000));
       await pauseBtn.moveTo();
+      await wait(300);
       await pauseBtn.click();
 
       // We should now have a resume button
-      const resumeBtn = await window.client.$('.p-download_item__link--resume');
-      assert.ok(await resumeBtn.waitForDisplayed(5000));
+      const resumeBtn = await window.client.$(
+        'button.p-download_item__link--resume'
+      );
+      assert.ok(await resumeBtn.waitForExist(5000));
 
       // Let the network pipes cool down (not required, I just want to wait a sec)
       // and check if the file is actually no longer downloading
@@ -118,8 +143,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     const cancelBtn = await window.client.$('.p-download_item__link--cancel');
     assert.ok(await cancelBtn.waitForDisplayed(5000));
     await cancelBtn.moveTo();
+    await wait(300);
     await cancelBtn.click();
-    await wait(500);
+    await wait(300);
 
     // Let the network pipes cool down (not required, I just want to wait a sec)
     // and check if the file is actually no longer downloading
@@ -166,8 +192,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       }
 
       // Download a file
-      const fileDesc = await window.client.$('span=second-test-file');
+      const fileDesc = await window.client.$(
+        'a[aria-label="Download second-test-file'
+      );
       await fileDesc.moveTo();
+      await wait(300);
       await fileDesc.click();
       await wait(1000);
 

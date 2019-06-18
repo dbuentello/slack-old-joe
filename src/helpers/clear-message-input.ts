@@ -9,7 +9,7 @@ import { BrowserObject } from 'webdriverio';
  * @param {BrowserObject} client
  */
 export async function clearMessageInput(client: BrowserObject) {
-  const msgInput = await client.$('#msg_input .ql-editor');
+  const msgInput = await client.$('.p-message_input_field .ql-editor');
 
   await focus();
   await msgInput.click();

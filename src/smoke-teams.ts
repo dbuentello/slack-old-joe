@@ -18,6 +18,6 @@ export const SMOKE_TEAMS: Record<string, SmokeTeam> = {
 };
 
 export const smokeTeams = [
-  SMOKE_TEAMS['Old Joe One'],
-  SMOKE_TEAMS['Old Joe Two']
+  SMOKE_TEAMS['Old Joe Two'],
+  SMOKE_TEAMS['Old Joe One']
 ];
