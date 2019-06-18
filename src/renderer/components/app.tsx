@@ -38,13 +38,12 @@ export class App extends React.Component<AppProps, LocalAppState> {
     this.run = this.run.bind(this);
     this.resetAppState = this.resetAppState.bind(this);
     this.testCallback = this.testCallback.bind(this);
-
   }
 
   public render() {
     const hasStarted = this.props.appState.hasStarted;
     const startingIn = this.props.appState.startingIn;
-    
+
     const progressOrStandby =
       hasStarted && !startingIn
         ? this.renderProgress()

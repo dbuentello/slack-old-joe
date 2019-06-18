@@ -40,7 +40,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can still switch teams post-reload (via shortcut)', async () => {
+    await wait(1000);
     await switchToTeam(0);
+    await wait(300);
 
     let title = await window.client.getTitle();
     assert.include(title, 'Old Joe Two');

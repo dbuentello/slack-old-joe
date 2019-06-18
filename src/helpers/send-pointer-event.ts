@@ -2,7 +2,8 @@ import * as robot from 'robotjs';
 
 import { BrowserObject } from 'webdriverio';
 import { moveCursorToElement } from './move-cursor';
-import { getModifierKeyCode, ModifierOptions } from './send-keyboard-event';
+import { getModifierKeyCode } from './send-keyboard-event';
+import { wait } from '../utils/wait';
 
 export const enum PointerEvents {
   MOUSEMOVE = 'mouseMoved',
@@ -70,6 +71,7 @@ export async function sendClickElement(
   const location = await element.getLocation();
 
   await element.moveTo();
+  await wait(300);
 
   let _type = type || PointerEvents.MOUSEDOWN;
 
