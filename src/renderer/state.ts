@@ -31,6 +31,11 @@ export class AppState {
   @observable public expectedLaunchTime: string =
     this.retrieve('expectedLaunchTime') || '5000';
 
+  // Start parameters
+  @observable public startingIn: number = 0;
+  @observable public hasStarted: boolean = false;
+  @observable public hasCountdownStarted: boolean = false;
+
   constructor() {
     this.setup();
 

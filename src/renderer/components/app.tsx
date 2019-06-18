@@ -8,12 +8,9 @@ import {
   Icon,
   Divider
 } from '@blueprintjs/core';
-import { shell } from 'electron';
-
 import { AppState } from '../state';
 import { clean, restore } from '../../helpers/clean-restore';
 import { runTestFile, readTests } from '../runner';
-import { writeReport } from '../../report';
 import { Setup } from './setup';
 import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
 import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
@@ -21,7 +18,6 @@ import { wait } from '../../utils/wait';
 import { Results } from './results';
 import { stopClientDriver, startClientDriver } from '../client-driver';
 import { setSonicBoot } from '../../helpers/set-sonic-boot';
-import { getOrCreateMainWindow } from '../../main/windows';
 
 interface AppProps {
   appState: AppState;
@@ -39,17 +35,15 @@ export class App extends React.Component<AppProps, LocalAppState> {
     super(props);
 
     this.run = this.run.bind(this);
+    this.resetAppState = this.resetAppState.bind(this);
     this.testCallback = this.testCallback.bind(this);
 
-    this.state = {
-      startingIn: 0,
-      hasStarted: false,
-      hasCountdownStarted: false
-    };
   }
 
   public render() {
-    const { hasStarted, startingIn } = this.state;
+    const hasStarted = this.props.appState.hasStarted;
+    const startingIn = this.props.appState.startingIn;
+    
     const progressOrStandby =
       hasStarted && !startingIn
         ? this.renderProgress()
@@ -73,7 +67,9 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   public renderStartingIn() {
-    const { hasCountdownStarted, hasStarted } = this.state;
+    const hasStarted = this.props.appState.hasStarted;
+    const hasCountdownStarted = this.props.appState.hasCountdownStarted;
+
     const text =
       hasCountdownStarted && !hasStarted
         ? `Lift-Off expected in ${this.getStartingIn()}`
@@ -85,16 +81,18 @@ export class App extends React.Component<AppProps, LocalAppState> {
         <Button
           icon="play"
           rightIcon={
-            this.state.startingIn > 0 ? (
+            this.props.appState.startingIn > 0 ? (
               <Spinner
-                value={this.state.startingIn / this.getExpectedLaunchTime()}
+                value={
+                  this.props.appState.startingIn / this.getExpectedLaunchTime()
+                }
                 size={20}
               />
             ) : null
           }
           large={true}
           text={text}
-          disabled={this.state.hasCountdownStarted}
+          disabled={this.props.appState.hasCountdownStarted}
           onClick={this.run}
         />
       </>
@@ -129,11 +127,26 @@ export class App extends React.Component<AppProps, LocalAppState> {
     );
   }
 
+  private resetAppState() {
+    // reset relevant metadata
+    this.props.appState.testsTotal = 0;
+    this.props.appState.testsDone = 0;
+    this.props.appState.testsFailed = 0;
+    this.props.appState.done = false;
+    this.props.appState.startingIn = 0;
+    this.props.appState.hasStarted = false;
+    this.props.appState.hasCountdownStarted = false;
+  }
+
   public renderDone() {
     const { appState } = this.props;
     const text = appState.generateReportAtEnd ? (
       <>
-      All done!
+        <Button
+          text="Start over"
+          icon="refresh"
+          onClick={this.resetAppState}
+        ></Button>
       </>
     ) : (
       'End of tests'
@@ -149,15 +162,12 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
   public async run() {
     const { appState } = this.props;
-
-    this.setState({
-      hasCountdownStarted: true,
-      startingIn: this.getExpectedLaunchTime()
-    });
+    this.props.appState.startingIn = this.getExpectedLaunchTime();
+    this.props.appState.hasCountdownStarted = true;
 
     // Okay, get ready to run this
     const countdownInterval = setInterval(() => {
-      this.setState({ startingIn: this.state.startingIn - 50 });
+      this.props.appState.startingIn = this.props.appState.startingIn - 50;
     }, 50);
 
     await clean();
@@ -179,7 +189,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     clearInterval(countdownInterval);
     this.setNewExpectedLaunchTime();
-    this.setState({ startingIn: 0 });
+    this.props.appState.startingIn = 0;
 
     await this.startTests();
     await this.stopTests();
@@ -189,7 +199,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
    * Start running the tests.
    */
   public async startTests() {
-    this.setState({ hasStarted: true });
+    this.props.appState.hasStarted = true;
     try {
       await this.readTests();
       await this.runTests();
@@ -270,7 +280,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   private setNewExpectedLaunchTime() {
-    const { startingIn } = this.state;
+    const startingIn = this.props.appState.startingIn;
     const expectedLaunchTime = this.getExpectedLaunchTime();
 
     this.props.appState.expectedLaunchTime = `${expectedLaunchTime -
@@ -278,7 +288,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
   }
 
   private getStartingIn() {
-    const { startingIn } = this.state;
+    const startingIn = this.props.appState.startingIn;
     return `${(startingIn / 1000).toFixed(1)}s`;
   }
 
