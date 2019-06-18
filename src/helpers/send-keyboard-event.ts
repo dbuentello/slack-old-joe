@@ -72,22 +72,10 @@ export function sendKeyboardEvent(
   client: BrowserObject,
   options: KeyboardEventOptions
 ) {
-  const { type, text, shift, alt, ctrl, cmd } = options;
+  const { type, text } = options;
   const description = keyDescriptionForString(options);
 
-  let modifiers = 0;
-  if (shift) {
-    modifiers += 8;
-  }
-  if (alt) {
-    modifiers += 1;
-  }
-  if (ctrl) {
-    modifiers += 2;
-  }
-  if (cmd) {
-    modifiers += 4;
-  }
+  let modifiers = getModifierKeyCode(options);
 
   const _type =
     type !== KeyboardEventType.KEYDOWN
@@ -107,6 +95,33 @@ export function sendKeyboardEvent(
     location: description.location,
     isKeypad: description.location === 3
   });
+}
+
+export interface ModifierOptions {
+  shift?: boolean;
+  alt?: boolean;
+  ctrl?: boolean;
+  cmd?: boolean;
+}
+
+export function getModifierKeyCode(options: ModifierOptions) {
+  const { shift, alt, ctrl, cmd } = options;
+
+  let modifiers = 0;
+  if (shift) {
+    modifiers += 8;
+  }
+  if (alt) {
+    modifiers += 1;
+  }
+  if (ctrl) {
+    modifiers += 2;
+  }
+  if (cmd) {
+    modifiers += 4;
+  }
+
+  return modifiers;
 }
 
 // Not to be confused with JS DOM key codes

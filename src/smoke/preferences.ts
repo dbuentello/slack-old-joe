@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
-import { selectNextTeamShortcut } from '../helpers/switch-teams';
 import { openPreferences, closePreferences } from '../helpers/open-preferences';
 import { wait } from '../utils/wait';
 import { enterMessage } from '../helpers/enter-message';
@@ -69,6 +68,23 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     // Close the window
     await window.client.closeWindow();
     await getSonicWindow(window.client);
+  });
+
+  it('persists these setting across teams', async () => {
+    await selectNextTeamShortcut();
+    await openPreferences(window.client, 'Advanced');
+
+    const checkboxes = await window.client.$$('.c-input_checkbox');
+    const disableHwCheckbox = checkboxes[checkboxes.length - 1];
+    assert.ok(
+      await disableHwCheckbox.getAttribute('checked'),
+      'hardware acceleration checkbox'
+    );
+
+    // Switch back
+    await closePreferences(window.client);
+    await wait(500);
+    await selectNextTeamShortcut();
   });
 
   it('launches without hardware acceleration on next launch', async () => {
@@ -194,18 +210,16 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it(
     'can select the HTML notifications',
     async () => {
-      await sendClickElement(
-        window.client,
-        '#winssb_notification_method_option_1',
-        false,
-        PointerEvents.MOUSEDOWN
-      );
-      await sendClickElement(
-        window.client,
-        '#winssb_notification_method_option_1',
-        false,
-        PointerEvents.MOUSEUP
-      );
+      await sendClickElement(window.client, {
+        selector: '#winssb_notification_method_option_1',
+        rightClick: false,
+        type: PointerEvents.MOUSEDOWN
+      });
+      await sendClickElement(window.client, {
+        selector: '#winssb_notification_method_option_1',
+        rightClick: false,
+        type: PointerEvents.MOUSEUP
+      });
 
       const notificationsButton = await window.client.$(
         '#winssb_notification_method_button'
@@ -213,18 +227,16 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await notificationsButton.waitForExist(1000);
       await notificationsButton.click();
 
-      await sendClickElement(
-        window.client,
-        '#winssb_notification_method_option_0',
-        false,
-        PointerEvents.MOUSEDOWN
-      );
-      await sendClickElement(
-        window.client,
-        '#winssb_notification_method_option_0',
-        false,
-        PointerEvents.MOUSEUP
-      );
+      await sendClickElement(window.client, {
+        selector: '#winssb_notification_method_option_0',
+        rightClick: false,
+        type: PointerEvents.MOUSEDOWN
+      });
+      await sendClickElement(window.client, {
+        selector: '#winssb_notification_method_option_0',
+        rightClick: false,
+        type: PointerEvents.MOUSEUP
+      });
 
       // Click somewhere else
       await sendNativeKeyboardEvent({ text: 'escape' });
