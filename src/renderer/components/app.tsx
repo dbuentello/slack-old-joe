@@ -13,7 +13,7 @@ import { shell } from 'electron';
 import { AppState } from '../state';
 import { clean, restore } from '../../helpers/clean-restore';
 import { runTestFile, readTests } from '../runner';
-import { getReportDir, writeReport } from '../../report';
+import { writeReport } from '../../report';
 import { Setup } from './setup';
 import { seedUserDataDir } from '../../helpers/seed-user-data-dir';
 import { isSignInDisabled } from '../../utils/is-sign-in-disabled';
@@ -21,6 +21,7 @@ import { wait } from '../../utils/wait';
 import { Results } from './results';
 import { stopClientDriver, startClientDriver } from '../client-driver';
 import { setSonicBoot } from '../../helpers/set-sonic-boot';
+import { getOrCreateMainWindow } from '../../main/windows';
 
 interface AppProps {
   appState: AppState;
@@ -38,7 +39,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     super(props);
 
     this.run = this.run.bind(this);
-    this.showReportMaybe = this.showReportMaybe.bind(this);
     this.testCallback = this.testCallback.bind(this);
 
     this.state = {
@@ -104,7 +104,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
           interactive={appState.generateReportAtEnd}
           elevation={Elevation.TWO}
           className="progress-card"
-          onClick={this.showReportMaybe}
         >
           <Spinner value={this.getPercentageDone()} />
           <div>
@@ -124,13 +123,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
   public renderDone() {
     const { appState } = this.props;
-    const text = appState.generateReportAtEnd ? (
-    <>
-      'All done! Report should be found in Directory here?'
-    </>
-    ) : (
-      'End of tests'
-    );
+    const text = appState.generateReportAtEnd ? <>All done!</> : 'End of tests';
 
     return appState.done ? (
       <>
@@ -186,7 +179,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     try {
       await this.readTests();
       await this.runTests();
-      await this.writeReportMaybe();
     } catch (error) {
       console.warn(`Failed to run tests`, error);
     }
@@ -259,12 +251,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     }
   }
 
-  public showReportMaybe() {
-    if (this.props.appState.generateReportAtEnd) {
-      shell.showItemInFolder(getReportDir());
-    }
-  }
-
   private getExpectedLaunchTime() {
     return parseInt(this.props.appState.expectedLaunchTime, 10);
   }
@@ -297,17 +283,5 @@ export class App extends React.Component<AppProps, LocalAppState> {
     appState.testsTotal = appState.tests.reduce((prev, test) => {
       return prev + test.suiteMethodResults.it.length;
     }, 0);
-  }
-
-  private async writeReportMaybe() {
-    const { appState } = this.props;
-    
-    if (appState.generateReportAtEnd) {
-      try {
-        await writeReport(appState.results);
-      } catch (error) {
-        console.warn(`Failed to write report`, error);
-      }
-    }
   }
 }

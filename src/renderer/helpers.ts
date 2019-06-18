@@ -4,7 +4,6 @@ import { runAppleScript, runAppleScriptFile } from '../utils/applescript';
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { enterMessage } from '../helpers/enter-message';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
 import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
@@ -53,6 +52,7 @@ import { getSonicWindow } from '../helpers/get-sonic-window';
 import { getZoomLevel } from '../helpers/get-zoom';
 import { sendNotification } from '../helpers/send-notification';
 import { moveCursorToElement } from '../helpers/move-cursor';
+import { topLeftMouse } from '../native-commands/top-left-mouse';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -70,7 +70,6 @@ export function registerHelpers() {
     focus,
     getAboutBoxValue,
     getAboutWindowHandle,
-    getBrowserViewHandle,
     getDevToolsWindowHandle,
     getGpuWindowHandle,
     getIsNetLogSheetOpen,
@@ -103,6 +102,7 @@ export function registerHelpers() {
     setSelection,
     switchToChannel,
     switchToTeam,
+    topLeftMouse,
     traceClicks,
     wait,
     waitForFile,

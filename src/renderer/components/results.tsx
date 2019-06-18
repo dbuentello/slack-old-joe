@@ -1,8 +1,9 @@
 import * as React from 'react';
 import useStayScrolled from 'react-stay-scrolled';
-import { Card, Elevation, Icon } from '@blueprintjs/core';
+import { Card, Elevation, Icon, Button } from '@blueprintjs/core';
 
 import { SuiteResult, Result } from '../../interfaces';
+import { chooseFolder } from './path-chooser'; // new addition
 
 interface ResultsProps {
   results: Array<SuiteResult>;
@@ -19,10 +20,17 @@ export const Results = ({ results, done }: ResultsProps) => {
       : [
           done ? (
             <h5 key="did-not-run">Didn't run any tests, huh? You rascal!</h5>
-          ) : (
-            <h5 key="waiting-for-results">Waiting for test results...</h5>
-          )
+          ) : null
         ];
+
+  const doneElements = done ? (
+    <Button text="Save Report" onClick={chooseFolder}></Button>
+  ) : (
+    <Button
+      text="Waiting for tests to finish...."
+      onClick={chooseFolder}
+    ></Button>
+  );
 
   // Typically you will want to use stayScrolled or scrollBottom inside
   // useLayoutEffect, because it measures and changes DOM attributes (scrollTop) directly
@@ -32,6 +40,7 @@ export const Results = ({ results, done }: ResultsProps) => {
 
   return (
     <Card elevation={Elevation.ONE} className="result-card">
+      {doneElements}
       <div ref={listRef as any}>{resultElements}</div>
     </Card>
   );

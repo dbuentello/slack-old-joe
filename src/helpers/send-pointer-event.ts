@@ -51,7 +51,7 @@ export async function sendClickElement(
   type?: PointerEvents
 ) {
   const element = await client.$(selector);
-  await element.waitForDisplayed(1000);
+  await element.waitForExist(1000);
   const location = await client.executeScript(
     `return document.querySelector("${selector}").getBoundingClientRect()`,
     []
@@ -80,7 +80,10 @@ export async function sendClickElement(
   }
 }
 
-export async function sendClickElementRobot(client: BrowserObject, selector: string) {
+export async function sendClickElementRobot(
+  client: BrowserObject,
+  selector: string
+) {
   await moveCursorToElement(client, selector);
   robot.mouseClick();
 }

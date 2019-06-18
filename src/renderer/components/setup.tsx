@@ -53,7 +53,10 @@ export class Setup extends React.Component<SetupProps, {}> {
             </li>
             <li>Use a Wi-Fi connection, disable all other network adapters.</li>
             <li>Close all apps that might send notifications.</li>
-            <li>Old joe will automatically geneerate a report at the end prompting you wehther or not you wish to save it.</li>
+            <li>
+              Old joe will automatically geneerate a report at the end prompting
+              you wehther or not you wish to save it.
+            </li>
           </ul>
           <FormGroup label="Slack App to test" labelInfo="(required)">
             <InputGroup
@@ -67,11 +70,6 @@ export class Setup extends React.Component<SetupProps, {}> {
             checked={appState.closeAppAtEnd}
             label="Close Slack at end of test"
             onChange={this.closeAtEndChange}
-          />
-          <Checkbox
-            checked={appState.generateReportAtEnd}
-            label="Generate a report"
-            onChange={this.generateReportChange}
           />
         </Card>
         <TestChooser appState={appState} />

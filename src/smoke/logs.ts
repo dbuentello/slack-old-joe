@@ -4,7 +4,6 @@ import * as path from 'path';
 import { remote } from 'electron';
 
 import { SuiteMethod } from '../interfaces';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { waitForFileInDir } from '../helpers/wait-for-file';
 import { wait } from '../utils/wait';
@@ -12,6 +11,7 @@ import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { isWin, isMac } from '../utils/os';
 import { getNetLogWindowHandle } from '../helpers/get-netlog-window';
+import { getSonicWindow } from '../helpers/get-sonic-window';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   const targetDir = remote.app.getPath('downloads');
@@ -56,7 +56,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   }
 
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
   });
 
   it('can reveal logs (window menu) in the downloads folder', async () => {
@@ -109,10 +109,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     // Check disk
     await waitForFileInDir(targetDir, getFindLogFileTest(blacklist));
 
-    // Close window, go back to browserView
+    // Close window, go back to main window
     const closeWindowBtn = await window.client.$('button=Close Window');
     await closeWindowBtn.click();
-    await getBrowserViewHandle(window.client, 500);
+    await getSonicWindow(window.client, 500);
   });
 
   it('saves a log file zip with a net.log in it', async () => {

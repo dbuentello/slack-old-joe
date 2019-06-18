@@ -3,15 +3,15 @@ import { assert } from 'chai';
 import { SuiteMethod } from '../interfaces';
 import { wait } from '../utils/wait';
 import { fullscreen } from '../native-commands/fullscreen';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { maximize } from '../native-commands/maximize';
 import { minimize } from '../native-commands/minimize';
 import { getIsHidden } from '../helpers/get-is-hidden';
 import { focus } from '../native-commands/focus';
+import { getSonicWindow } from '../helpers/get-sonic-window';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
     await focus();
   });
 

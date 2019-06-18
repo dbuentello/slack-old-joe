@@ -1,13 +1,13 @@
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
-import { getBrowserViewHandle } from '../helpers/get-browser-view';
 import { disableWifi, enableWifi } from '../native-commands/wifi';
 import { waitUntilElementGone } from '../helpers/wait-until-gone';
+import { getSonicWindow } from '../helpers/get-sonic-window';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await getBrowserViewHandle(window.client);
+    await getSonicWindow(window.client);
   });
 
   it(
@@ -17,7 +17,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
       // We don't really know how quickly the system will go down,
       // so we'll be generous with our wait time (40s), likely much faster
-      const offlineInfo = await window.client.$('.p-notification_bar__offline');
+      const offlineInfo = await window.client.$(
+        'i[type="cloud-offline-small"]'
+      );
       await offlineInfo.waitForDisplayed(40 * 1000);
 
       assert.ok(await offlineInfo.isDisplayed(), 'offline info');
@@ -36,7 +38,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       assert.ok(
         await waitUntilElementGone(
           window.client,
-          '.p-notification_bar__offline',
+          'i[type="cloud-offline-small"]',
           40 * 1000
         )
       );
