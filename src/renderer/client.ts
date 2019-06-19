@@ -1,5 +1,4 @@
 import { remote } from 'webdriverio';
-
 import { JoeBrowserObject } from '../interfaces';
 import { wait } from '../utils/wait';
 import { waitUntilSlackReady } from '../helpers/wait-until-slack-ready';

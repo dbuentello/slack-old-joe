@@ -15,7 +15,7 @@ import { wait } from '../utils/wait';
 const debug = require('debug')('old-joe');
 
 /**
- * Read all test files (or suites)
+ * Read all test suite files
  *
  * @export
  * @param {Array<TestFile>} testFiles
@@ -135,6 +135,13 @@ export async function runTestFile(
   return result;
 }
 
+export async function runSpecificTest(
+  test: string,
+  appState: AppState
+): Promise<SuiteResult> {
+  return undefined;
+}
+
 /**
  * Run a single test, as returned by an it() method
  *
@@ -142,7 +149,7 @@ export async function runTestFile(
  * @param {(succeeded: boolean) => void} updateCallback
  * @returns {Promise<Result>}
  */
-async function runTest(
+export async function runTest(
   { name, fn, options }: ItTestParams,
   updateCallback: (succeeded: boolean) => void,
   retries: number = 0
