@@ -165,12 +165,11 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     async () => {
       await switchToChannel(window.client, 'image');
       await wait(1000);
-      await sendClickElement(
-        window.client,
-        'a.p-file_image_thumbnail__wrapper',
-        false,
-        PointerEvents.MOUSEDOWNUP
-      );
+      await sendClickElement(window.client, {
+        selector: 'a.p-file_image_thumbnail__wrapper',
+        rightClick: false,
+        type: PointerEvents.MOUSEDOWNUP
+      });
 
       await openContextMenuForElement(
         window.client,
@@ -198,12 +197,11 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     async () => {
       await switchToChannel(window.client, 'image');
       await wait(1000);
-      await sendClickElement(
-        window.client,
-        'a.p-file_image_thumbnail__wrapper',
-        false,
-        PointerEvents.MOUSEDOWNUP
-      );
+      await sendClickElement(window.client, {
+        selector: 'a.p-file_image_thumbnail__wrapper',
+        rightClick: false,
+        type: PointerEvents.MOUSEDOWNUP
+      });
 
       await openContextMenuForElement(
         window.client,

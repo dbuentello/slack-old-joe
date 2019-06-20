@@ -9,12 +9,12 @@ export async function signOut(client: BrowserObject) {
   await getSonicWindow(client);
 
   // Try to sign out
-  const teamMenu = await client.$('#team_menu');
+  const teamMenu = await client.$('.p-classic_nav__team_header__content');
   await teamMenu.click();
   // Animation
   await wait(1000);
 
-  const signoutBtn = await client.$('*=Sign out');
+  const signoutBtn = await client.$('button[data-qa=sign-out]');
   await signoutBtn.click();
   await wait(1000);
 }
