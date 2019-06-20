@@ -1,23 +1,19 @@
 import { remote } from 'electron';
 import { appState } from '../state';
-import { writeReport } from '../../report';
 
-export async function chooseFolder() {
+export function chooseFolder() {
   const currentWindow = remote.BrowserWindow.getAllWindows()[0];
-
-  remote.dialog.showOpenDialog(
+  
+  let filePaths = remote.dialog.showOpenDialog(
     currentWindow,
     {
       title: 'Choose where to add report',
       properties: ['openDirectory']
-    },
-    filePaths => {
-      if (filePaths[0]) {
-        appState.absPath = filePaths[0];
-        writeReport(appState.results, filePaths[0], appState.fileName);
-      }
     }
   );
+  if (filePaths != undefined) {
+    appState.absPath = filePaths[0];
+  }
 }
 
 export function chooseFolderAsString() {

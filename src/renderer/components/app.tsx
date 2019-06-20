@@ -19,6 +19,7 @@ import { Results } from './results';
 import { stopClientDriver, startClientDriver } from '../client-driver';
 import { setSonicBoot } from '../../helpers/set-sonic-boot';
 import { getOrCreateMainWindow } from '../../main/windows';
+import { writeToFile } from 'src/report';
 
 interface AppProps {
   appState: AppState;
@@ -146,7 +147,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
         <Button
           text="Start over"
           icon="refresh"
-          onClick={this.resetAppState}
+          onClick={ () => { this.resetAppState(); } }
         ></Button>
       </>
     );

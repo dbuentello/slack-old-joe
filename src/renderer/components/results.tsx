@@ -12,7 +12,7 @@ import {
 } from '../../interfaces';
 import { chooseFolder } from './path-chooser';
 import { runTest } from '../runner';
-import { appendReport, writeReport } from '../../report';
+import { appendReport, writeReport, writeToFile } from '../../report';
 import { appState } from '../state';
 
 interface ResultsProps {
@@ -31,7 +31,6 @@ export const Results = ({
 }: ResultsProps) => {
   const listRef = React.useRef();
   const { stayScrolled } = useStayScrolled(listRef);
-
   const resultElements =
     results.length > 0
       ? results.map(suiteResult =>
@@ -44,11 +43,11 @@ export const Results = ({
         ];
 
   const doneElements = done ? (
-    <Button text="Save Report" onClick={chooseFolder}></Button>
+    <Button text="Save Report" onClick={ () => {writeReport(appState.results); chooseFolder(); writeToFile()}}></Button>
   ) : (
     <Button
       text="Waiting for tests to finish...."
-      onClick={chooseFolder}
+      onClick={()=>{null} }
     ></Button>
   );
 
@@ -71,34 +70,12 @@ export function retryTest(
   suiteName: string,
   testsDone: TestSuite[]
 ) {
-  console.log("Let's hope " + testName + ' works again 😬');
   testsDone.forEach(testSuite => {
     if (testSuite.name === suiteName) {
       testSuite.suiteMethodResults.it.forEach(async indTest => {
         if (testName === indTest.name) {
           runTest(indTest, (succeeded: boolean) => {
-            if (appState.absPath === '') {
-              let p: string = appState.reportPath();
-              appState.absPath = p;
-              writeReport(
-                appState.results,
-                appState.absPath,
-                appState.fileName
-              );
-              appendReport(
-                indTest,
-                appState.fileName,
-                appState.absPath,
-                succeeded
-              );
-            } else {
-              appendReport(
-                indTest,
-                appState.fileName,
-                appState.absPath,
-                succeeded
-              );
-            }
+            appendReport(indTest, succeeded);
           });
         }
       });
