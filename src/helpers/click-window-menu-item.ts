@@ -130,6 +130,7 @@ async function clickWindowMenuItemWin(clickList: Array<string>) {
   await focus();
 
   robot.keyTap('alt');
+  robot.keyTap('enter');
   await wait(500);
 
   let currentFocus = menuMap;
