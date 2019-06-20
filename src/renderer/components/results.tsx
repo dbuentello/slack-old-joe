@@ -1,7 +1,7 @@
 import * as React from 'react';
 import useStayScrolled from 'react-stay-scrolled';
 import { Card, Elevation, Icon, Button } from '@blueprintjs/core';
-import { appState } from '../state';
+import { write } from 'fs-extra';
 
 import {
   SuiteResult,
@@ -11,10 +11,9 @@ import {
   TestSuite
 } from '../../interfaces';
 import { chooseFolder } from './path-chooser';
-import { readTestFile, runTest } from '../runner';
-import { startClientDriver, stopClientDriver } from '../client-driver';
+import { runTest } from '../runner';
 import { appendReport, writeReport } from '../../report';
-import { write } from 'fs-extra';
+import { appState } from '../state';
 
 interface ResultsProps {
   results: Array<SuiteResult>;
@@ -77,11 +76,6 @@ export function retryTest(
     if (testSuite.name === suiteName) {
       testSuite.suiteMethodResults.it.forEach(async indTest => {
         if (testName === indTest.name) {
-          console.log('FOUND THE MATCHH☣️️️️️️️️️');
-          // run the test!!? K!?!?!?!?!??!
-          // await i
-          // await startClientDriver(false); // this might depend on the test we're doing.
-          console.log('WRITING TOOOOOO: ' + appState.absPath);
           runTest(indTest, (succeeded: boolean) => {
             if (appState.absPath === '') {
               let p: string = appState.reportPath();
@@ -122,7 +116,6 @@ const renderIndividualResult = (
   testsDone: TestSuite[],
   slackClosed: boolean
 ): Array<JSX.Element> => {
-  // const showError = <p> {error} </p>
   return [
     <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
     ...suiteResult.results.map(result => {
@@ -138,13 +131,6 @@ const renderIndividualResult = (
         ></Button>
       );
       const errorElement = error && !slackClosed ? retryElem : errorTextElement;
-
-      // const text = (
-
-      // );
-
-      // const errorElement = error ? <p>text</p> : null;
-
       return (
         <div className="result" key={result.name}>
           <p>
