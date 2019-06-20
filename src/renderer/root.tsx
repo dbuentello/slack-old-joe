@@ -32,8 +32,8 @@ export class Root {
       <div className={className}>
         <App appState={appState} />
       </div>
-      );
-      
+    );
+
     const rendered = render(app, document.getElementById('app'));
 
     return rendered;

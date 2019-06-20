@@ -3,14 +3,11 @@ import * as os from 'os';
 import * as fs from 'fs-extra';
 import { SuiteResult, ItTestParams } from './interfaces';
 
-
-
 export async function writeReport(
   input: Array<SuiteResult>,
-  pathChosen: string, 
+  pathChosen: string,
   fileName: string
-) 
-{
+) {
   const reportPath = path.join(pathChosen, fileName);
   let text = `# Slack Old Joe Run ${new Date().toLocaleString()}\n`;
   text += `-`.padEnd(50, '-');
@@ -41,18 +38,18 @@ export async function writeReport(
 }
 
 /**
- * Append a test-retry to the report. 
+ * Append a test-retry to the report.
  */
 export async function appendReport(
   input: ItTestParams, // for now
   fileName: string,
   absPath: string,
   succeeded: boolean
-) {  
-  if(absPath === "") {
-    console.log("Nothing will print");
+) {
+  if (absPath === '') {
+    console.log('Nothing will print');
   } else {
-    console.log("🐪ing");
+    console.log('🐪ing');
     let text = `\n\n# Slack Old Joe Run ${input.name} (previously failed test)\n`;
     text += `-`.padEnd(50, '-');
     text += `\n\n`;
@@ -60,6 +57,6 @@ export async function appendReport(
     text += `Test: ${input.name}\n`;
     text += `Result: ${succeeded ? 'Passed' : 'Did not pass'}\n`;
     text += `\n`;
-    fs.appendFile(absPath + "/" + fileName, text);
+    fs.appendFile(absPath + '/' + fileName, text);
   }
 }

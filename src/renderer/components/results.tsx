@@ -16,7 +16,6 @@ import { startClientDriver, stopClientDriver } from '../client-driver';
 import { appendReport, writeReport } from '../../report';
 import { write } from 'fs-extra';
 
-
 interface ResultsProps {
   results: Array<SuiteResult>;
   done: boolean;
@@ -29,7 +28,7 @@ export const Results = ({
   results,
   done,
   testsDone,
-  slackClosed, 
+  slackClosed
 }: ResultsProps) => {
   const listRef = React.useRef();
   const { stayScrolled } = useStayScrolled(listRef);
@@ -71,7 +70,7 @@ export const Results = ({
 export function retryTest(
   testName: string,
   suiteName: string,
-  testsDone: TestSuite[], 
+  testsDone: TestSuite[]
 ) {
   console.log("Let's hope " + testName + ' works again 😬');
   testsDone.forEach(testSuite => {
@@ -82,15 +81,29 @@ export function retryTest(
           // run the test!!? K!?!?!?!?!??!
           // await i
           // await startClientDriver(false); // this might depend on the test we're doing.
-          console.log("WRITING TOOOOOO: " + appState.absPath);
-          runTest(indTest, (succeeded:boolean) => {
-            if(appState.absPath === "") {              
-              let p: string =  appState.reportPath();
+          console.log('WRITING TOOOOOO: ' + appState.absPath);
+          runTest(indTest, (succeeded: boolean) => {
+            if (appState.absPath === '') {
+              let p: string = appState.reportPath();
               appState.absPath = p;
-              writeReport(appState.results, appState.absPath, appState.fileName);
-              appendReport(indTest, appState.fileName, appState.absPath, succeeded);
+              writeReport(
+                appState.results,
+                appState.absPath,
+                appState.fileName
+              );
+              appendReport(
+                indTest,
+                appState.fileName,
+                appState.absPath,
+                succeeded
+              );
             } else {
-              appendReport(indTest, appState.fileName, appState.absPath, succeeded);
+              appendReport(
+                indTest,
+                appState.fileName,
+                appState.absPath,
+                succeeded
+              );
             }
           });
         }
@@ -107,7 +120,7 @@ export function retryTest(
 const renderIndividualResult = (
   suiteResult: SuiteResult,
   testsDone: TestSuite[],
-  slackClosed: boolean, 
+  slackClosed: boolean
 ): Array<JSX.Element> => {
   // const showError = <p> {error} </p>
   return [

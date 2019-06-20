@@ -47,7 +47,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       const messageElement = await window.client.$(selector);
       await messageElement.waitForExist(1000);
 
-      assert.equal(await messageElement.getText(), 'misspelled', 'corrected message element');
+      assert.equal(
+        await messageElement.getText(),
+        'misspelled',
+        'corrected message element'
+      );
     },
     {
       cleanup: () => clearMessageInput(window.client),
