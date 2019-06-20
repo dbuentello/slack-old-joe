@@ -84,28 +84,15 @@ export function retryTest(
           // await startClientDriver(false); // this might depend on the test we're doing.
           console.log("WRITING TOOOOOO: " + appState.absPath);
           runTest(indTest, (succeeded:boolean) => {
-            if(appState.absPath === "") {
-              console.log("most likely scenario");
-              
+            if(appState.absPath === "") {              
               let p: string =  appState.reportPath();
               appState.absPath = p;
               writeReport(appState.results, appState.absPath, appState.fileName);
               appendReport(indTest, appState.fileName, appState.absPath, succeeded);
-              // p.finally( (result) => {
-              //   console.log("PATHHHHH CHOSENNNNNNN: " + (await p) );
-              //   appState.absPath = await p;
-              //   appState.absPath = await appState.reportPath();
-              //   writeReport(appState.results, appState.absPath);
-              //   appendReport(indTest, appState.absPath, succeeded);
-              // });
             } else {
-              console.log("in the event they already wrote the file");
-              // const chosenPath = appState.reportPath();
               appendReport(indTest, appState.fileName, appState.absPath, succeeded);
             }
-            // succeeded ? console.log('failed again💔') : console.log('it passed now!!💖');
           });
-          // await stopClientDriver();
         }
       });
     }
