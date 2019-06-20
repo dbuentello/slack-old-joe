@@ -14,7 +14,7 @@ export async function chooseFolder() {
     filePaths => {
       if (filePaths[0]) {
         appState.absPath = filePaths[0];
-        writeReport(appState.results, filePaths[0]);
+        writeReport(appState.results, filePaths[0], appState.fileName);
       }
     }
   );
@@ -22,19 +22,16 @@ export async function chooseFolder() {
 
 export function chooseFolderAsString() {
   const currentWindow = remote.BrowserWindow.getAllWindows()[0];
-
-  remote.dialog.showOpenDialog(
+  let results = remote.dialog.showOpenDialog(
     currentWindow,
     {
       title: 'Choose where to add report',
       properties: ['openDirectory']
-    },
-    filePaths => {
-      if (filePaths[0]) {
-        return filePaths[0];
-      }
     }
   );
-  console.log("not found.... ");
-  return "";
+  if(results != undefined) {
+    return results[0];
+  } else {
+    return "";
+  }
 }

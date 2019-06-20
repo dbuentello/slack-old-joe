@@ -3,21 +3,15 @@ import * as os from 'os';
 import * as fs from 'fs-extra';
 import { SuiteResult, ItTestParams } from './interfaces';
 
-const now = new Date()
-  .toLocaleTimeString()
-  .replace(/:/g, '-')
-  .replace(' ', '');
+
 
 export async function writeReport(
   input: Array<SuiteResult>,
-  pathChosen: string
+  pathChosen: string, 
+  fileName: string
 ) 
 {
-  if(pathChosen === "") {
-    console.log("Nothing will print");
-  }
-  console.log("Writing report....");
-  const reportPath = path.join(pathChosen, `${now}.txt`);
+  const reportPath = path.join(pathChosen, fileName);
   let text = `# Slack Old Joe Run ${new Date().toLocaleString()}\n`;
   text += `-`.padEnd(50, '-');
   text += `\n\n`;
@@ -51,6 +45,7 @@ export async function writeReport(
  */
 export async function appendReport(
   input: ItTestParams, // for now
+  fileName: string,
   absPath: string,
   succeeded: boolean
 ) {  
@@ -65,7 +60,6 @@ export async function appendReport(
     text += `Test: ${input.name}\n`;
     text += `Result: ${succeeded ? 'Passed' : 'Did not pass'}\n`;
     text += `\n`;
-    fs.appendFile(absPath, text);
-    console.log(`appended to text at ${absPath}`)
+    fs.appendFile(absPath + "/" + fileName, text);
   }
 }
