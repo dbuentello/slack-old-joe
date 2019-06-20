@@ -20,6 +20,8 @@ export async function selectNextTeamShortcut() {
       ? { text: '}', shift: true }
       : { text: '\u0009' };
 
+  await sendNativeKeyboardEvent({ text: 'escape' });
+  await wait(100);
   await sendNativeKeyboardEvent({ ...options, ...PLATFORM_MODIFIER });
   await wait(300);
 }
@@ -30,6 +32,8 @@ export async function selectPreviousTeamShortcut() {
       ? { text: '{', shift: true }
       : { text: '\u0009', shift: true };
 
+  await sendNativeKeyboardEvent({ text: 'escape' });
+  await wait(100);
   await sendNativeKeyboardEvent({ ...options, ...PLATFORM_MODIFIER });
   await wait(300);
 }

@@ -36,11 +36,11 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
   });
 
   it('can select a workspace by name using the window menu', async () => {
-    await selectTeamWindowMenu(smokeTeams[0].name, window.client);
+    await selectTeamWindowMenu(smokeTeams[0].name);
     const beforeTitle = await window.client.getTitle();
     assert.include(beforeTitle, smokeTeams[0].name);
 
-    await selectTeamWindowMenu(smokeTeams[1].name, window.client);
+    await selectTeamWindowMenu(smokeTeams[1].name);
     const afterTitle = await window.client.getTitle();
     assert.include(afterTitle, smokeTeams[1].name);
   });

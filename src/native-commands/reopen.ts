@@ -10,7 +10,7 @@ export async function reopen(appState: AppState) {
   }
 
   if (isWin()) {
-    exec(appState.appToTest);
+    exec(`${appState.appToTest} --test-type=webdriver`);
     await wait(1000);
   }
 }

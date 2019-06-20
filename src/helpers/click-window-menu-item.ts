@@ -61,8 +61,8 @@ const menuMap: Record<string, MenuMapEntry> = {
     linuxShortcut: 'w',
     index: 2,
     items: {
-      'Old Joe One': { index: 5 },
-      'Old Joe Two': { index: 4 },
+      'Old Joe Two': { index: 5 },
+      'Old Joe One': { index: 4 },
       'Select Next Workspace': { index: 3 },
       'Select Previous Workspace': { index: 2 }
     }
