@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as os from 'os';
 import * as fs from 'fs-extra';
-import { SuiteResult } from './interfaces';
+import { SuiteResult, ItTestParams } from './interfaces';
 
 const now = new Date()
   .toLocaleTimeString()
@@ -11,7 +11,12 @@ const now = new Date()
 export async function writeReport(
   input: Array<SuiteResult>,
   pathChosen: string
-) {
+) 
+{
+  if(pathChosen === "") {
+    console.log("Nothing will print");
+  }
+  console.log("Writing report....");
   const reportPath = path.join(pathChosen, `${now}.txt`);
   let text = `# Slack Old Joe Run ${new Date().toLocaleString()}\n`;
   text += `-`.padEnd(50, '-');
@@ -36,5 +41,31 @@ export async function writeReport(
       text += `\n`;
     }
   }
-  return fs.writeFile(reportPath, text);
+  // absPath = reportPath;
+  fs.writeFile(reportPath, text);
+  return reportPath;
+}
+
+/**
+ * Append a test-retry to the report. 
+ */
+export async function appendReport(
+  input: ItTestParams, // for now
+  absPath: string,
+  succeeded: boolean
+) {  
+  if(absPath === "") {
+    console.log("Nothing will print");
+  } else {
+    console.log("🐪ing");
+    let text = `\n\n# Slack Old Joe Run ${input.name} (previously failed test)\n`;
+    text += `-`.padEnd(50, '-');
+    text += `\n\n`;
+
+    text += `Test: ${input.name}\n`;
+    text += `Result: ${succeeded ? 'Passed' : 'Did not pass'}\n`;
+    text += `\n`;
+    fs.appendFile(absPath, text);
+    console.log(`appended to text at ${absPath}`)
+  }
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import useStayScrolled from 'react-stay-scrolled';
 import { Card, Elevation, Icon, Button } from '@blueprintjs/core';
+import { appState } from '../state';
 
 import {
   SuiteResult,
@@ -12,19 +13,23 @@ import {
 import { chooseFolder } from './path-chooser';
 import { readTestFile, runTest } from '../runner';
 import { startClientDriver, stopClientDriver } from '../client-driver';
+import { appendReport, writeReport } from '../../report';
+import { write } from 'fs-extra';
+
 
 interface ResultsProps {
   results: Array<SuiteResult>;
   done: boolean;
   testsDone: TestSuite[];
   slackClosed: boolean;
+  currPath: string;
 }
 
 export const Results = ({
   results,
   done,
   testsDone,
-  slackClosed
+  slackClosed, 
 }: ResultsProps) => {
   const listRef = React.useRef();
   const { stayScrolled } = useStayScrolled(listRef);
@@ -66,10 +71,9 @@ export const Results = ({
 export function retryTest(
   testName: string,
   suiteName: string,
-  testsDone: TestSuite[]
+  testsDone: TestSuite[], 
 ) {
   console.log("Let's hope " + testName + ' works again 😬');
-
   testsDone.forEach(testSuite => {
     if (testSuite.name === suiteName) {
       testSuite.suiteMethodResults.it.forEach(async indTest => {
@@ -78,8 +82,25 @@ export function retryTest(
           // run the test!!? K!?!?!?!?!??!
           // await i
           // await startClientDriver(false); // this might depend on the test we're doing.
-          await runTest(indTest, (succeeded:boolean) => {
-            succeeded ? console.log('failed again💔') : console.log('it passed now!!💖');
+          console.log("WRITING TOOOOOO: " + appState.absPath);
+          await runTest(indTest, async (succeeded:boolean) => {
+            if(appState.absPath === "") {
+              console.log("most likely scenario");
+              appState.reportPath().then( (path: string) => {
+                console.log("PATHHHHH CHOSENNNNNNN: " + path );
+              } )
+              let p: Promise<string> =  await appState.reportPath();
+              console.log("PATHHHHH CHOSENNNNNNN: " + (await p) );
+              appState.absPath = await p;
+              appState.absPath = await appState.reportPath();
+              writeReport(appState.results, appState.absPath);
+              appendReport(indTest, appState.absPath, succeeded);
+            } else {
+              console.log("in the event they already wrote the file");
+              // const chosenPath = appState.reportPath();
+              appendReport(indTest, appState.absPath, succeeded);
+            }
+            // succeeded ? console.log('failed again💔') : console.log('it passed now!!💖');
           });
           // await stopClientDriver();
         }
@@ -96,7 +117,7 @@ export function retryTest(
 const renderIndividualResult = (
   suiteResult: SuiteResult,
   testsDone: TestSuite[],
-  slackClosed: boolean
+  slackClosed: boolean, 
 ): Array<JSX.Element> => {
   // const showError = <p> {error} </p>
   return [
@@ -107,8 +128,8 @@ const renderIndividualResult = (
       const retryElem = (
         <Button
           icon="outdated"
-          onClick={function() {
-            retryTest(name, suiteResult.name, testsDone);
+          onClick={async function() {
+            await retryTest(name, suiteResult.name, testsDone);
           }} // using a 'closure'
           htmltitle="Retry test"
         ></Button>
