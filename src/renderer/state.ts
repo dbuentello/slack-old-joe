@@ -47,9 +47,6 @@ export class AppState {
       .replace(' ', '') + '.txt';
   @observable public report: string = '';
 
-  // Used for popover on retry
-  @observable public testRunning: boolean = false;
-
   constructor() {
     this.setup();
 

@@ -6,8 +6,7 @@ import {
   Card,
   Elevation,
   Icon,
-  Divider,
-  Popover
+  Divider
 } from '@blueprintjs/core';
 import { AppState } from '../state';
 import { clean, restore } from '../../helpers/clean-restore';
@@ -40,7 +39,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     this.run = this.run.bind(this);
     this.resetAppState = this.resetAppState.bind(this);
     this.testCallback = this.testCallback.bind(this);
-    // this.toggle
   }
 
   public render() {
@@ -98,9 +96,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     );
   }
 
-  /**
-   * Renders the results page
-   */
   public renderProgress() {
     const { appState } = this.props;
     const { testsDone, testsFailed } = appState;
