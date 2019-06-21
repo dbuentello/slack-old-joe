@@ -3,7 +3,6 @@ import { assert } from 'chai';
 import { SuiteMethod } from '../interfaces';
 import { getSignInWindow } from '../helpers/get-sign-in-window';
 import { openBrowserAndWaitForSignIn } from '../helpers/open-browser-and-sign-in';
-import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { switchToTeam } from '../helpers/switch-teams';
 import { smokeTeams } from '../smoke-teams';
 import { centerMouse } from '../native-commands/center-mouse';
@@ -39,13 +38,13 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('does not have a quick switcher', async () => {
-    await getRendererWindowHandle(window.client);
+    await getSonicWindow(window.client);
 
     const body = await window.client.$('body');
     const html = await body.getHTML();
     const hasSidebar = html.includes('TeamSidebar');
 
-    assert.ok(!hasSidebar);
+    assert.ok(!hasSidebar, 'has a team sidebar, should have none');
   });
 
   it('signs into a second team', async () => {
@@ -53,11 +52,13 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('has a quick switcher', async () => {
-    await getRendererWindowHandle(window.client);
+    await getSonicWindow(window.client);
 
-    const teamSidebar = await window.client.$('.p-team_sidebar__teams');
+    const body = await window.client.$('body');
+    const html = await body.getHTML();
+    const hasSidebar = html.includes('TeamSidebar');
 
-    assert.ok(await teamSidebar.waitForDisplayed(1000));
+    assert.ok(hasSidebar, 'has no team sidebar, should have one');
   });
 
   it('can switch teams (via shortcut)', async () => {
