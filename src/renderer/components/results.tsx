@@ -1,6 +1,7 @@
 import * as React from 'react';
 import useStayScrolled from 'react-stay-scrolled';
-import { Card, Elevation, Icon, Button } from '@blueprintjs/core';
+import { Card, Elevation, Icon, Button, Popover, PopoverInteractionKind, Classes, Position } from '@blueprintjs/core';
+// import { PopoverHeader, PopoverBody } from 'reactstrap'
 import { write } from 'fs-extra';
 
 import {
@@ -14,6 +15,7 @@ import { chooseFolder } from './path-chooser';
 import { runTest } from '../runner';
 import { appendReport, writeReport, writeToFile } from '../../report';
 import { appState } from '../state';
+import { app } from 'electron';
 
 interface ResultsProps {
   results: Array<SuiteResult>;
@@ -93,20 +95,43 @@ const renderIndividualResult = (
   testsDone: TestSuite[],
   slackClosed: boolean
 ): Array<JSX.Element> => {
+let popOverContent = (<div>
+  <h5>Popover Title</h5>
+      <p>...</p>
+  <Button className="bp3-button bp3-popover-dismiss" title="Close popover"> ⏱⏱⏱⏱⏱⏱⏱⏱⏱</Button>
+</div>);
+
   return [
     <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
     ...suiteResult.results.map(result => {
       const { error, name } = result;
       const errorTextElement = error ? <pre>{error.toString()}</pre> : null;
       const retryElem = (
-        <Button
-          icon="outdated"
-          onClick={async function() {
-            await retryTest(name, suiteResult.name, testsDone);
-          }} // using a 'closure'
-          htmltitle="Retry test"
-        ></Button>
+        // <div className={Classes.POPOVER_DISMISS}>
+        <Popover
+          content={popOverContent}
+          isOpen={appState.testRunning}
+          position={Position.RIGHT}
+          interactionKind={PopoverInteractionKind.CLICK}
+          onInteraction={() => {appState.testRunning = true; console.log(`TESTRUNNING: ${appState.testRunning}`)}}
+        >
+            <Button
+              className="bp3-button bp3-intent-primary"
+              icon="outdated"
+              id={name}
+              onClick={function() {
+                // appState.testRunning = true;
+                retryTest(name, suiteResult.name, testsDone);
+                // appState.testRunning = false;
+              }} // using a 'closure'
+              title="Retry test"
+              text="Retry"
+            >
+            </Button>
+        </Popover>
+        // </div>
       );
+      // </div>
       const errorElement = error && !slackClosed ? retryElem : errorTextElement;
       return (
         <div className="result" key={result.name}>
