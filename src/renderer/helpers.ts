@@ -5,7 +5,6 @@ import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { clickWindowMenuItem } from '../helpers/click-window-menu-item';
 import { enterMessage } from '../helpers/enter-message';
 import { getDevToolsWindowHandle } from '../helpers/get-devtools-window';
-import { getRendererWindowHandle } from '../helpers/get-renderer-window';
 import { getPostWindowHandle } from '../helpers/get-posts-window';
 import { getSignInWindow } from '../helpers/get-sign-in-window';
 import { getSlackPath } from '../helpers/get-slack-path';
@@ -75,7 +74,6 @@ export function registerHelpers() {
     getIsNetLogSheetOpen,
     getIsResetAppDataSheetOpen,
     getPostWindowHandle,
-    getRendererWindowHandle,
     getRunningSlackProcessesCount,
     getSignInWindow,
     getSlackPath,
