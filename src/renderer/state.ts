@@ -2,6 +2,7 @@ import { observable, autorun } from 'mobx';
 import { TestSuites, SuiteResult, TestFile } from '../interfaces';
 import { getSlackPath } from '../helpers/get-slack-path';
 import { SMOKE_TESTS } from '../smoke';
+import { chooseFolder, chooseFolderAsString } from './components/path-chooser';
 
 /**
  * The application's state. Exported as a singleton below.
@@ -23,7 +24,7 @@ export class AppState {
   @observable public done: boolean = false;
 
   // Configuration
-  @observable public closeAppAtEnd: boolean = true;
+  @observable public closeAppAtEnd: boolean = false;
   @observable public generateReportAtEnd: boolean = true;
   @observable public disabledTests: Array<string> = [];
 
@@ -35,6 +36,15 @@ export class AppState {
   @observable public startingIn: number = 0;
   @observable public hasStarted: boolean = false;
   @observable public hasCountdownStarted: boolean = false;
+
+  // Report so far used to modify after test retry
+  @observable public reportPath: Function = chooseFolderAsString;
+  @observable public absPath: string = '';
+  @observable public fileName: string =
+    new Date()
+      .toLocaleTimeString()
+      .replace(/:/g, '-')
+      .replace(' ', '') + '.txt';
 
   constructor() {
     this.setup();
