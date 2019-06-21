@@ -6,8 +6,22 @@ import { smokeTeams } from '../smoke-teams';
 import { switchToTeam } from '../helpers/switch-teams';
 import { getSonicWindow } from '../helpers/get-sonic-window';
 import { wait } from '../utils/wait';
+import { launchWithArgs } from '../helpers/launch-with-args';
+import { appState } from '../renderer/state';
+import { isMac } from '../utils/os';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
+  function openDeepLink(link: string) {
+    if (isMac()) {
+      return shell.openExternal(link);
+    }
+
+    // We used to use shell.openExternal, but Slack would
+    // launch the "normal" Slack side-by-side with the "devMode"
+    // Slack.
+    return launchWithArgs(appState, link);
+  }
+
   beforeAll(async () => {
     await getSonicWindow(window.client);
   });
@@ -26,27 +40,27 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     const teamId = smokeTeams[0].id;
     const channelId = `DJ0EJKRC7`;
-    shell.openExternal(`slack://channel?team=${teamId}&id=${channelId}`);
+    await openDeepLink(`slack://channel?team=${teamId}&id=${channelId}`);
 
     const dmTitle = await window.client.$('span*=(you)');
     await dmTitle.waitForExist(1000);
 
-    assert.ok(await dmTitle.isDisplayed(), 'DM title is displayed');
+    assert.ok(await dmTitle.isDisplayed(), 'DM title is not displayed');
   });
 
   it('can open a file via deep link', async () => {
     await switchToTeam(0);
 
-    const teamId = smokeTeams[0].id;
+    const teamId = smokeTeams[1].id;
     const fileId = 'FHNDK7KAN';
-    shell.openExternal(`slack://file?team=${teamId}&id=${fileId}`);
+    await openDeepLink(`slack://file?team=${teamId}&id=${fileId}`);
 
     const filesTitle = await window.client.$('div=Files');
     await filesTitle.waitForExist(1000);
 
     assert.ok(
       await filesTitle.isDisplayed(),
-      'Files flexpane title is displayed'
+      'files flex pane title is not displayed'
     );
   });
 };

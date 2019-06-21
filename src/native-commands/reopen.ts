@@ -1,8 +1,7 @@
 import { runAppleScript } from '../utils/applescript';
 import { isMac, isWin } from '../utils/os';
 import { AppState } from '../renderer/state';
-import { exec } from 'child_process';
-import { wait } from '../utils/wait';
+import { launchWithArgs } from '../helpers/launch-with-args';
 
 export async function reopen(appState: AppState) {
   if (isMac()) {
@@ -10,7 +9,6 @@ export async function reopen(appState: AppState) {
   }
 
   if (isWin()) {
-    exec(`${appState.appToTest} --test-type=webdriver`);
-    await wait(1000);
+    return launchWithArgs(appState);
   }
 }
