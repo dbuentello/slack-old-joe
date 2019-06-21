@@ -60,5 +60,16 @@
     "prettier": "1.18.2",
     "rimraf": "^2.6.3",
     "typescript": "^3.4.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
