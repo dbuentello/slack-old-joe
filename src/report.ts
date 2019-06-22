@@ -6,12 +6,10 @@ import { appState } from './renderer/state';
 
 /**
  * Writes the report to memory. This will no longer write to a file and will instead write to the global
- * appState.fileName. 
+ * appState.fileName.
  * @param input Takes in all the suites and their results
  */
-export async function writeReport(
-  input: Array<SuiteResult>
-) {
+export async function writeReport(input: Array<SuiteResult>) {
   let text = `# Slack Old Joe Run ${new Date().toLocaleString()}\n`;
   text += `-`.padEnd(50, '-');
   text += `\n\n`;
@@ -56,7 +54,6 @@ export async function appendReport(
 
   appState.report += text;
 }
-
 
 export function writeToFile() {
   const reportPath = path.join(appState.absPath, appState.fileName);

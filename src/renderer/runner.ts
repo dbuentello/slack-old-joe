@@ -135,7 +135,6 @@ export async function runTestFile(
   return result;
 }
 
-
 /**
  * Run a single test, as returned by an it() method
  *

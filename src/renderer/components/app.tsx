@@ -150,7 +150,9 @@ export class App extends React.Component<AppProps, LocalAppState> {
         <Button
           text="Start over"
           icon="refresh"
-          onClick={ () => { this.resetAppState(); } }
+          onClick={() => {
+            this.resetAppState();
+          }}
         ></Button>
       </>
     );
