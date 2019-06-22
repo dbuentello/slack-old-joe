@@ -35,7 +35,6 @@ export async function writeReport(
       text += `\n`;
     }
   }
-  // absPath = reportPath;
   appState.report += text;
   return true;
 }
@@ -47,7 +46,6 @@ export async function appendReport(
   input: ItTestParams, // for now
   succeeded: boolean
 ) {
-  console.log("🤪");
   let text = `\n\n# Slack Old Joe Run ${input.name} (previously failed test)\n`;
   text += `-`.padEnd(50, '-');
   text += `\n\n`;

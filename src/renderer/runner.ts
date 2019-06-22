@@ -9,7 +9,7 @@ import {
   Result,
   LifeCycleFn
 } from '../interfaces';
-import { AppState } from './state';
+import { AppState, appState } from './state';
 import { wait } from '../utils/wait';
 
 const debug = require('debug')('old-joe');
@@ -135,12 +135,12 @@ export async function runTestFile(
   return result;
 }
 
-export async function runSpecificTest(
-  test: string,
-  appState: AppState
-): Promise<SuiteResult> {
-  return undefined;
-}
+// export async function runSpecificTest(
+//   test: string,
+//   appState: AppState
+// ): Promise<SuiteResult> {
+//   return undefined;
+// }
 
 /**
  * Run a single test, as returned by an it() method
@@ -184,6 +184,7 @@ export async function runTest(
   }
 
   updateCallback(result.ok);
+  appState.testRunning = false;
   return result;
 }
 
