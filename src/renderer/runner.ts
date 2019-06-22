@@ -135,12 +135,6 @@ export async function runTestFile(
   return result;
 }
 
-// export async function runSpecificTest(
-//   test: string,
-//   appState: AppState
-// ): Promise<SuiteResult> {
-//   return undefined;
-// }
 
 /**
  * Run a single test, as returned by an it() method
