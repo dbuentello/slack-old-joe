@@ -4,7 +4,7 @@ import { appState } from '../state';
 export function chooseFolder() {
   const currentWindow = remote.BrowserWindow.getAllWindows()[0];
   
-  let filePaths = remote.dialog.showOpenDialog(
+  const filePaths = remote.dialog.showOpenDialog(
     currentWindow,
     {
       title: 'Choose where to add report',
