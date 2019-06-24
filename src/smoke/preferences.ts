@@ -70,23 +70,6 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await getSonicWindow(window.client);
   });
 
-  it('persists these setting across teams', async () => {
-    await selectNextTeamShortcut();
-    await openPreferences(window.client, 'Advanced');
-
-    const checkboxes = await window.client.$$('.c-input_checkbox');
-    const disableHwCheckbox = checkboxes[checkboxes.length - 1];
-    assert.ok(
-      await disableHwCheckbox.getAttribute('checked'),
-      'hardware acceleration checkbox'
-    );
-
-    // Switch back
-    await closePreferences(window.client);
-    await wait(500);
-    await selectNextTeamShortcut();
-  });
-
   it('launches without hardware acceleration on next launch', async () => {
     // The setting should now be at "off", so let's relaunch
     await window.client.restart();
@@ -95,7 +78,6 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await openGpuInfoWindow(window.client);
 
     assert.isFalse(await getIsGpuEnabled(window.client));
-    // await window.client.closeWindow();
   });
 
   it('can enable hardware acceleration', async () => {

@@ -51,7 +51,11 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     return (
       <div>
-        <h2 style={{ textAlign: 'right', marginTop: 0, 'WebkitAppRegion': 'drag'}}>🐪</h2>
+        <h2
+          style={{ textAlign: 'right', marginTop: 0, WebkitAppRegion: 'drag' }}
+        >
+          🐪
+        </h2>
 
         {progressOrStandby}
       </div>
@@ -97,7 +101,12 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
     return (
       <>
-        <Results done={appState.done} results={appState.results} />
+        <Results
+          done={appState.done}
+          results={appState.results}
+          testsDone={appState.tests}
+          slackClosed={appState.closeAppAtEnd}
+        />
         <Card
           interactive={appState.generateReportAtEnd}
           elevation={Elevation.TWO}
@@ -132,7 +141,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
 
   public renderDone() {
     const { appState } = this.props;
-    const text = appState.generateReportAtEnd ? (
+    const text = (
       <>
         <Button
           text="Start over"
@@ -140,8 +149,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
           onClick={this.resetAppState}
         ></Button>
       </>
-    ) : (
-      'End of tests'
     );
 
     return appState.done ? (

@@ -1,22 +1,42 @@
 import * as React from 'react';
 import useStayScrolled from 'react-stay-scrolled';
 import { Card, Elevation, Icon, Button } from '@blueprintjs/core';
+import { write } from 'fs-extra';
 
-import { SuiteResult, Result } from '../../interfaces';
-import { chooseFolder } from './path-chooser'; // new addition
+import {
+  SuiteResult,
+  Result,
+  ItTestParams,
+  SuiteMethodResults,
+  TestSuite
+} from '../../interfaces';
+import { chooseFolder } from './path-chooser';
+import { runTest } from '../runner';
+import { appendReport, writeReport } from '../../report';
+import { appState } from '../state';
 
 interface ResultsProps {
   results: Array<SuiteResult>;
   done: boolean;
+  testsDone: TestSuite[];
+  slackClosed: boolean;
+  currPath: string;
 }
 
-export const Results = ({ results, done }: ResultsProps) => {
+export const Results = ({
+  results,
+  done,
+  testsDone,
+  slackClosed
+}: ResultsProps) => {
   const listRef = React.useRef();
   const { stayScrolled } = useStayScrolled(listRef);
 
   const resultElements =
     results.length > 0
-      ? results.map(renderIndividualResult)
+      ? results.map(suiteResult =>
+          renderIndividualResult(suiteResult, testsDone, slackClosed)
+        ) // pass in testsDone
       : [
           done ? (
             <h5 key="did-not-run">Didn't run any tests, huh? You rascal!</h5>
@@ -46,20 +66,77 @@ export const Results = ({ results, done }: ResultsProps) => {
   );
 };
 
+export function retryTest(
+  testName: string,
+  suiteName: string,
+  testsDone: TestSuite[]
+) {
+  console.log("Let's hope " + testName + ' works again 😬');
+  testsDone.forEach(testSuite => {
+    if (testSuite.name === suiteName) {
+      testSuite.suiteMethodResults.it.forEach(async indTest => {
+        if (testName === indTest.name) {
+          runTest(indTest, (succeeded: boolean) => {
+            if (appState.absPath === '') {
+              let p: string = appState.reportPath();
+              appState.absPath = p;
+              writeReport(
+                appState.results,
+                appState.absPath,
+                appState.fileName
+              );
+              appendReport(
+                indTest,
+                appState.fileName,
+                appState.absPath,
+                succeeded
+              );
+            } else {
+              appendReport(
+                indTest,
+                appState.fileName,
+                appState.absPath,
+                succeeded
+              );
+            }
+          });
+        }
+      });
+    }
+  });
+}
+
+/**
+ * If there is an error, lets pass in the suiteName and name
+ * @param suiteResult result of tests.
+ * @param testsDone list of tests for all suites
+ */
 const renderIndividualResult = (
-  suiteResult: SuiteResult
+  suiteResult: SuiteResult,
+  testsDone: TestSuite[],
+  slackClosed: boolean
 ): Array<JSX.Element> => {
   return [
     <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
     ...suiteResult.results.map(result => {
       const { error, name } = result;
-      const errorElement = error ? <pre>{error.toString()}</pre> : null;
-
+      const errorTextElement = error ? <pre>{error.toString()}</pre> : null;
+      const retryElem = (
+        <Button
+          icon="outdated"
+          onClick={async function() {
+            await retryTest(name, suiteResult.name, testsDone);
+          }} // using a 'closure'
+          htmltitle="Retry test"
+        ></Button>
+      );
+      const errorElement = error && !slackClosed ? retryElem : errorTextElement;
       return (
         <div className="result" key={result.name}>
           <p>
             {getIcon(result)} {name}
           </p>
+          {errorTextElement}
           {errorElement}
         </div>
       );

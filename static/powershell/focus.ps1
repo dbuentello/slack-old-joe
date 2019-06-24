@@ -44,9 +44,10 @@ Add-Type @"
   }
 "@
 
-$windows = [OldJoe]::GetWindows() | Where-Object { $_.WinTitle -like "Slack -*" } | Select-Object WinTitle, WinHwnd
+$windows = [OldJoe]::GetWindows() | Where-Object { $_.WinTitle -like "*Old Joe *" } | Select-Object WinTitle, WinHwnd
 
 $windows | ForEach-Object {
+  Write-Output $_
   [OldJoe]::ShowWindow($_.WinHwnd, 5)
   [OldJoe]::SetForegroundWindow($_.WinHwnd)
 }

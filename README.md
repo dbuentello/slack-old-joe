@@ -139,7 +139,6 @@ Old Joe currently verifies the following:
 - Can disable hardware acceleration
 - Can open the `/slackgpuinfo` window by typing it into the message box
 - Has hardware acceleration enabled by default (and is actually using it)
-- Persists these setting across teams
 - Launches without hardware acceleration on next launch (and Chrome uses software acceleration)
 - Can enable hardware acceleration
 - Launches with hardware acceleration on next launch (and is actually using it)
