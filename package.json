@@ -8,6 +8,7 @@
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
     "make": "cross-env NODE_ENV=production electron-forge make",
     "package": "cross-env NODE_ENV=production electron-forge package",
+    "publish": "cross-env NODE_ENV=production electron-forge publish",
     "parcel:build": "node ./tools/parcel-build.js",
     "parcel:watch": "node ./tools/parcel-watch.js"
   },
