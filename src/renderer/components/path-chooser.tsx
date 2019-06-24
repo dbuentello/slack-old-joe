@@ -22,9 +22,5 @@ export function chooseFolderAsString() {
     title: 'Choose where to add report',
     properties: ['openDirectory']
   });
-  if (results != undefined) {
-    return results[0];
-  } else {
-    return '';
-  }
+  return (results && results[0]) ? results[0] : '';
 }

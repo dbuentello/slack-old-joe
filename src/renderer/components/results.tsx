@@ -47,7 +47,6 @@ export const Results = ({
   ) : (
     <Button
       text="Waiting for tests to finish...."
-      onClick={()=>{null} }
     ></Button>
   );
 
