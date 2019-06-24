@@ -19,7 +19,7 @@ import { Results } from './results';
 import { stopClientDriver, startClientDriver } from '../client-driver';
 import { setSonicBoot } from '../../helpers/set-sonic-boot';
 import { getOrCreateMainWindow } from '../../main/windows';
-import { writeToFile } from 'src/report';
+import { writeToFile } from '../../report';
 
 interface AppProps {
   appState: AppState;
