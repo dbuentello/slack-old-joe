@@ -24,7 +24,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     await selectNextTeamWindowMenu();
     const afterTitle = await window.client.getTitle();
 
-    assert.notEqual(beforeTitle, afterTitle);
+    assert.notEqual(beforeTitle, afterTitle, 'the titles should change (selecting next workspace)');
   });
 
   it('can select the "previous" workspace using the window menu', async () => {
@@ -32,17 +32,17 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     await selectPreviousTeamWindowMenu();
 
     const afterTitle = await window.client.getTitle();
-    assert.notEqual(beforeTitle, afterTitle);
+    assert.notEqual(beforeTitle, afterTitle, 'the titles should change (selecting previous workspace)');
   });
 
   it('can select a workspace by name using the window menu', async () => {
     await selectTeamWindowMenu(smokeTeams[0].name);
     const beforeTitle = await window.client.getTitle();
-    assert.include(beforeTitle, smokeTeams[0].name);
+    assert.include(beforeTitle, smokeTeams[0].name, `beforeTitle does not include ${smokeTeams[0].name}` );
 
     await selectTeamWindowMenu(smokeTeams[1].name);
     const afterTitle = await window.client.getTitle();
-    assert.include(afterTitle, smokeTeams[1].name);
+    assert.include(afterTitle, smokeTeams[1].name, `afterTitle does not include ${smokeTeams[1].name}`);
   });
 
   it('can select the "next" workspace using the shortcut', async () => {
@@ -50,7 +50,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     await selectNextTeamShortcut();
     const afterTitle = await window.client.getTitle();
 
-    assert.notEqual(beforeTitle, afterTitle);
+    assert.notEqual(beforeTitle, afterTitle, 'unable to select the next workspace using the shortcut');
   });
 
   it('can select the "previous" workspace using the shortcut', async () => {
@@ -58,7 +58,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     await selectPreviousTeamShortcut();
     const afterTitle = await window.client.getTitle();
 
-    assert.notEqual(beforeTitle, afterTitle);
+    assert.notEqual(beforeTitle, afterTitle, `beforeTitle:${beforeTitle} should not be equal to afterTitle:${afterTitle}`);
   });
 
   it(
@@ -69,14 +69,14 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
       await getSonicWindow(window.client, 500);
 
       const beforeTitle = await window.client.getTitle();
-      assert.include(beforeTitle, smokeTeams[0].name);
+      assert.include(beforeTitle, smokeTeams[0].name, `beforeTitle does not include ${smokeTeams[0].name}`);
 
       // In the dock, "Old Joe Two" should be number six from the bottom
       await clickDockMenuItem(6);
       await getSonicWindow(window.client, 500);
 
       const afterTitle = await window.client.getTitle();
-      assert.include(afterTitle, smokeTeams[1].name);
+      assert.include(afterTitle, smokeTeams[1].name, `beforeTitle does not include ${smokeTeams[1].name}` );
     },
     { platforms: ['darwin'] }
   );

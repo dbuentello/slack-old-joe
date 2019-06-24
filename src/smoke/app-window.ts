@@ -31,7 +31,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     console.log(beforeDimensions, afterDimensions);
 
-    assert.notEqual(beforeDimensions, afterDimensions);
+    assert.notEqual(beforeDimensions, afterDimensions, 'Window dimensions should not equal each other after maximizing the window.');
 
     // Restore
     await maximize();
@@ -54,9 +54,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     console.log(beforeDimensions, afterDimensions);
 
-    assert.notEqual(beforeDimensions, afterDimensions);
+    assert.notEqual(beforeDimensions, afterDimensions, `Fullscreen window should not have the same dimensions as the previous window. ${beforeDimensions} != ${afterDimensions} `);
   });
 
+  // Is this test meant to be written this way? Ask Felix
   it('can leave fullscreen', async () => {
     const beforeDimensions = await window.client.executeScript(
       'return window.outerHeight',
@@ -71,18 +72,18 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       []
     );
 
-    assert.notEqual(beforeDimensions, afterDimensions);
+    assert.notEqual(beforeDimensions, afterDimensions, `Window dimensions should not match after leaving fullscreen. ${beforeDimensions} != ${afterDimensions} `);
   });
 
   it(
     'can minimize the window',
     async () => {
-      assert.ok(!(await getIsHidden(window.client)), 'document.hidden');
+      assert.ok(!(await getIsHidden(window.client)), 'Window is visible');
 
       await minimize();
       await wait(1000);
 
-      assert.ok(await getIsHidden(window.client), 'document.hidden');
+      assert.ok(await getIsHidden(window.client), 'Window is not minimized');
 
       // Restore
       await minimize(true);
