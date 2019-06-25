@@ -134,7 +134,7 @@ export class Results extends React.Component<ResultsProps, {}> {
         );
         // </div>
         const errorElement =
-          error && !slackClosed ? retryElem : errorTextElement;
+          (error && !slackClosed) ? retryElem : errorTextElement;
         return (
           <div className="result" key={result.name}>
             <p>
