@@ -18,7 +18,7 @@ let backupUserDir = userDir.replace(
 export async function clean() {
   console.groupCollapsed('clean');
   const userDir = getUserDir();
-  
+
   // Delete old "Old Joe" folder
   await deleteOldJoeFolders();
 
@@ -58,12 +58,13 @@ export async function deleteOldJoeFolders() {
   const slackBackupFolders = (await fs.readdir(appDataDir)).filter(
     f => f.startsWith(`${USER_DATA_FOLDER_NAME}-`) && f.length === 22
   );
-
-  for (const folder of slackBackupFolders) {
-    const folderPath = path.join(appDataDir, folder);
-    if (hasOldJoeFile(folderPath)) {
-      await fs.remove(folderPath);
-    }
+  
+  if(slackBackupFolders.length > 1) {
+    throw new Error("Should not have more than one backup folder.")
+  }
+  const folderPath = path.join(appDataDir, slackBackupFolders[0]);
+  if (hasOldJoeFile(folderPath)) {
+    await fs.remove(folderPath);
   }
 }
 
