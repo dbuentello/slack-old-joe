@@ -33,7 +33,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     assert.equal(
       await getNativeOpenNotificationCount(window.client),
       1,
-      'count of native notifications'
+      'count of native notifications is not 1.'
     );
   });
 
@@ -47,7 +47,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       const messageToFind = await window.client.$(
         `span=Hi, it's me, the notification`
       );
-      assert.ok(messageToFind.waitForExist(1000), 'the notification message');
+      assert.ok(messageToFind.waitForExist(1000), 'the notification message is not found.');
     },
     {
       platforms: ['win32', 'darwin']
@@ -63,7 +63,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await clickFirstNativeNotification(window.client);
       await wait(300);
 
-      assert.isFalse(await getIsHidden(window.client), 'document.hidden');
+      assert.isFalse(await getIsHidden(window.client), 'the notification did not open Slack successfully.');
     },
     {
       platforms: ['win32', 'darwin']
@@ -80,7 +80,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       assert.equal(
         await getNativeOpenNotificationCount(window.client),
         1,
-        'count of native notifications'
+        'count of native notifications should be 1.'
       );
     },
     {
@@ -98,7 +98,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       // Hopefully open it again
       await clickFirstNativeNotification(window.client);
       const threadMsg = await window.client.$('span=The thread notification');
-      assert.ok(threadMsg.waitForExist(2000));
+      assert.ok(threadMsg.waitForExist(2000), 'thread message was not found.');
 
       await getSonicWindow(window.client);
       await closeFlexpane(window.client);

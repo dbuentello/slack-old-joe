@@ -16,7 +16,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     await wait(1000);
 
     const devToolsWindow = await getDevToolsWindowHandle(window.client);
-    assert.ok(devToolsWindow, 'window handle for the dev tools');
+    assert.ok(devToolsWindow, 'window handle for the dev tools should be true');
   });
 
   it('can close the webapp devtools via menu', async () => {
@@ -24,7 +24,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     await wait(1000);
 
     const devToolsWindow = await getDevToolsWindowHandle(window.client);
-    assert.notOk(devToolsWindow, 'window handle for the devtools');
+    assert.notOk(devToolsWindow, 'window handle for the devtools should be false.');
   });
 
   it('can open the Electron devtools via menu', async () => {
@@ -36,7 +36,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     await wait(2000);
 
     const devToolsWindow = await getDevToolsWindowHandle(window.client);
-    assert.ok(devToolsWindow, 'window handle for the dev tools');
+    assert.ok(devToolsWindow, 'window handle for the dev tools should be true');
   });
 
   it('can close the Electron devtools via menu', async () => {
@@ -48,6 +48,6 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     await wait(2000);
 
     const devToolsWindow = await getDevToolsWindowHandle(window.client);
-    assert.notOk(devToolsWindow, 'window handle for the devtools');
+    assert.notOk(devToolsWindow, 'window handle for the devtools present');
   });
 };

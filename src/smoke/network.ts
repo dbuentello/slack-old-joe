@@ -22,7 +22,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       );
       await offlineInfo.waitForDisplayed(40 * 1000);
 
-      assert.ok(await offlineInfo.isDisplayed(), 'offline info');
+      assert.ok(await offlineInfo.isDisplayed(), 'offline info not displayed');
     },
     {
       platforms: ['win32', 'darwin']
@@ -40,7 +40,8 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
           window.client,
           'i[type="cloud-offline-small"]',
           40 * 1000
-        )
+        ),
+        'Unable to return to the connected state.'
       );
     },
     {
