@@ -122,7 +122,7 @@ export class Results extends React.Component<ResultsProps, {}> {
             id={name}
             disabled={appState.testRunning}
             intent="warning"
-            onClick={function() {
+            onClick={() => {
               appState.testRunning = true;
               retryTest(name, suiteResult.name, testsDone);
             }} // using a 'closure'
