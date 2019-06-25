@@ -112,7 +112,7 @@ export class Results extends React.Component<ResultsProps, {}> {
             id={name}
             disabled={appState.testRunning}
             intent="warning"
-            onClick={function() {
+            onClick={() => {
               appState.testRunning = true;
               retryTest(name, suiteResult.name, testsDone);
             }} // using a 'closure'
@@ -121,7 +121,7 @@ export class Results extends React.Component<ResultsProps, {}> {
           ></Button>
         );
         const errorElement =
-          error && !slackClosed ? retryElem : errorTextElement;
+          (error && !slackClosed) ? retryElem : errorTextElement;
         return (
           <div className="result" key={result.name}>
             <p>
