@@ -37,46 +37,11 @@ export interface ResultsProps {
 export class Results extends React.Component<ResultsProps, {}> {
   props: ResultsProps;
 
-  constructor(props: ResultsProps) {
-    super(props);
-    this.props = props;
-  }
-
   public render() {
     const listRef = React.useRef();
     const { stayScrolled } = useStayScrolled(listRef);
-    const resultElements =
-      this.props.results.length > 0
-        ? this.props.results.map((suiteResult: SuiteResult) =>
-            this.renderIndividualResult(
-              suiteResult,
-              this.props.testsDone,
-              this.props.slackClosed
-            )
-          ) // pass in testsDone
-        : [
-            this.props.done ? (
-              <h5 key="did-not-run">Didn't run any tests, huh? You rascal!</h5>
-            ) : null
-          ];
-
-    const doneElements = this.props.done ? (
-      <Button
-        text="Save Report"
-        onClick={() => {
-          writeReport(appState.results);
-          chooseFolder();
-          writeToFile();
-        }}
-      ></Button>
-    ) : (
-      <Button
-        text="Waiting for tests to finish...."
-        onClick={() => {
-          null;
-        }}
-      ></Button>
-    );
+    const resultElements = this.renderResultElements();
+    const doneElements = this.renderDoneElements();
     // Typically you will want to use stayScrolled or scrollBottom inside
     // useLayoutEffect, because it measures and changes DOM attributes (scrollTop) directly
     React.useLayoutEffect(() => {
@@ -91,25 +56,50 @@ export class Results extends React.Component<ResultsProps, {}> {
     );
   }
 
+  private renderResultElements() {
+    return (
+      this.props.results.length > 0
+      ? this.props.results.map((suiteResult: SuiteResult) =>
+          this.renderIndividualResult(
+            suiteResult,
+            this.props.slackClosed
+          )
+        ) // pass in testsDone
+      : [
+          this.props.done ? (
+            <h5 key="did-not-run">Didn't run any tests, huh? You rascal!</h5>
+          ) : null
+        ]
+    );
+  }
+
+  private renderDoneElements() {
+    return (
+      this.props.done ? (
+        <Button
+          text="Save Report"
+          onClick={() => {
+            writeReport(appState.results);
+            chooseFolder();
+            writeToFile();
+          }}
+        ></Button>
+      ) : (
+        <Button
+          text="Waiting for tests to finish...."
+          onClick={() => {
+            null;
+          }}
+        ></Button>
+      )
+    )
+  }
+
   private renderIndividualResult(
     suiteResult: SuiteResult,
-    testsDone: TestSuite[],
     slackClosed: boolean
   ): Array<JSX.Element> {
-    let popOverContent = (
-      <div className={Classes.POPOVER_DISMISS}>
-        <h5>Please wait for test to finish.</h5>
-        <p>...</p>
-        <Button
-          className="bp3-button bp3-popover-dismiss"
-          small
-          alignText="center"
-        >
-          Close popover
-        </Button>
-      </div>
-    );
-
+    const testsDone = this.props.testsDone;
     return [
       <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
       ...suiteResult.results.map(result => {
@@ -129,10 +119,7 @@ export class Results extends React.Component<ResultsProps, {}> {
             title="Retry test"
             text={appState.testRunning ? 'Running...' : `Retry`}
           ></Button>
-          // </Popover>
-          // </div>
         );
-        // </div>
         const errorElement =
           error && !slackClosed ? retryElem : errorTextElement;
         return (
@@ -152,9 +139,15 @@ export class Results extends React.Component<ResultsProps, {}> {
       suiteName: string,
       testsDone: TestSuite[]
     ) {
+      const indTest = findTest(testName, suiteName, testsDone);
+      runTest(indTest, (succeeded:boolean) => {
+        appendReport(indTest, succeeded);
+        appState.testPassed = succeeded;
+      })
+
       testsDone.forEach(testSuite => {
         if (testSuite.name === suiteName) {
-          testSuite.suiteMethodResults.it.forEach(async indTest => {
+          testSuite.suiteMethodResults.it.forEach(indTest => {
             if (testName === indTest.name) {
               runTest(indTest, (succeeded: boolean) => {
                 appendReport(indTest, succeeded);
@@ -165,6 +158,28 @@ export class Results extends React.Component<ResultsProps, {}> {
         }
       });
     }
+
+    function findTest(
+      testName: string,
+      suiteName: string,
+      testsDone: TestSuite[]
+    ): ItTestParams | undefined {
+      // Find the right suiteMethodResult
+      const foundSuiteMethodResults = testsDone
+        .filter(({ name }) => name === suiteName)
+        .map(({ suiteMethodResults }) => suiteMethodResults)
+        [0];
+
+      // _Should_ never happen
+      if (!foundSuiteMethodResults) {
+        throw new Error(`Could not find ${suiteName}`);
+      }
+
+      // Find the right test
+      return foundSuiteMethodResults.it
+        .find((test) => test.name === testName);
+    }
+
   }
 
   private getIcon({ skipped, ok }: Result): JSX.Element {

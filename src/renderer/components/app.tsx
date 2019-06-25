@@ -38,7 +38,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
     this.run = this.run.bind(this);
     this.resetAppState = this.resetAppState.bind(this);
     this.testCallback = this.testCallback.bind(this);
-    // this.toggle
+    this.resetAppState = this.resetAppState.bind(this);
   }
 
   public render() {
@@ -150,9 +150,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
         <Button
           text="Start over"
           icon="refresh"
-          onClick={() => {
-            this.resetAppState();
-          }}
+          onClick={this.resetAppState}
         ></Button>
       </>
     );
