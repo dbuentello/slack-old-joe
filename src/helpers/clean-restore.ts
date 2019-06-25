@@ -18,7 +18,7 @@ let backupUserDir = userDir.replace(
 export async function clean() {
   console.groupCollapsed('clean');
   const userDir = getUserDir();
-
+  
   // Delete old "Old Joe" folder
   await deleteOldJoeFolders();
 
