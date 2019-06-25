@@ -4,6 +4,7 @@ import { getOrCreateMainWindow } from './windows';
 import { shouldQuit } from './squirrel';
 import { setupMenu } from './menu';
 import { setupReporter } from './reporter';
+import { deleteOldJoeFolders } from '../helpers/clean-restore';
 
 /**
  * Handle the app's "ready" event. This is essentially
@@ -20,6 +21,7 @@ export async function onReady() {
  * @export
  */
 export function onBeforeQuit() {
+  deleteOldJoeFolders();
   (global as any).isQuitting = true;
 }
 
@@ -30,6 +32,7 @@ export function onBeforeQuit() {
 export function onWindowsAllClosed() {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
+  deleteOldJoeFolders();
   app.quit();
 }
 
