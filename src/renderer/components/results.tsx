@@ -87,8 +87,7 @@ export class Results extends React.Component<ResultsProps, {}> {
   private renderIndividualResult(
     suiteResult: SuiteResult
   ): Array<JSX.Element> {
-    const slackClosed = this.props.slackClosed;
-    const testsDone = this.props.testsDone;
+    const { testsDone, slackClosed } = this.props;
     return [
       <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
       ...suiteResult.results.map(result => {
@@ -129,23 +128,16 @@ export class Results extends React.Component<ResultsProps, {}> {
       testsDone: TestSuite[]
     ) {
       const indTest = findTest(testName, suiteName, testsDone);
-      runTest(indTest, (succeeded: boolean) => {
-        appendReport(indTest, succeeded);
-        appState.testPassed = succeeded;
-      });
+      if(indTest) {
+        runTest(indTest, (succeeded: boolean) => {
+          appendReport(indTest, succeeded);
+          appState.testPassed = succeeded;
+        });
+      } else {
+        throw new Error(`Unable to find test ${testName}`);
+      }
 
-      testsDone.forEach(testSuite => {
-        if (testSuite.name === suiteName) {
-          testSuite.suiteMethodResults.it.forEach(indTest => {
-            if (testName === indTest.name) {
-              runTest(indTest, (succeeded: boolean) => {
-                appendReport(indTest, succeeded);
-                appState.testPassed = succeeded;
-              });
-            }
-          });
-        }
-      });
+      
     }
 
     function findTest(
