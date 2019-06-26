@@ -1,17 +1,8 @@
 import * as React from 'react';
 import useStayScrolled from 'react-stay-scrolled';
-import {
-  Card,
-  Elevation,
-  Icon,
-  Button,
-} from '@blueprintjs/core';
+import { Card, Elevation, Icon, Button } from '@blueprintjs/core';
 
-import {
-  SuiteResult,
-  Result,
-  TestSuite
-} from '../../interfaces';
+import { SuiteResult, Result, TestSuite } from '../../interfaces';
 import { chooseFolder } from './path-chooser';
 import { runTest } from '../runner';
 import { appendReport, writeReport, writeToFile } from '../../report';
@@ -27,7 +18,6 @@ export interface ResultsProps {
 
 @observer
 export class Results extends React.Component<ResultsProps, {}> {
-
   constructor(props: ResultsProps) {
     super(props);
 
@@ -74,16 +64,11 @@ export class Results extends React.Component<ResultsProps, {}> {
         }}
       ></Button>
     ) : (
-      <Button
-        text="Waiting for tests to finish...."
-        disabled = {true}
-      ></Button>
+      <Button text="Waiting for tests to finish...." disabled={true}></Button>
     );
   }
 
-  private renderIndividualResult(
-    suiteResult: SuiteResult
-  ): Array<JSX.Element> {
+  private renderIndividualResult(suiteResult: SuiteResult): Array<JSX.Element> {
     // const { testsDone, slackClosed } = this.props;
     const testsDone = this.props.testsDone;
     const slackClosed = this.props.slackClosed;
@@ -126,7 +111,6 @@ export class Results extends React.Component<ResultsProps, {}> {
       suiteName: string,
       testsDone: TestSuite[]
     ) {
-
       testsDone.forEach(testSuite => {
         if (testSuite.name === suiteName) {
           testSuite.suiteMethodResults.it.forEach(indTest => {
