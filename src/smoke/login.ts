@@ -12,7 +12,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => centerMouse());
 
   it('opens and loads a sign-in window', async () => {
-    assert.ok(await getSignInWindow(window.client), 'unable to fetch sign in window.');
+    assert.ok(
+      await getSignInWindow(window.client),
+      'unable to fetch sign in window.'
+    );
 
     const url = await window.client.getUrl();
     assert.ok(
@@ -26,7 +29,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     const button = await window.client.$('button');
     assert.ok(button, 'button is not present.');
-    assert.equal(await button.getText(), 'Sign In', 'button text should be: \'Sign in\'');
+    assert.equal(
+      await button.getText(),
+      'Sign In',
+      "button text should be: 'Sign in'"
+    );
   });
 
   it('signs in', async () => {
@@ -48,7 +55,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('signs into a second team', async () => {
-    assert.ok(await openBrowserAndWaitForSignIn(smokeTeams[1].url), 'should be able to sign into second team.');
+    assert.ok(
+      await openBrowserAndWaitForSignIn(smokeTeams[1].url),
+      'should be able to sign into second team.'
+    );
   });
 
   it('has a quick switcher', async () => {
@@ -70,6 +80,6 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await switchToTeam(0);
 
     title = await window.client.getTitle();
-    assert.include(title, 'Old Joe One', 'Should now be on \'Old Joe One team\'');
+    assert.include(title, 'Old Joe One', "Should now be on 'Old Joe One team'");
   });
 };

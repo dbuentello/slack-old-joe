@@ -46,13 +46,20 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     await fileDesc.click();
 
     const expectedFilePath = path.join(DOWNLOADS_DIR, `test-file`);
-    assert.ok(await waitForFile(expectedFilePath), `file not fetched under expectedFilePath:${expectedFilePath}`);
+    assert.ok(
+      await waitForFile(expectedFilePath),
+      `file not fetched under expectedFilePath:${expectedFilePath}`
+    );
   });
 
   it('downloads a file that has the right contents', async () => {
     const expectedFilePath = path.join(DOWNLOADS_DIR, `test-file`);
     const fileContents = await fs.readFile(expectedFilePath, 'utf-8');
-    assert.equal(fileContents, 'I am a test file', 'fileContents do not equal \'I am a test file\'');
+    assert.equal(
+      fileContents,
+      'I am a test file',
+      "fileContents do not equal 'I am a test file'"
+    );
 
     // Cleanup, or attempted - Windows is weird sometimes
     try {
@@ -75,7 +82,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       const downloadsBtn = await window.client.$(
         'div.c-menu_item__label=Downloads'
       );
-      assert.ok(await downloadsBtn.waitForExist(2000), 'downloaddsBtn does not exist.');
+      assert.ok(
+        await downloadsBtn.waitForExist(2000),
+        'downloaddsBtn does not exist.'
+      );
       await wait(500);
       await downloadsBtn.moveTo();
       await downloadsBtn.click();
@@ -110,7 +120,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       const resumeBtn = await window.client.$(
         'button.p-download_item__link--resume'
       );
-      assert.ok(await resumeBtn.waitForExist(5000), 'resumtBtn does not exist.');
+      assert.ok(
+        await resumeBtn.waitForExist(5000),
+        'resumtBtn does not exist.'
+      );
 
       // Let the network pipes cool down (not required, I just want to wait a sec)
       // and check if the file is actually no longer downloading
@@ -119,7 +132,11 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       const beforeBytes = fs.statSync(expectedFilePath).size;
       await wait(1000);
       const afterBytes = fs.statSync(expectedFilePath).size;
-      assert.equal(beforeBytes, afterBytes, `beforeBytes:${beforeBytes} is not equal to afterBytes:${afterBytes}`);
+      assert.equal(
+        beforeBytes,
+        afterBytes,
+        `beforeBytes:${beforeBytes} is not equal to afterBytes:${afterBytes}`
+      );
     },
     {
       cleanup: async () => {
@@ -141,7 +158,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
 
   it('can cancel a download', async () => {
     const cancelBtn = await window.client.$('.p-download_item__link--cancel');
-    assert.ok(await cancelBtn.waitForDisplayed(5000), 'cancelBtn is not displayed.');
+    assert.ok(
+      await cancelBtn.waitForDisplayed(5000),
+      'cancelBtn is not displayed.'
+    );
     await cancelBtn.moveTo();
     await wait(300);
     await cancelBtn.click();
@@ -200,7 +220,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await fileDesc.click();
       await wait(1000);
 
-      assert.ok(fs.existsSync(expectedFilePath), `the downloaded file does not exist. expectedFilePath:${expectedFilePath}`);
+      assert.ok(
+        fs.existsSync(expectedFilePath),
+        `the downloaded file does not exist. expectedFilePath:${expectedFilePath}`
+      );
     },
     {
       cleanup: async () => {

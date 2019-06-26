@@ -12,7 +12,9 @@ export const test: SuiteMethod = async ({ it }) => {
     await stopClientDriver();
 
     // Wait until we have no processes
-    const runningSlackProcessesCount = await getRunningSlackProcessesCount(appState);
+    const runningSlackProcessesCount = await getRunningSlackProcessesCount(
+      appState
+    );
     assert.equal(
       runningSlackProcessesCount,
       0,
@@ -27,6 +29,9 @@ export const test: SuiteMethod = async ({ it }) => {
     const processes = await getRunningSlackProcessesCount(appState);
     const expected = isWin() ? processes < 10 : processes < 7;
 
-    assert.ok(expected, `number of Slack processes is more than expected (processes:${processes})`);
+    assert.ok(
+      expected,
+      `number of Slack processes is more than expected (processes:${processes})`
+    );
   });
 };

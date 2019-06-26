@@ -45,7 +45,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
       // Dialog should now be closed
       const dialogClosed = !(await getIsResetAppDataSheetOpen());
-      assert.ok(dialogClosed, 'the reset app data dialog (closed) is not present');
+      assert.ok(
+        dialogClosed,
+        'the reset app data dialog (closed) is not present'
+      );
     },
     {
       cleanup,
@@ -67,7 +70,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       // Dialog should now be open
       const dialogOpen =
         (await getIsNetLogSheetOpen()) || (await getIsNetLogSheetOpen());
-      assert.ok(dialogOpen, 'the restart and collect net logs sheet (open) should be present');
+      assert.ok(
+        dialogOpen,
+        'the restart and collect net logs sheet (open) should be present'
+      );
 
       await sendNativeKeyboardEvent({ text: 'escape', noFocus: !isMac() });
       if (isMac()) {

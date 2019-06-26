@@ -31,7 +31,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     console.log(beforeDimensions, afterDimensions);
 
-    assert.notEqual(beforeDimensions, afterDimensions, 'Window dimensions should not equal each other after maximizing the window.');
+    assert.notEqual(
+      beforeDimensions,
+      afterDimensions,
+      'Window dimensions should not equal each other after maximizing the window.'
+    );
 
     // Restore
     await maximize();
@@ -54,7 +58,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     console.log(beforeDimensions, afterDimensions);
 
-    assert.notEqual(beforeDimensions, afterDimensions, `Fullscreen window should not have the same dimensions as the previous window. ${beforeDimensions} != ${afterDimensions} `);
+    assert.notEqual(
+      beforeDimensions,
+      afterDimensions,
+      `Fullscreen window should not have the same dimensions as the previous window. ${beforeDimensions} != ${afterDimensions} `
+    );
   });
 
   // Is this test meant to be written this way? Ask Felix
@@ -72,7 +80,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       []
     );
 
-    assert.notEqual(beforeDimensions, afterDimensions, `Window dimensions should not match after leaving fullscreen. ${beforeDimensions} != ${afterDimensions} `);
+    assert.notEqual(
+      beforeDimensions,
+      afterDimensions,
+      `Window dimensions should not match after leaving fullscreen. ${beforeDimensions} != ${afterDimensions} `
+    );
   });
 
   it(

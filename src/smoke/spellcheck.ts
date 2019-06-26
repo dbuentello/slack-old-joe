@@ -50,7 +50,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       assert.equal(
         await messageElement.getText(),
         'misspelled',
-        'corrected message element does not equal \'missspelled\''
+        "corrected message element does not equal 'missspelled'"
       );
     },
     {

@@ -24,7 +24,10 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
     await wait(1000);
 
     const devToolsWindow = await getDevToolsWindowHandle(window.client);
-    assert.notOk(devToolsWindow, 'window handle for the devtools should be false.');
+    assert.notOk(
+      devToolsWindow,
+      'window handle for the devtools should be false.'
+    );
   });
 
   it('can open the Electron devtools via menu', async () => {
