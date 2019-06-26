@@ -5,25 +5,17 @@ import {
   Elevation,
   Icon,
   Button,
-  Popover,
-  PopoverInteractionKind,
-  Classes,
-  Position
 } from '@blueprintjs/core';
-import { write } from 'fs-extra';
 
 import {
   SuiteResult,
   Result,
-  ItTestParams,
-  SuiteMethodResults,
   TestSuite
 } from '../../interfaces';
 import { chooseFolder } from './path-chooser';
 import { runTest } from '../runner';
 import { appendReport, writeReport, writeToFile } from '../../report';
 import { appState } from '../state';
-import { app } from 'electron';
 import { observer } from 'mobx-react';
 
 export interface ResultsProps {
@@ -35,7 +27,6 @@ export interface ResultsProps {
 
 @observer
 export class Results extends React.Component<ResultsProps, {}> {
-  props: ResultsProps;
 
   public render() {
     const listRef = React.useRef();
@@ -87,7 +78,9 @@ export class Results extends React.Component<ResultsProps, {}> {
   private renderIndividualResult(
     suiteResult: SuiteResult
   ): Array<JSX.Element> {
-    const { testsDone, slackClosed } = this.props;
+    // const { testsDone, slackClosed } = this.props;
+    const testsDone = this.props.testsDone;
+    const slackClosed = this.props.slackClosed;
     return [
       <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
       ...suiteResult.results.map(result => {
@@ -127,36 +120,19 @@ export class Results extends React.Component<ResultsProps, {}> {
       suiteName: string,
       testsDone: TestSuite[]
     ) {
-      const indTest = findTest(testName, suiteName, testsDone);
-      if(indTest) {
-        runTest(indTest, (succeeded: boolean) => {
-          appendReport(indTest, succeeded);
-          appState.testPassed = succeeded;
-        });
-      } else {
-        throw new Error(`Unable to find test ${testName}`);
-      }
 
-      
-    }
-
-    function findTest(
-      testName: string,
-      suiteName: string,
-      testsDone: TestSuite[]
-    ): ItTestParams | undefined {
-      // Find the right suiteMethodResult
-      const foundSuiteMethodResults = testsDone
-        .filter(({ name }) => name === suiteName)
-        .map(({ suiteMethodResults }) => suiteMethodResults)[0];
-
-      // _Should_ never happen
-      if (!foundSuiteMethodResults) {
-        throw new Error(`Could not find ${suiteName}`);
-      }
-
-      // Find the right test
-      return foundSuiteMethodResults.it.find(test => test.name === testName);
+      testsDone.forEach(testSuite => {
+        if (testSuite.name === suiteName) {
+          testSuite.suiteMethodResults.it.forEach(indTest => {
+            if (testName === indTest.name) {
+              runTest(indTest, (succeeded: boolean) => {
+                appendReport(indTest, succeeded);
+                appState.testPassed = succeeded;
+              });
+            }
+          });
+        }
+      });
     }
   }
 

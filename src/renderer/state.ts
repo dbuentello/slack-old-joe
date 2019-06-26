@@ -2,7 +2,7 @@ import { observable, autorun } from 'mobx';
 import { TestSuites, SuiteResult, TestFile } from '../interfaces';
 import { getSlackPath } from '../helpers/get-slack-path';
 import { SMOKE_TESTS } from '../smoke';
-import { chooseFolder, chooseFolderAsString } from './components/path-chooser';
+import { chooseFolderAsString } from './components/path-chooser';
 
 /**
  * The application's state. Exported as a singleton below.

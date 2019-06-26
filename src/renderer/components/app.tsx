@@ -6,8 +6,7 @@ import {
   Card,
   Elevation,
   Icon,
-  Divider,
-  Popover
+  Divider
 } from '@blueprintjs/core';
 import { AppState } from '../state';
 import { clean, restore } from '../../helpers/clean-restore';
@@ -96,9 +95,6 @@ export class App extends React.Component<AppProps, LocalAppState> {
     );
   }
 
-  /**
-   * Renders the results page
-   */
   public renderProgress() {
     const { appState } = this.props;
     const { testsDone, testsFailed } = appState;
