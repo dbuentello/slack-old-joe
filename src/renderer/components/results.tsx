@@ -28,6 +28,12 @@ export interface ResultsProps {
 @observer
 export class Results extends React.Component<ResultsProps, {}> {
 
+  constructor(props: ResultsProps) {
+    super(props);
+
+    this.renderIndividualResult = this.renderIndividualResult.bind(this);
+  }
+
   public render() {
     const listRef = React.useRef();
     const { stayScrolled } = useStayScrolled(listRef);
