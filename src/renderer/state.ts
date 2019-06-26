@@ -45,6 +45,7 @@ export class AppState {
       .toLocaleTimeString()
       .replace(/:/g, '-')
       .replace(' ', '') + '.txt';
+
   @observable public report: string = '';
 
   // Used for button retry info
