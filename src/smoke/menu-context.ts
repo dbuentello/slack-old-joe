@@ -60,7 +60,11 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await clickContextMenuItem(2);
       await wait(600);
 
-      assert.equal(clipboard.readText(), 'hello', `the clipboard content does not equal \'hello\' given ${clipboard.readText()} instead`);
+      assert.equal(
+        clipboard.readText(),
+        'hello',
+        `the clipboard content does not equal \'hello\' given ${clipboard.readText()} instead`
+      );
     },
     { retries }
   );
@@ -87,7 +91,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       const messageElement = await window.client.$('p=pasted');
       await messageElement.waitForExist(1000);
 
-      assert.ok(await messageElement.isExisting(), 'the message input does not exist');
+      assert.ok(
+        await messageElement.isExisting(),
+        'the message input does not exist'
+      );
     },
     { retries }
   );
@@ -110,7 +117,11 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await clickContextMenuItem(3);
       await wait(600);
 
-      assert.equal(clipboard.readText(), 'cut', 'the clipboard content does not equal \'cut\'');
+      assert.equal(
+        clipboard.readText(),
+        'cut',
+        "the clipboard content does not equal 'cut'"
+      );
       await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
     },
     { retries }
@@ -132,7 +143,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       assert.equal(
         clipboard.readText(),
         'I am a thread',
-        'the clipboard content should equal \'I am a thread\''
+        "the clipboard content should equal 'I am a thread'"
       );
     },
     { retries }
@@ -181,7 +192,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await wait(600);
 
       const imageUrl = clipboard.readText();
-      assert.ok(imageUrl.startsWith('https://files.slack'), 'image does not start with the desired image URL');
+      assert.ok(
+        imageUrl.startsWith('https://files.slack'),
+        'image does not start with the desired image URL'
+      );
     },
     {
       retries,
@@ -213,7 +227,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await wait(600);
 
       const image = clipboard.readImage();
-      assert.notOk(image.isEmpty(), 'there should be an image in the clipboard.');
+      assert.notOk(
+        image.isEmpty(),
+        'there should be an image in the clipboard.'
+      );
     },
     {
       retries,
@@ -239,7 +256,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
 
       const image = clipboard.readText();
       // https://files.slack.com/files-pri/THWUCHYD6-FJEBR9EJ1/photo-1467269204594-9661b134dd2b.jpeg
-      assert.ok(image.startsWith('https://files.slack'), 'image does not begin with the desired url (https://files.slack)');
+      assert.ok(
+        image.startsWith('https://files.slack'),
+        'image does not begin with the desired url (https://files.slack)'
+      );
     },
     {
       retries

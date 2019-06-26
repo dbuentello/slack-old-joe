@@ -83,7 +83,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     assert.ok(createdLogFile, 'log file does not exist.');
 
     const contents = await extractLogFile();
-    assert.ok(contents.length > 10, 'log file should have more than 10 files inside.');
+    assert.ok(
+      contents.length > 10,
+      'log file should have more than 10 files inside.'
+    );
   });
 
   it('restarts and collects net logs', async () => {
@@ -117,6 +120,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
   it('saves a log file zip with a net.log in it', async () => {
     const contents = await extractLogFile();
-    assert.include(contents, 'net.log', 'a net log file should have been saved');
+    assert.include(
+      contents,
+      'net.log',
+      'a net log file should have been saved'
+    );
   });
 };

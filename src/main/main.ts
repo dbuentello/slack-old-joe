@@ -4,6 +4,7 @@ import { getOrCreateMainWindow } from './windows';
 import { shouldQuit } from './squirrel';
 import { setupMenu } from './menu';
 import { setupReporter } from './reporter';
+import { deleteOldJoeFolders } from '../helpers/clean-restore';
 
 /**
  * Handle the app's "ready" event. This is essentially
@@ -20,6 +21,7 @@ export async function onReady() {
  * @export
  */
 export function onBeforeQuit() {
+  deleteOldJoeFolders();
   (global as any).isQuitting = true;
 }
 

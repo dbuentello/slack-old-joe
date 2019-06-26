@@ -13,7 +13,10 @@ export const test: SuiteMethod = async ({ it }) => {
 
     // We hopefully lost a team, at least after a while
     await wait(3000);
-    assert.ok(numberOfTeams > (await getTeamsCount()), 'the number of current teams should be less than what we previously had.');
+    assert.ok(
+      numberOfTeams > (await getTeamsCount()),
+      'the number of current teams should be less than what we previously had.'
+    );
   });
 
   it('opens the sign-in window when signing out of the last team ', async () => {

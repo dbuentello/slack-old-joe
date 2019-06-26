@@ -18,8 +18,8 @@ async function assertVideo(client: JoeBrowserObject) {
 
   // Expect the video to be playing
   const src = (await iframe.getProperty('src')) as string;
-  assert.ok(src.includes('youtube.com'), 'src does not include \'youtube.com\'');
-  assert.ok(src.includes('IEItOBG0r2g'), 'src does not include \'IEItOBG0r2g\'');
+  assert.ok(src.includes('youtube.com'), "src does not include 'youtube.com'");
+  assert.ok(src.includes('IEItOBG0r2g'), "src does not include 'IEItOBG0r2g'");
 
   // Switch to the iframe
   await client.switchToFrame(iframe);
@@ -48,7 +48,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     const randomDesc = await window.client.$(
       'span=Non-work banter and water cooler conversation'
     );
-    assert.ok(await randomDesc.waitForExist(1000), 'could not switch to the #random channel.');
+    assert.ok(
+      await randomDesc.waitForExist(1000),
+      'could not switch to the #random channel.'
+    );
   });
 
   it('can post a message', async () => {

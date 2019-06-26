@@ -49,12 +49,23 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
       const aboutBoxValue: string = await getAboutBoxValue();
 
-      assert.ok(aboutBoxValue.includes(expectedVersion.simple), 'about dialog does not display the correct version.');
+      assert.ok(
+        aboutBoxValue.includes(expectedVersion.simple),
+        'about dialog does not display the correct version.'
+      );
 
       if (expectedVersion.full.includes('alpha')) {
-        assert.include(aboutBoxValue.toLowerCase(), 'alpha', 'version string for alpha not included');
+        assert.include(
+          aboutBoxValue.toLowerCase(),
+          'alpha',
+          'version string for alpha not included'
+        );
       } else if (expectedVersion.full.includes('beta')) {
-        assert.include(aboutBoxValue.toLowerCase(), 'beta', 'version string for beta not included');
+        assert.include(
+          aboutBoxValue.toLowerCase(),
+          'beta',
+          'version string for beta not included'
+        );
       }
 
       // Close window
@@ -79,12 +90,24 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       // Direct Download 3.4.1-beta PR6078/aa231d3 64-bit
       const versionText = await versionElement.getText();
 
-      assert.include(versionText, expectedVersion.simple, `version does not match the expected. expected:${expectedVersion.simple} actual: ${versionText}`);
+      assert.include(
+        versionText,
+        expectedVersion.simple,
+        `version does not match the expected. expected:${expectedVersion.simple} actual: ${versionText}`
+      );
 
       if (expectedVersion.full.includes('alpha')) {
-        assert.include(versionText.toLowerCase(), 'alpha', 'version string for alpha not included');
+        assert.include(
+          versionText.toLowerCase(),
+          'alpha',
+          'version string for alpha not included'
+        );
       } else if (expectedVersion.full.includes('beta')) {
-        assert.include(versionText.toLowerCase(), 'beta', 'version string for beta not included');
+        assert.include(
+          versionText.toLowerCase(),
+          'beta',
+          'version string for beta not included'
+        );
       }
     },
     { platforms: ['win32'] }

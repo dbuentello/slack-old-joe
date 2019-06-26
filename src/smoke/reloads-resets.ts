@@ -47,12 +47,20 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await wait(300);
 
     let title = await window.client.getTitle();
-    assert.include(title, 'Old Joe Two', `${title} does not include needle \'Old Joe Two\'`);
+    assert.include(
+      title,
+      'Old Joe Two',
+      `${title} does not include needle \'Old Joe Two\'`
+    );
 
     await switchToTeam(1);
 
     title = await window.client.getTitle();
-    assert.include(title, 'Old Joe One', `${title} does not include needle \'Old Joe One\'`);
+    assert.include(
+      title,
+      'Old Joe One',
+      `${title} does not include needle \'Old Joe One\'`
+    );
   });
 
   it('can "Clear Cache and Restart"', async () => {
@@ -77,7 +85,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await switchToTeam(1);
 
     title = await window.client.getTitle();
-    assert.include(title, 'Old Joe One', `${title} does not include needle \'Old Joe One\'`);
+    assert.include(
+      title,
+      'Old Joe One',
+      `${title} does not include needle \'Old Joe One\'`
+    );
   });
 
   it('can switch to the #random channel post-reset', async () => {
@@ -88,7 +100,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     const randomDesc = await window.client.$(
       'span=Non-work banter and water cooler conversation'
     );
-    assert.ok(await randomDesc.waitForExist(1000), 'randomDesc not showing up.');
+    assert.ok(
+      await randomDesc.waitForExist(1000),
+      'randomDesc not showing up.'
+    );
   });
 
   it('can post a message post-reset', async () => {
@@ -97,6 +112,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     // The message should show up
     const randomDesc = await window.client.$(`span=${testValue}`);
-    assert.ok(await randomDesc.waitForExist(1000), 'randomDesc not showing up.');
+    assert.ok(
+      await randomDesc.waitForExist(1000),
+      'randomDesc not showing up.'
+    );
   });
 };

@@ -87,13 +87,17 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     });
     const selection = await getSelection(window.client);
 
-    assert.equal(selection, 'F', 'the message input should equal \'F\'');
+    assert.equal(selection, 'F', "the message input should equal 'F'");
   });
 
   it('can "copy"', async () => {
     await sendNativeKeyboardEvent({ text: 'c', cmdOrCtrl: true });
     await wait(300);
-    assert.equal(clipboard.readText(), 'F', 'the clipboard content should equal \'F\'');
+    assert.equal(
+      clipboard.readText(),
+      'F',
+      "the clipboard content should equal 'F'"
+    );
   });
 
   it('can "delete"', async () => {
@@ -101,7 +105,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await sendNativeKeyboardEvent({ text: 'delete', noFocus: true });
 
     const messageElement = await window.client.$('p=F');
-    assert.notOk(await messageElement.isExisting(), 'the former message input should not exist');
+    assert.notOk(
+      await messageElement.isExisting(),
+      'the former message input should not exist'
+    );
   });
 
   it('can "paste"', async () => {
@@ -115,7 +122,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     const messageElement = await window.client.$('p=P');
     await messageElement.waitForExist(1000);
 
-    assert.ok(await messageElement.isExisting(), 'the message input should exist.');
+    assert.ok(
+      await messageElement.isExisting(),
+      'the message input should exist.'
+    );
   });
 
   it(
@@ -135,7 +145,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       const messageElement = await window.client.$('p=Hello');
       await messageElement.waitForExist(1000);
 
-      assert.ok(await messageElement.isExisting(), 'the message input should exist.');
+      assert.ok(
+        await messageElement.isExisting(),
+        'the message input should exist.'
+      );
 
       // Delete it again
       await sendNativeKeyboardEvent({
@@ -162,7 +175,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     );
     await searchCloseBtn.waitForExist(1000);
 
-    assert.ok(await searchCloseBtn.isExisting(), 'the search box close button should exist.');
+    assert.ok(
+      await searchCloseBtn.isExisting(),
+      'the search box close button should exist.'
+    );
 
     await searchCloseBtn.click();
   });

@@ -47,7 +47,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       const messageToFind = await window.client.$(
         `span=Hi, it's me, the notification`
       );
-      assert.ok(messageToFind.waitForExist(1000), 'the notification message is not found.');
+      assert.ok(
+        messageToFind.waitForExist(1000),
+        'the notification message is not found.'
+      );
     },
     {
       platforms: ['win32', 'darwin']
@@ -63,7 +66,10 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await clickFirstNativeNotification(window.client);
       await wait(300);
 
-      assert.isFalse(await getIsHidden(window.client), 'the notification did not open Slack successfully.');
+      assert.isFalse(
+        await getIsHidden(window.client),
+        'the notification did not open Slack successfully.'
+      );
     },
     {
       platforms: ['win32', 'darwin']
