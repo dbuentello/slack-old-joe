@@ -8,7 +8,7 @@ export function chooseFolder() {
     title: 'Choose where to add report',
     properties: ['openDirectory']
   });
-  if (filePaths != undefined) {
+  if (filePaths) {
     appState.absPath = filePaths[0];
   }
 }
