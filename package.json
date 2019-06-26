@@ -1,6 +1,6 @@
 {
   "name": "old-joe",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A test framework for Slack",
   "main": "./dist/src/main/main",
   "scripts": {
@@ -8,6 +8,7 @@
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
     "make": "cross-env NODE_ENV=production electron-forge make",
     "package": "cross-env NODE_ENV=production electron-forge package",
+    "publish": "cross-env NODE_ENV=production electron-forge publish",
     "parcel:build": "node ./tools/parcel-build.js",
     "parcel:watch": "node ./tools/parcel-watch.js"
   },
@@ -43,7 +44,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.39",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.39",
     "@electron-forge/maker-zip": "^6.0.0-beta.39",
-    "@electron-forge/publisher-github": "^6.0.0-beta.39",
+    "@electron-forge/publisher-github": "6.0.0-beta.39",
     "@types/chai": "^4.1.7",
     "@types/cross-spawn": "^6.0.0",
     "@types/extract-zip": "^1.6.2",
@@ -60,5 +61,16 @@
     "prettier": "1.18.2",
     "rimraf": "^2.6.3",
     "typescript": "^3.4.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

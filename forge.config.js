@@ -65,9 +65,7 @@ module.exports = {
       name: '@electron-forge/maker-deb',
       platforms: ['linux'],
       config: {
-        icon: {
-          scalable: path.resolve(iconDir, 'fiddle.svg')
-        }
+        icon: path.resolve(iconDir, 'icon.png')
       }
     },
     {
@@ -75,17 +73,17 @@ module.exports = {
       platforms: ['linux']
     }
   ],
-  // publishers: [
-  //   {
-  //     name: '@electron-forge/publisher-github',
-  //     config: {
-  //       repository: {
-  //         owner: 'electron',
-  //         name: 'fiddle'
-  //       },
-  //       draft: true,
-  //       prerelease: true
-  //     }
-  //   }
-  // ]
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'felixrieseberg',
+          name: 'slack-old-joe'
+        },
+        draft: true,
+        prerelease: true
+      }
+    }
+  ]
 }

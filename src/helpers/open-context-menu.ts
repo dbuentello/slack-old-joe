@@ -17,6 +17,10 @@ export async function openContextMenuForElement(
   waitFor: number = 300
 ) {
   await wait(waitFor);
-  await sendClickElement(client, selector, true, PointerEvents.MOUSEDOWNUP);
+  await sendClickElement(client, {
+    selector,
+    rightClick: true,
+    type: PointerEvents.MOUSEDOWNUP
+  });
   await wait(waitFor);
 }

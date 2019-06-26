@@ -18,7 +18,7 @@ export async function getClient(appState: AppState) {
       browserName: 'chrome',
       'goog:chromeOptions': {
         binary: appState.appToTest,
-        args: ['--remote-debugging-port=12209', '--testType=webdriver'] // Optional, perhaps 'app=' + /path/to/your/app/
+        args: ['--remote-debugging-port=12209', '--test-type=webdriver']
       }
     }
   };

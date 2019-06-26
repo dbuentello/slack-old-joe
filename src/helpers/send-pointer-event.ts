@@ -2,6 +2,8 @@ import * as robot from 'robotjs';
 
 import { BrowserObject } from 'webdriverio';
 import { moveCursorToElement } from './move-cursor';
+import { getModifierKeyCode } from './send-keyboard-event';
+import { wait } from '../utils/wait';
 
 export const enum PointerEvents {
   MOUSEMOVE = 'mouseMoved',
@@ -16,6 +18,10 @@ export interface PointerEventOptions {
   x: number;
   y: number;
   rightClick?: boolean;
+  ctrl?: boolean;
+  shift?: boolean;
+  alt?: boolean;
+  cmd?: boolean;
 }
 
 export function sendPointerEvent(
@@ -31,7 +37,8 @@ export function sendPointerEvent(
     y: y,
     x: x,
     timestamp: Date.now(),
-    clickCount: 1
+    clickCount: 1,
+    modifiers: getModifierKeyCode(options)
   };
 
   // Won't work with scaled screens
@@ -44,20 +51,27 @@ export function sendPointerEvent(
   return client.sendCommand(command, data);
 }
 
+export interface SendClickElementOptions {
+  selector: string;
+  rightClick?: boolean;
+  type?: PointerEvents;
+  ctrl?: boolean;
+  shift?: boolean;
+  alt?: boolean;
+  cmd?: boolean;
+}
+
 export async function sendClickElement(
   client: BrowserObject,
-  selector: string,
-  rightClick?: boolean,
-  type?: PointerEvents
+  options: SendClickElementOptions
 ) {
+  const { rightClick, selector, type, alt, cmd, ctrl, shift } = options;
   const element = await client.$(selector);
   await element.waitForExist(1000);
-  const location = await client.executeScript(
-    `return document.querySelector("${selector}").getBoundingClientRect()`,
-    []
-  );
+  const location = await element.getLocation();
 
   await element.moveTo();
+  await wait(300);
 
   let _type = type || PointerEvents.MOUSEDOWN;
 
@@ -69,14 +83,21 @@ export async function sendClickElement(
   await sendPointerEvent(client, {
     type: _type,
     // +2 so that we actually hit the element
-    x: location.left + 2,
-    y: location.top + 2,
-    rightClick
+    x: location.x + 2,
+    y: location.y + 2,
+    rightClick,
+    alt,
+    cmd,
+    shift,
+    ctrl
   });
 
   // If the type was "down and up", we'll now do the "up" part
   if (type === PointerEvents.MOUSEDOWNUP) {
-    await sendClickElement(client, selector, rightClick, PointerEvents.MOUSEUP);
+    await sendClickElement(client, {
+      ...options,
+      type: PointerEvents.MOUSEUP
+    });
   }
 }
 
