@@ -99,7 +99,7 @@ export class Results extends React.Component<ResultsProps, {}> {
     suiteResult: SuiteResult,
     slackClosed: boolean
   ): Array<JSX.Element> {
-    const testsDone = this.props.testsDone;
+    const { testsDone, slackClosed } = this.props;
     return [
       <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
       ...suiteResult.results.map(result => {
