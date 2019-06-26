@@ -76,14 +76,17 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     // Give Slack a second to show us the file in the Finder
     await wait(2000);
 
-    assert.ok(createdLogFile);
+    assert.ok(createdLogFile, 'Unable to reveal logs in the downloads folder');
   });
 
   it('creates a log file more than 10 files inside', async () => {
-    assert.ok(createdLogFile);
+    assert.ok(createdLogFile, 'log file does not exist.');
 
     const contents = await extractLogFile();
-    assert.ok(contents.length > 10);
+    assert.ok(
+      contents.length > 10,
+      'log file should have more than 10 files inside.'
+    );
   });
 
   it('restarts and collects net logs', async () => {
@@ -117,6 +120,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
   it('saves a log file zip with a net.log in it', async () => {
     const contents = await extractLogFile();
-    assert.include(contents, 'net.log', 'a net log file');
+    assert.include(
+      contents,
+      'net.log',
+      'a net log file should have been saved'
+    );
   });
 };

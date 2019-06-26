@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 
 import { SuiteMethod } from '../interfaces';
-import { selectNextTeamShortcut } from '../helpers/switch-teams';
 import { openPreferences, closePreferences } from '../helpers/open-preferences';
 import { wait } from '../utils/wait';
 import { enterMessage } from '../helpers/enter-message';
@@ -56,14 +55,14 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     assert.ok(
       await getGpuWindowHandle(window.client),
-      'the chrome:///gpu window'
+      'could not get GPU window handle'
     );
   });
 
   it('has hardware acceleration enabled by default (and is actually using it)', async () => {
     assert.isTrue(
       await getIsGpuEnabled(window.client),
-      'hardware acceleration (as reported by Chrome)'
+      'hardware acceleration (as reported by Chrome) is not enabled.'
     );
 
     // Close the window
@@ -78,8 +77,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     await openGpuInfoWindow(window.client);
 
-    assert.isFalse(await getIsGpuEnabled(window.client));
-    // await window.client.closeWindow();
+    assert.isFalse(
+      await getIsGpuEnabled(window.client),
+      'GPU hardware acceleration should be false got true instead.'
+    );
   });
 
   it('can enable hardware acceleration', async () => {
@@ -98,7 +99,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     );
     assert.isTrue(
       setting,
-      `hardware acceleration (as noted by Slack's preference store)`
+      `hardware acceleration (as noted by Slack's preference store) is not present.`
     );
   });
 
@@ -110,7 +111,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     assert.isTrue(
       await getIsGpuEnabled(window.client),
-      'hardware acceleration (as reported by Chrome)'
+      'hardware acceleration (as reported by Chrome) is not enabled.'
     );
 
     await window.client.closeWindow();
@@ -140,7 +141,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
         const newStartupItems = await getStartupItems();
         const newEnabled = newStartupItems.length > 0;
 
-        assert.ok(newEnabled, 'Slack launch on login');
+        assert.ok(
+          newEnabled,
+          'Slack launch on login failed. (newEnabled not true).'
+        );
       }
     },
     { platforms: ['win32'] }
@@ -159,7 +163,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
       const startupItems = await getStartupItems();
 
-      assert.equal(startupItems.length, 0, 'number of Slack startup items');
+      assert.equal(
+        startupItems.length,
+        0,
+        `number of Slack startup items should be equal to 0 got: ${startupItems.length}`
+      );
     },
     { platforms: ['win32'] }
   );
@@ -185,7 +193,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       for (const option of options) {
         const element = await window.client.$(option);
         await element.waitForExist(1000);
-        assert.ok(await element.isExisting());
+        assert.ok(
+          await element.isExisting(),
+          `element: windows.client.${option} does not exist.`
+        );
       }
     },
     { platforms: ['win32'] }
@@ -194,18 +205,16 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it(
     'can select the HTML notifications',
     async () => {
-      await sendClickElement(
-        window.client,
-        '#winssb_notification_method_option_1',
-        false,
-        PointerEvents.MOUSEDOWN
-      );
-      await sendClickElement(
-        window.client,
-        '#winssb_notification_method_option_1',
-        false,
-        PointerEvents.MOUSEUP
-      );
+      await sendClickElement(window.client, {
+        selector: '#winssb_notification_method_option_1',
+        rightClick: false,
+        type: PointerEvents.MOUSEDOWN
+      });
+      await sendClickElement(window.client, {
+        selector: '#winssb_notification_method_option_1',
+        rightClick: false,
+        type: PointerEvents.MOUSEUP
+      });
 
       const notificationsButton = await window.client.$(
         '#winssb_notification_method_button'
@@ -213,18 +222,16 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await notificationsButton.waitForExist(1000);
       await notificationsButton.click();
 
-      await sendClickElement(
-        window.client,
-        '#winssb_notification_method_option_0',
-        false,
-        PointerEvents.MOUSEDOWN
-      );
-      await sendClickElement(
-        window.client,
-        '#winssb_notification_method_option_0',
-        false,
-        PointerEvents.MOUSEUP
-      );
+      await sendClickElement(window.client, {
+        selector: '#winssb_notification_method_option_0',
+        rightClick: false,
+        type: PointerEvents.MOUSEDOWN
+      });
+      await sendClickElement(window.client, {
+        selector: '#winssb_notification_method_option_0',
+        rightClick: false,
+        type: PointerEvents.MOUSEUP
+      });
 
       // Click somewhere else
       await sendNativeKeyboardEvent({ text: 'escape' });
@@ -234,7 +241,13 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
         window.client,
         'notificationMethod'
       );
-      assert.equal(notificatonMethod, 'html');
+      assert.equal(
+        notificatonMethod,
+        'html',
+        `notification method is not equal to \'html\' got ${String(
+          notificatonMethod
+        )}`
+      );
     },
     { platforms: ['win32'] }
   );
