@@ -57,5 +57,5 @@ export async function appendReport(
 
 export function writeToFile() {
   const reportPath = path.join(appState.absPath, appState.fileName);
-  return(fs.writeFile(reportPath, appState.report));
+  return fs.writeFile(reportPath, appState.report);
 }

@@ -58,9 +58,9 @@ export async function deleteOldJoeFolders() {
   const slackBackupFolders = (await fs.readdir(appDataDir)).filter(
     f => f.startsWith(`${USER_DATA_FOLDER_NAME}-`) && f.length === 22
   );
-  
-  if(slackBackupFolders.length > 1) {
-    throw new Error("Should not have more than one backup folder.")
+
+  if (slackBackupFolders.length > 1) {
+    throw new Error('Should not have more than one backup folder.');
   }
   const folderPath = path.join(appDataDir, slackBackupFolders[0]);
   if (hasOldJoeFile(folderPath)) {

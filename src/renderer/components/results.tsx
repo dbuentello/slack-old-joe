@@ -57,48 +57,37 @@ export class Results extends React.Component<ResultsProps, {}> {
   }
 
   private renderResultElements() {
-    return (
-      this.props.results.length > 0
-      ? this.props.results.map((suiteResult: SuiteResult) =>
-          this.renderIndividualResult(
-            suiteResult,
-            this.props.slackClosed
-          )
-        ) // pass in testsDone
+    return this.props.results.length > 0
+      ? this.props.results.map(this.renderIndividualResult)
       : [
           this.props.done ? (
             <h5 key="did-not-run">Didn't run any tests, huh? You rascal!</h5>
           ) : null
-        ]
-    );
+        ];
   }
 
   private renderDoneElements() {
-    return (
-      this.props.done ? (
-        <Button
-          text="Save Report"
-          onClick={() => {
-            writeReport(appState.results);
-            chooseFolder();
-            writeToFile();
-          }}
-        ></Button>
-      ) : (
-        <Button
-          text="Waiting for tests to finish...."
-          onClick={() => {
-            null;
-          }}
-        ></Button>
-      )
-    )
+    return this.props.done ? (
+      <Button
+        text="Save Report"
+        onClick={() => {
+          writeReport(appState.results);
+          chooseFolder();
+          writeToFile();
+        }}
+      ></Button>
+    ) : (
+      <Button
+        text="Waiting for tests to finish...."
+        disabled = {true}
+      ></Button>
+    );
   }
 
   private renderIndividualResult(
-    suiteResult: SuiteResult,
-    slackClosed: boolean
+    suiteResult: SuiteResult
   ): Array<JSX.Element> {
+    const slackClosed = this.props.slackClosed;
     const testsDone = this.props.testsDone;
     return [
       <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
@@ -121,7 +110,7 @@ export class Results extends React.Component<ResultsProps, {}> {
           ></Button>
         );
         const errorElement =
-          (error && !slackClosed) ? retryElem : errorTextElement;
+          error && !slackClosed ? retryElem : errorTextElement;
         return (
           <div className="result" key={result.name}>
             <p>
@@ -140,10 +129,10 @@ export class Results extends React.Component<ResultsProps, {}> {
       testsDone: TestSuite[]
     ) {
       const indTest = findTest(testName, suiteName, testsDone);
-      runTest(indTest, (succeeded:boolean) => {
+      runTest(indTest, (succeeded: boolean) => {
         appendReport(indTest, succeeded);
         appState.testPassed = succeeded;
-      })
+      });
 
       testsDone.forEach(testSuite => {
         if (testSuite.name === suiteName) {
@@ -167,8 +156,7 @@ export class Results extends React.Component<ResultsProps, {}> {
       // Find the right suiteMethodResult
       const foundSuiteMethodResults = testsDone
         .filter(({ name }) => name === suiteName)
-        .map(({ suiteMethodResults }) => suiteMethodResults)
-        [0];
+        .map(({ suiteMethodResults }) => suiteMethodResults)[0];
 
       // _Should_ never happen
       if (!foundSuiteMethodResults) {
@@ -176,10 +164,8 @@ export class Results extends React.Component<ResultsProps, {}> {
       }
 
       // Find the right test
-      return foundSuiteMethodResults.it
-        .find((test) => test.name === testName);
+      return foundSuiteMethodResults.it.find(test => test.name === testName);
     }
-
   }
 
   private getIcon({ skipped, ok }: Result): JSX.Element {
