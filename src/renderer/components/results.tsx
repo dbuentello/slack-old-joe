@@ -31,7 +31,6 @@ export const Results = ({
 }: ResultsProps) => {
   const listRef = React.useRef();
   const { stayScrolled } = useStayScrolled(listRef);
-
   const resultElements =
     results.length > 0
       ? results.map(suiteResult =>
@@ -66,12 +65,29 @@ export const Results = ({
   );
 };
 
+export function retrySuite(
+  testsDone: TestSuite[],
+  suiteName: string,
+  results: Result[]
+) {
+  const foundSuiteMethodResults = testsDone.filter(({name}) => {name === suiteName})[0]; // get the suit of tests we want. 
+  const failedSuiteTests = results.filter(({error}) => {error}) // get the tests with an error in them. 
+  foundSuiteMethodResults.suiteMethodResults.it.filter((test) => {}); // get the tests with an error from the suit we found. 
+  foundSuiteMethodResults.suiteMethodResults.it.forEach(async indTest => {
+    if(failedSuiteTests.some((result) => {result.name === indTest.name})) {
+      runTest(indTest, (succeeded:boolean) => {
+        appendReport(indTest, succeeded);
+        appState.testPassed = succeeded;
+      })
+    }
+  });
+}
+
 export function retryTest(
   testName: string,
   suiteName: string,
   testsDone: TestSuite[]
 ) {
-  console.log("Let's hope " + testName + ' works again 😬');
   testsDone.forEach(testSuite => {
     if (testSuite.name === suiteName) {
       testSuite.suiteMethodResults.it.forEach(async indTest => {
@@ -112,23 +128,33 @@ export function retryTest(
  * @param testsDone list of tests for all suites
  */
 const renderIndividualResult = (
-  suiteResult: SuiteResult,
+  { name: suiteName, results }: SuiteResult,
   testsDone: TestSuite[],
   slackClosed: boolean
 ): Array<JSX.Element> => {
+  const noErrorSuite = <h5 key={suiteName}>{suiteName}</h5>;
+  const suiteWithError = <h5 key={suiteName}>{suiteName} <a style={{"color":"#D8000C"}}><u onClick={() => {retrySuite(testsDone, suiteName, results)} }>try again?</u></a></h5> 
+  const hasError = results.some(({ error }) => !!error);
+
+  if (!!hasError) {
+    console.log(`${suiteName} has an error.`, results);
+  } else {
+    console.log(`${suiteName} has no error`, results);
+  }
+  const suiteElement = hasError ? suiteWithError : noErrorSuite;
+
   return [
-    <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
-    ...suiteResult.results.map(result => {
+    suiteElement,
+    ...results.map(result => {
       const { error, name } = result;
-      // const errorTextElement = <pre>`error`</pre>;
       const retryElem = error ? (
         <div>
           <Button
             icon="outdated"
             onClick={async function() {
-              await retryTest(name, suiteResult.name, testsDone);
+              await retryTest(name, suiteName, testsDone);
             }} // using a 'closure'
-            htmltitle="Retry test"
+            title="Retry test"
           ></Button>
         </div>
       ) : null;
