@@ -120,23 +120,25 @@ const renderIndividualResult = (
     <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
     ...suiteResult.results.map(result => {
       const { error, name } = result;
-      const errorTextElement = error ? <pre>{error.toString()}</pre> : null;
-      const retryElem = (
-        <Button
-          icon="outdated"
-          onClick={async function() {
-            await retryTest(name, suiteResult.name, testsDone);
-          }} // using a 'closure'
-          htmltitle="Retry test"
-        ></Button>
-      );
-      const errorElement = error && !slackClosed ? retryElem : errorTextElement;
+      // const errorTextElement = <pre>`error`</pre>;
+      const retryElem = error ? (
+        <div>
+          <Button
+            icon="outdated"
+            onClick={async function() {
+              await retryTest(name, suiteResult.name, testsDone);
+            }} // using a 'closure'
+            htmltitle="Retry test"
+          ></Button>
+        </div>
+      ) : null;
+      const errorElement = error ? (<pre>{error.toString()}</pre>) : null;
       return (
         <div className="result" key={result.name}>
           <p>
             {getIcon(result)} {name}
           </p>
-          {errorTextElement}
+          {retryElem}
           {errorElement}
         </div>
       );
