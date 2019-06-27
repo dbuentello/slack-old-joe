@@ -1,14 +1,14 @@
 import * as path from 'path';
-import * as os from 'os';
 import * as fs from 'fs-extra';
 import { SuiteResult, ItTestParams } from './interfaces';
+import { appState } from './renderer/state';
 
-export async function writeReport(
-  input: Array<SuiteResult>,
-  pathChosen: string,
-  fileName: string
-) {
-  const reportPath = path.join(pathChosen, fileName);
+/**
+ * Writes the report to memory. This will no longer write to a file and will instead write to the global
+ * appState.fileName.
+ * @param input Takes in all the suites and their results
+ */
+export async function writeReport(input: Array<SuiteResult>) {
   let text = `# Slack Old Joe Run ${new Date().toLocaleString()}\n`;
   text += `-`.padEnd(50, '-');
   text += `\n\n`;
@@ -32,9 +32,8 @@ export async function writeReport(
       text += `\n`;
     }
   }
-  // absPath = reportPath;
-  fs.writeFile(reportPath, text);
-  return reportPath;
+  appState.report += text;
+  return true;
 }
 
 /**
@@ -42,21 +41,20 @@ export async function writeReport(
  */
 export async function appendReport(
   input: ItTestParams, // for now
-  fileName: string,
-  absPath: string,
   succeeded: boolean
 ) {
-  if (absPath === '') {
-    console.log('Nothing will print');
-  } else {
-    console.log('🐪ing');
-    let text = `\n\n# Slack Old Joe Run ${input.name} (previously failed test)\n`;
-    text += `-`.padEnd(50, '-');
-    text += `\n\n`;
+  let text = `\n\n# Slack Old Joe Run ${input.name} (previously failed test)\n`;
+  text += `-`.padEnd(50, '-');
+  text += `\n\n`;
 
-    text += `Test: ${input.name}\n`;
-    text += `Result: ${succeeded ? 'Passed' : 'Did not pass'}\n`;
-    text += `\n`;
-    fs.appendFile(absPath + '/' + fileName, text);
-  }
+  text += `Test: ${input.name}\n`;
+  text += `Result: ${succeeded ? 'Passed' : 'Did not pass'}\n`;
+  text += `\n`;
+
+  appState.report += text;
+}
+
+export function writeToFile() {
+  const reportPath = path.join(appState.absPath, appState.fileName);
+  return fs.writeFile(reportPath, appState.report);
 }

@@ -7,8 +7,6 @@ import {
   closeAboutBox
 } from '../native-commands/mac-about-dialog';
 import { wait } from '../utils/wait';
-import { getPostWindowHandle } from '../helpers/get-posts-window';
-import { switchToChannel } from '../helpers/switch-channel';
 import { getAboutWindowHandle } from '../helpers/get-about-window';
 import { getSonicWindow } from '../helpers/get-sonic-window';
 

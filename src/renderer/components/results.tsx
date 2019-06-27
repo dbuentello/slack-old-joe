@@ -1,157 +1,156 @@
 import * as React from 'react';
 import useStayScrolled from 'react-stay-scrolled';
 import { Card, Elevation, Icon, Button } from '@blueprintjs/core';
-import { write } from 'fs-extra';
 
-import {
-  SuiteResult,
-  Result,
-  ItTestParams,
-  SuiteMethodResults,
-  TestSuite
-} from '../../interfaces';
+import { SuiteResult, Result, TestSuite, ItTestParams } from '../../interfaces';
 import { chooseFolder } from './path-chooser';
 import { runTest } from '../runner';
-import { appendReport, writeReport } from '../../report';
+import { appendReport, writeReport, writeToFile } from '../../report';
 import { appState } from '../state';
+import { observer } from 'mobx-react';
 
-interface ResultsProps {
+export interface ResultsProps {
   results: Array<SuiteResult>;
   done: boolean;
   testsDone: TestSuite[];
   slackClosed: boolean;
-  currPath: string;
 }
 
-export const Results = ({
-  results,
-  done,
-  testsDone,
-  slackClosed
-}: ResultsProps) => {
-  const listRef = React.useRef();
-  const { stayScrolled } = useStayScrolled(listRef);
+@observer
+export class Results extends React.Component<ResultsProps, {}> {
+  constructor(props: ResultsProps) {
+    super(props);
 
-  const resultElements =
-    results.length > 0
-      ? results.map(suiteResult =>
-          renderIndividualResult(suiteResult, testsDone, slackClosed)
-        ) // pass in testsDone
+    this.renderIndividualResult = this.renderIndividualResult.bind(this);
+  }
+
+  public render() {
+    const listRef = React.useRef();
+    const { stayScrolled } = useStayScrolled(listRef);
+    const resultElements = this.renderResultElements();
+    const doneElements = this.renderDoneElements();
+    // Typically you will want to use stayScrolled or scrollBottom inside
+    // useLayoutEffect, because it measures and changes DOM attributes (scrollTop) directly
+    React.useLayoutEffect(() => {
+      stayScrolled();
+    }, [this.props.results.length]);
+
+    return (
+      <Card elevation={Elevation.ONE} className="result-card">
+        {doneElements}
+        <div ref={listRef as any}>{resultElements}</div>
+      </Card>
+    );
+  }
+
+  private renderResultElements() {
+    return this.props.results.length > 0
+      ? this.props.results.map(this.renderIndividualResult)
       : [
-          done ? (
+          this.props.done ? (
             <h5 key="did-not-run">Didn't run any tests, huh? You rascal!</h5>
           ) : null
         ];
+  }
 
-  const doneElements = done ? (
-    <Button text="Save Report" onClick={chooseFolder}></Button>
-  ) : (
-    <Button
-      text="Waiting for tests to finish...."
-      onClick={chooseFolder}
-    ></Button>
-  );
+  private renderDoneElements() {
+    return this.props.done ? (
+      <Button
+        text="Save Report"
+        onClick={() => {
+          writeReport(appState.results);
+          chooseFolder();
+          writeToFile();
+        }}
+      ></Button>
+    ) : (
+      <Button text="Waiting for tests to finish...." disabled={true}></Button>
+    );
+  }
 
-  // Typically you will want to use stayScrolled or scrollBottom inside
-  // useLayoutEffect, because it measures and changes DOM attributes (scrollTop) directly
-  React.useLayoutEffect(() => {
-    stayScrolled();
-  }, [results.length]);
+  private renderIndividualResult(suiteResult: SuiteResult): Array<JSX.Element> {
+    const { testsDone, slackClosed } = this.props;
+    return [
+      <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
+      ...suiteResult.results.map(result => {
+        const { error, name } = result;
+        const errorTextElement = error ? <pre>{error.toString()}</pre> : null;
+        const retryElem = (
+          <Button
+            className="bp3-button bp3-intent-primary"
+            icon="outdated"
+            id={name}
+            disabled={appState.testRunning}
+            intent="warning"
+            onClick={() => {
+              appState.testRunning = true;
+              retryTest(name, suiteResult.name, testsDone);
+            }} // using a 'closure'
+            title="Retry test"
+            text={appState.testRunning ? 'Running...' : `Retry`}
+          ></Button>
+        );
+        const errorElement =
+          error && !slackClosed ? retryElem : errorTextElement;
+        return (
+          <div className="result" key={result.name}>
+            <p>
+              {this.getIcon(result)} {name}
+            </p>
+            {errorTextElement}
+            {errorElement}
+          </div>
+        );
+      })
+    ];
 
-  return (
-    <Card elevation={Elevation.ONE} className="result-card">
-      {doneElements}
-      <div ref={listRef as any}>{resultElements}</div>
-    </Card>
-  );
-};
+    function retryTest(
+      testName: string,
+      suiteName: string,
+      testsDone: TestSuite[]
+    ) {
+      const indTest = findTest(testName, suiteName, testsDone);
+      if(indTest) {
+        runTest(indTest, (succeeded:boolean) => {
+          appendReport(indTest, succeeded);
+          appState.testPassed = succeeded;
+        });
+      } else {
+        throw new Error(`Unable to find test ${testName}`);
+      }
+    };
 
-export function retryTest(
-  testName: string,
-  suiteName: string,
-  testsDone: TestSuite[]
-) {
-  console.log("Let's hope " + testName + ' works again 😬');
-  testsDone.forEach(testSuite => {
-    if (testSuite.name === suiteName) {
-      testSuite.suiteMethodResults.it.forEach(async indTest => {
-        if (testName === indTest.name) {
-          runTest(indTest, (succeeded: boolean) => {
-            if (appState.absPath === '') {
-              let p: string = appState.reportPath();
-              appState.absPath = p;
-              writeReport(
-                appState.results,
-                appState.absPath,
-                appState.fileName
-              );
-              appendReport(
-                indTest,
-                appState.fileName,
-                appState.absPath,
-                succeeded
-              );
-            } else {
-              appendReport(
-                indTest,
-                appState.fileName,
-                appState.absPath,
-                succeeded
-              );
-            }
-          });
-        }
-      });
+    function findTest(
+      testName: string,
+      suiteName: string,
+      testsDone: TestSuite[]
+    ): ItTestParams | undefined {
+      // Find the right suiteMethodResult
+      const foundSuiteMethodResults = testsDone
+        .filter(({ name }) => name === suiteName)
+        .map(({ suiteMethodResults }) => suiteMethodResults)
+        [0];
+
+      // _Should_ never happen
+      if (!foundSuiteMethodResults) {
+        throw new Error(`Could not find ${suiteName}`);
+      }
+
+      // Find the right test
+      return foundSuiteMethodResults.it
+        .find((test) => test.name === testName);
     }
-  });
 }
 
-/**
- * If there is an error, lets pass in the suiteName and name
- * @param suiteResult result of tests.
- * @param testsDone list of tests for all suites
- */
-const renderIndividualResult = (
-  suiteResult: SuiteResult,
-  testsDone: TestSuite[],
-  slackClosed: boolean
-): Array<JSX.Element> => {
-  return [
-    <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
-    ...suiteResult.results.map(result => {
-      const { error, name } = result;
-      const errorTextElement = error ? <pre>{error.toString()}</pre> : null;
-      const retryElem = (
-        <Button
-          icon="outdated"
-          onClick={async function() {
-            await retryTest(name, suiteResult.name, testsDone);
-          }} // using a 'closure'
-          htmltitle="Retry test"
-        ></Button>
-      );
-      const errorElement = error && !slackClosed ? retryElem : errorTextElement;
-      return (
-        <div className="result" key={result.name}>
-          <p>
-            {getIcon(result)} {name}
-          </p>
-          {errorTextElement}
-          {errorElement}
-        </div>
-      );
-    })
-  ];
-};
+  private getIcon({ skipped, ok }: Result): JSX.Element {
+    if (skipped) {
+      return <Icon icon="moon" htmlTitle="Test skipped (wrong platform)" />;
+    }
 
-function getIcon({ skipped, ok }: Result): JSX.Element {
-  if (skipped) {
-    return <Icon icon="moon" htmlTitle="Test skipped (wrong platform)" />;
+    if (ok) {
+      return <Icon icon="endorsed" htmlTitle="Test passed" />;
+    }
+
+    return <Icon icon="error" intent="danger" htmlTitle="Test failed" />;
   }
-
-  if (ok) {
-    return <Icon icon="endorsed" htmlTitle="Test passed" />;
-  }
-
-  return <Icon icon="error" intent="danger" htmlTitle="Test failed" />;
 }

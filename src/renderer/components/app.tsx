@@ -18,7 +18,6 @@ import { wait } from '../../utils/wait';
 import { Results } from './results';
 import { stopClientDriver, startClientDriver } from '../client-driver';
 import { setSonicBoot } from '../../helpers/set-sonic-boot';
-import { getOrCreateMainWindow } from '../../main/windows';
 
 interface AppProps {
   appState: AppState;
@@ -38,6 +37,7 @@ export class App extends React.Component<AppProps, LocalAppState> {
     this.run = this.run.bind(this);
     this.resetAppState = this.resetAppState.bind(this);
     this.testCallback = this.testCallback.bind(this);
+    this.resetAppState = this.resetAppState.bind(this);
   }
 
   public render() {

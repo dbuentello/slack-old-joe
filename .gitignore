@@ -88,3 +88,4 @@ dist
 .DS_Store
 
 out
+static/data/SlackDevMode.zip
