@@ -1,6 +1,6 @@
 import { TestSuite, Result } from '../interfaces';
 
-// Returns tests that have failed within the test suite. 
+// Returns tests that have failed within the test suite.
 export function getFailedTests(suite: TestSuite, results: Result[]) {
   let testNames: string[] = []; // contains all the test name strings
   // foundSuiteMethodResults

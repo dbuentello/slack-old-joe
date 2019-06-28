@@ -136,19 +136,22 @@ export class Results extends React.Component<ResultsProps, {}> {
         throw new Error('undefined suite.');
       }
 
-      let failedTestNames: string[] = getFailedTests(foundSuiteMethodResults, results);
-      
+      let failedTestNames: string[] = getFailedTests(
+        foundSuiteMethodResults,
+        results
+      );
+
       const failedTests: ItTestParams[] = findTests(
         failedTestNames,
         suiteName,
         testsDone
       );
 
-      failedTests.forEach((failedTest) => {
-        runTest(failedTest, (succeeded:boolean) => {
+      failedTests.forEach(failedTest => {
+        runTest(failedTest, (succeeded: boolean) => {
           appendReport(failedTest, succeeded);
           appState.testPassed = succeeded;
-        })
+        });
       });
     }
 
