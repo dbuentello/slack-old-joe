@@ -155,7 +155,7 @@ export class Results extends React.Component<ResultsProps, {}> {
       });
     }
 
-    /* Retry ONE test */
+    // Retry a test 
     function retryTest(
       testName: string,
       suiteName: string,
@@ -188,12 +188,13 @@ export class Results extends React.Component<ResultsProps, {}> {
         throw new Error(`Could not find ${suiteName}`);
       }
       const results: ItTestParams[] = []; // the list of ItTestParams
+      // Find the right tests
       testNames.forEach(testName => {
         results.push(foundSuiteMethodResults.it.find(
           test => test.name === testName
         ) as ItTestParams);
       });
-      // Find the right test
+      
       return results;
     }
   }
