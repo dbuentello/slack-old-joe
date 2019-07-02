@@ -2,7 +2,9 @@ const shell = require('shelljs');
 
 export async function findWindow(name: string): Promise<any> {
   // const stringOfWindows = await sh("wmctrl -l");
-  console.log(String(shell.exec('wmctrl -l')));
+  console.log(shell.exec('wmctrl -l').stdout);
+  const s:string = shell.exec('wmctrl -l');
+  return s.includes(name);
   // sh("wmctrl -l").then(function(res: { stdout: any; stderr: any; }) {
   //   console.log("Output from Linux command wmctrl -l : ", res.stdout);
   //   console.log(`Does output contain ${name}? ${res.stdout.contains(name)}`);
