@@ -2,7 +2,7 @@ const shell = require('shelljs');
 
 export async function findWindow(name: string): Promise<any> {
   // const stringOfWindows = await sh("wmctrl -l");
-  shell.config.execPath = shell.which('node');
+  shell.config.execPath = String(shell.which('node'));
   console.log(shell.exec('wmctrl -l').stdout);
   const s:string = shell.exec('wmctrl -l');
   return s.includes(name);
