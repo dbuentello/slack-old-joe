@@ -38,8 +38,8 @@ export async function getIsResetAppDataSheetOpen() {
   }
 
   if (isLinux()) {
-    console.log("👽");
     return (await findWindow('Reset Slack?'));
   }
 
+  return null;
 }
