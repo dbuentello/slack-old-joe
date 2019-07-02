@@ -53,7 +53,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     {
       cleanup,
       retries,
-      platforms: ['win32', 'darwin']
+      platforms: ['win32', 'darwin', 'linux']
     }
   );
 
