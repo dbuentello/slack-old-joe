@@ -1,6 +1,7 @@
-import { isMac, isWin } from '../utils/os';
+import { isMac, isWin, isLinux } from '../utils/os';
 import { runAppleScript } from '../utils/applescript';
 import { findHwnds } from './find-hwnds';
+import { findWindow } from './find-linux-window';
 
 const tryGetYesTitleScript = () =>
   `
@@ -35,4 +36,10 @@ export async function getIsResetAppDataSheetOpen() {
   if (isWin()) {
     return (await findHwnds('Reset Slack?')) > 0;
   }
+
+  if (isLinux()) {
+    console.log("👽");
+    return (await findWindow('Reset Slack?'));
+  }
+
 }
