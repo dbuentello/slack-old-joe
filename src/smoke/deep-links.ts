@@ -13,7 +13,7 @@ import { isMac, isLinux } from '../utils/os';
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   function openDeepLink(link: string) {
     console.log("link given: " + link);
-    if (isMac() || isLinux()) {
+    if (isMac()) {
       return shell.openExternal(link, {activate:false, workingDirectory:appState.appToTest});
     }
 
