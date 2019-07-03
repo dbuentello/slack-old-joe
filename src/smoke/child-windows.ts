@@ -108,7 +108,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
         );
       }
     },
-    { platforms: ['win32'] }
+    { platforms: ['win32', 'linux'] }
   );
 
   it(
@@ -125,7 +125,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
       await window.client.closeWindow();
     },
-    { platforms: ['win32'] }
+    { platforms: ['win32', 'linux'] }
   );
 
   // Disabled: Posts don't work in Sonic (yet)
