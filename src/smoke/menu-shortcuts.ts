@@ -7,7 +7,7 @@ import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { getIsHidden } from '../helpers/get-is-hidden';
 import { focus } from '../native-commands/focus';
 import { enterMessage } from '../helpers/enter-message';
-import { isMac } from '../utils/os';
+import { isMac, isLinux, isWin } from '../utils/os';
 import { getSelection } from '../helpers/get-selection';
 import { reopen } from '../native-commands/reopen';
 import { clipboard } from 'electron';
@@ -53,11 +53,19 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     const messageElement = await window.client.$('p=F');
     await messageElement.waitForExist(1000);
 
-    await sendNativeKeyboardEvent({
-      text: 'z',
-      cmdOrCtrl: true,
-      noFocus: true
-    });
+    if(isMac() || isWin()) {
+      await sendNativeKeyboardEvent({
+        text: 'z',
+        cmdOrCtrl: true,
+        noFocus: true
+      });
+    } else {
+      // linux
+      await sendNativeKeyboardEvent({
+        text: 'z',
+        cmdOrCtrl: true
+      })
+    }
     assert.notOk(await messageElement.isExisting(), 'the former message input');
   });
 
@@ -69,7 +77,14 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
         shift: true,
         noFocus: true
       });
+    } else if(isLinux()) { 
+      await sendNativeKeyboardEvent({
+        text: 'z',
+        ctrl: true,
+        shift: true
+      });
     } else {
+      // Windows!
       await sendNativeKeyboardEvent({ text: 'y', ctrl: true, noFocus: true });
     }
 
