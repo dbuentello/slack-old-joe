@@ -12,9 +12,4 @@ export async function reopen(appState: AppState) {
     return launchWithArgs(appState);
   }
 
-  // if (isLinux()) {
-  //   // rip
-
-  // }
-
 }
