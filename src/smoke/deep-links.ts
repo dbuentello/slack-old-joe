@@ -12,7 +12,7 @@ import { isMac, isLinux } from '../utils/os';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   function openDeepLink(link: string) {
-    if (isMac() || isLinux() ) {
+    if (isMac()) {
       return shell.openExternal(link);
     }
 
@@ -56,7 +56,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await openDeepLink(`slack://file?team=${teamId}&id=${fileId}`);
 
     const filesTitle = await window.client.$('div=Files');
-    await filesTitle.waitForExist(1000);
+    await filesTitle.waitForExist(2000);
 
     assert.ok(
       await filesTitle.isDisplayed(),
