@@ -8,11 +8,11 @@ import { getSonicWindow } from '../helpers/get-sonic-window';
 import { wait } from '../utils/wait';
 import { launchWithArgs } from '../helpers/launch-with-args';
 import { appState } from '../renderer/state';
-import { isMac } from '../utils/os';
+import { isMac, isLinux } from '../utils/os';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   function openDeepLink(link: string) {
-    if (isMac()) {
+    if (isMac() || isLinux() ) {
       return shell.openExternal(link);
     }
 
