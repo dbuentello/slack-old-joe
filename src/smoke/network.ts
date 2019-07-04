@@ -25,7 +25,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       assert.ok(await offlineInfo.isDisplayed(), 'offline info not displayed');
     },
     {
-      platforms: ['win32', 'darwin']
+      platforms: ['win32', 'darwin', 'linux']
     }
   );
 
@@ -45,7 +45,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       );
     },
     {
-      platforms: ['win32', 'darwin']
+      platforms: ['win32', 'darwin', 'linux']
     }
   );
 };
