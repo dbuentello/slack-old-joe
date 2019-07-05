@@ -1,4 +1,4 @@
-import shell = require('shelljs');
+import * as shell from 'shelljs';
 
 import { isWin, isLinux } from '../utils/os';
 import { execSync } from 'child_process';
@@ -21,12 +21,10 @@ export class WifiManager {
 
   private async onLinux() {
     shell.exec('nmcli networking on');
-    // execSync('nmcli networking off');
   }
 
   private async offLinux() {
     shell.exec('nmcli networking off');
-    // execSync('nmcli networking on');
   }
 
   private async onWindows() {
