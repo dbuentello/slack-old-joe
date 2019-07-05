@@ -38,7 +38,7 @@ export async function getIsResetAppDataSheetOpen() {
   }
 
   if (isLinux()) {
-    return (await findWindow('Reset Slack?'));
+    return await findWindow('Reset Slack?');
   }
 
   return null;

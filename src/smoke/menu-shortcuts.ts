@@ -53,7 +53,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     const messageElement = await window.client.$('p=F');
     await messageElement.waitForExist(1000);
 
-    if(isMac() || isWin()) {
+    if (isMac() || isWin()) {
       await sendNativeKeyboardEvent({
         text: 'z',
         cmdOrCtrl: true,
@@ -64,7 +64,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await sendNativeKeyboardEvent({
         text: 'z',
         cmdOrCtrl: true
-      })
+      });
     }
     assert.notOk(await messageElement.isExisting(), 'the former message input');
   });
@@ -77,7 +77,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
         shift: true,
         noFocus: true
       });
-    } else if(isLinux()) { 
+    } else if (isLinux()) {
       await sendNativeKeyboardEvent({
         text: 'z',
         ctrl: true,

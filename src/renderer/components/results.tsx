@@ -110,15 +110,15 @@ export class Results extends React.Component<ResultsProps, {}> {
       testsDone: TestSuite[]
     ) {
       const indTest = findTest(testName, suiteName, testsDone);
-      if(indTest) {
-        runTest(indTest, (succeeded:boolean) => {
+      if (indTest) {
+        runTest(indTest, (succeeded: boolean) => {
           appendReport(indTest, succeeded);
           appState.testPassed = succeeded;
         });
       } else {
         throw new Error(`Unable to find test ${testName}`);
       }
-    };
+    }
 
     function findTest(
       testName: string,
@@ -128,8 +128,7 @@ export class Results extends React.Component<ResultsProps, {}> {
       // Find the right suiteMethodResult
       const foundSuiteMethodResults = testsDone
         .filter(({ name }) => name === suiteName)
-        .map(({ suiteMethodResults }) => suiteMethodResults)
-        [0];
+        .map(({ suiteMethodResults }) => suiteMethodResults)[0];
 
       // _Should_ never happen
       if (!foundSuiteMethodResults) {
@@ -137,10 +136,9 @@ export class Results extends React.Component<ResultsProps, {}> {
       }
 
       // Find the right test
-      return foundSuiteMethodResults.it
-        .find((test) => test.name === testName);
+      return foundSuiteMethodResults.it.find(test => test.name === testName);
     }
-}
+  }
 
   private getIcon({ skipped, ok }: Result): JSX.Element {
     if (skipped) {

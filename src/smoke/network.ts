@@ -22,10 +22,10 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       const offlineInfo = await window.client.$(
         'i[type="cloud-offline-small"]'
       );
-      if(isLinux()) {
-        await wait(10000); 
+      if (isLinux()) {
+        await wait(10000);
       } else {
-        // The test always failed when I tested this with linux. 
+        // The test always failed when I tested this with linux.
         await offlineInfo.waitForDisplayed(40 * 1000);
       }
       assert.ok(await offlineInfo.isDisplayed(), 'offline info not displayed');

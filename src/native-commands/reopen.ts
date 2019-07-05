@@ -11,5 +11,4 @@ export async function reopen(appState: AppState) {
   if (isWin() || isLinux()) {
     return launchWithArgs(appState);
   }
-
 }

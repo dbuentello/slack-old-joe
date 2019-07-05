@@ -17,8 +17,10 @@ export async function switchToTeam(index: number) {
 export async function selectNextTeamShortcut() {
   const options =
     process.platform === 'darwin'
-      ? { text: '}', shift: true } : process.platform === 'linux' ? { shift: true, text:']' }
-      : { text: '\u0009' }; // for windows. 
+      ? { text: '}', shift: true }
+      : process.platform === 'linux'
+      ? { shift: true, text: ']' }
+      : { text: '\u0009' }; // for windows.
 
   await sendNativeKeyboardEvent({ text: 'escape' });
   await wait(100);
@@ -29,7 +31,9 @@ export async function selectNextTeamShortcut() {
 export async function selectPreviousTeamShortcut() {
   const options =
     process.platform === 'darwin'
-      ? { text: '{', shift: true } : process.platform === 'linux' ? { shift: true, text: '[' }
+      ? { text: '{', shift: true }
+      : process.platform === 'linux'
+      ? { shift: true, text: '[' }
       : { text: '\u0009', shift: true };
 
   await sendNativeKeyboardEvent({ text: 'escape' });

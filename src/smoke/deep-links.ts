@@ -12,9 +12,12 @@ import { isMac, isLinux } from '../utils/os';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   function openDeepLink(link: string) {
-    console.log("link given: " + link);
+    console.log('link given: ' + link);
     if (isMac()) {
-      return shell.openExternal(link, {activate:false, workingDirectory:appState.appToTest});
+      return shell.openExternal(link, {
+        activate: false,
+        workingDirectory: appState.appToTest
+      });
     }
 
     // We used to use shell.openExternal, but Slack would

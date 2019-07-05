@@ -40,6 +40,6 @@ export async function getIsNetLogSheetOpen() {
   }
 
   if (isLinux()) {
-    return (await findWindow('Restart and Collect Net Logs?'));
+    return await findWindow('Restart and Collect Net Logs?');
   }
 }
