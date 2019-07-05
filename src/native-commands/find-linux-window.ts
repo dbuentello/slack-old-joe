@@ -1,4 +1,4 @@
-import shell = require('shelljs');
+import * as shell from 'shelljs';
 
 /**
  * This function tells you whether or not you have a window with the title you give it. 
