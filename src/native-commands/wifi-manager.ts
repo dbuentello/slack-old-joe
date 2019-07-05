@@ -1,5 +1,3 @@
-import * as shell from 'shelljs';
-
 import { isWin, isLinux } from '../utils/os';
 import { execSync } from 'child_process';
 
