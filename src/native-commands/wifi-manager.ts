@@ -20,7 +20,6 @@ export class WifiManager {
 
   private async onLinux() {
     execSync('nmcli networking off');
-    await wait(100000);
   }
 
   private async offLinux() {
