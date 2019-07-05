@@ -40,7 +40,6 @@ export async function getIsNetLogSheetOpen() {
   }
 
   if (isLinux()) {
-    console.log("😍");
     return (await findWindow('Restart and Collect Net Logs?'));
   }
 }
