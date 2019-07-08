@@ -38,7 +38,7 @@ export async function selectPreviousTeamShortcut() {
   let options = {} as KeyboardEventOptions;
 
   if( isMac()) {
-    options = {text:'{', shift: true};
+    options = {text: '{', shift: true};
   } else if(isWin()) {
     options = {text: '\u0009', shift: true};
   } else {
