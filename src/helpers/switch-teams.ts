@@ -25,7 +25,7 @@ export async function selectNextTeamShortcut() {
     options = {text:'\u0009'};
   } else {
     // Linux
-    options = {text:']', shift: true};
+    options = {text: ']', shift: true};
   }
   
   await sendNativeKeyboardEvent({ text: 'escape' });
