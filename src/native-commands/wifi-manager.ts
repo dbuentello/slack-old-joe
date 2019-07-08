@@ -18,11 +18,11 @@ export class WifiManager {
   }
 
   private async onLinux() {
-    shell.exec('nmcli networking on');
+    execSync('nmcli networking on');
   }
 
   private async offLinux() {
-    shell.exec('nmcli networking off');
+    execSync('nmcli networking off');
   }
 
   private async onWindows() {

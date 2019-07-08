@@ -1,4 +1,4 @@
-import { sendNativeKeyboardEvent } from './send-keyboard-event';
+import { sendNativeKeyboardEvent, KeyboardEventOptions } from './send-keyboard-event';
 import { clickWindowMenuItem } from './click-window-menu-item';
 import { wait } from '../utils/wait';
 import { isMac, isLinux, isWin } from '../utils/os';
@@ -42,7 +42,7 @@ export async function selectPreviousTeamShortcut() {
 
   await sendNativeKeyboardEvent({ text: 'escape' });
   await wait(100);
-  await sendNativeKeyboardEvent({ ...options, ...PLATFORM_MODIFIER });
+  await sendNativeKeyboardEvent(...options, ...PLATFORM_MODIFIER);
   await wait(300);
 }
 
