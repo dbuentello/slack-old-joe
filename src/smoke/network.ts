@@ -4,6 +4,8 @@ import { SuiteMethod } from '../interfaces';
 import { disableWifi, enableWifi } from '../native-commands/wifi';
 import { waitUntilElementGone } from '../helpers/wait-until-gone';
 import { getSonicWindow } from '../helpers/get-sonic-window';
+import { wait } from '../utils/wait';
+import { isLinux } from '../utils/os';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
@@ -20,12 +22,16 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       const offlineInfo = await window.client.$(
         'i[type="cloud-offline-small"]'
       );
-      await offlineInfo.waitForDisplayed(40 * 1000);
-
+      if (isLinux()) {
+        await wait(10000);
+      } else {
+        // The test always failed when I tested this with linux.
+        await offlineInfo.waitForDisplayed(40 * 1000);
+      }
       assert.ok(await offlineInfo.isDisplayed(), 'offline info not displayed');
     },
     {
-      platforms: ['win32', 'darwin']
+      platforms: ['win32', 'darwin', 'linux']
     }
   );
 
@@ -45,7 +51,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       );
     },
     {
-      platforms: ['win32', 'darwin']
+      platforms: ['win32', 'darwin', 'linux']
     }
   );
 };

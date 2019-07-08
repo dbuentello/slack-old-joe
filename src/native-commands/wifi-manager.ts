@@ -1,4 +1,4 @@
-import { isWin } from '../utils/os';
+import { isWin, isLinux } from '../utils/os';
 import { execSync } from 'child_process';
 
 const debug = require('debug')('old-joe');
@@ -9,10 +9,20 @@ export class WifiManager {
 
   public async on() {
     if (isWin()) return this.onWindows();
+    if (isLinux()) return this.onLinux();
   }
 
   public async off() {
     if (isWin()) return this.offWindows();
+    if (isLinux()) return this.offLinux();
+  }
+
+  private async onLinux() {
+    execSync('nmcli networking on');
+  }
+
+  private async offLinux() {
+    execSync('nmcli networking off');
   }
 
   private async onWindows() {

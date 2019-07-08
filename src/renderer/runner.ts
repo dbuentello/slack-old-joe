@@ -87,7 +87,6 @@ export async function runTestFile(
   updateCallback: (succeeded: boolean) => void,
   appState: AppState
 ): Promise<SuiteResult> {
-  const { generateReportAtEnd } = appState;
   const result: SuiteResult = {
     name: file,
     results: []

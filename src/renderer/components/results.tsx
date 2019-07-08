@@ -161,7 +161,7 @@ export class Results extends React.Component<ResultsProps, {}> {
       suiteName: string,
       testsDone: TestSuite[]
     ) {
-      const indTest = findTests([testName], suiteName, testsDone)[0];
+      const indTest = findTest(testName, suiteName, testsDone);
       if (indTest) {
         runTest(indTest, (succeeded: boolean) => {
           appendReport(indTest, succeeded);
@@ -187,15 +187,8 @@ export class Results extends React.Component<ResultsProps, {}> {
       if (!foundSuiteMethodResults) {
         throw new Error(`Could not find ${suiteName}`);
       }
-      const results: ItTestParams[] = []; // the list of ItTestParams
-      // Find the right tests
-      testNames.forEach(testName => {
-        results.push(foundSuiteMethodResults.it.find(
-          test => test.name === testName
-        ) as ItTestParams);
-      });
-      
-      return results;
+      // Find the right test
+      return foundSuiteMethodResults.it.find(test => test.name === testName);
     }
   }
 

@@ -1,6 +1,7 @@
-import { sendNativeKeyboardEvent } from './send-keyboard-event';
+import { sendNativeKeyboardEvent, KeyboardEventOptions } from './send-keyboard-event';
 import { clickWindowMenuItem } from './click-window-menu-item';
 import { wait } from '../utils/wait';
+import { isMac, isWin } from '../utils/os';
 
 const PLATFORM_MODIFIER =
   process.platform === 'darwin' ? { cmd: true } : { ctrl: true };
@@ -15,11 +16,18 @@ export async function switchToTeam(index: number) {
 }
 
 export async function selectNextTeamShortcut() {
-  const options =
-    process.platform === 'darwin'
-      ? { text: '}', shift: true }
-      : { text: '\u0009' };
+  // assure method call this will have required parameters
+  let options = {} as KeyboardEventOptions; 
 
+  if( isMac()) {
+    options = {text: '}', shift: true};
+  } else if(isWin()) {
+    options = {text: '\u0009'};
+  } else {
+    // Linux
+    options = {text: ']', shift: true};
+  }
+  
   await sendNativeKeyboardEvent({ text: 'escape' });
   await wait(100);
   await sendNativeKeyboardEvent({ ...options, ...PLATFORM_MODIFIER });
@@ -27,14 +35,20 @@ export async function selectNextTeamShortcut() {
 }
 
 export async function selectPreviousTeamShortcut() {
-  const options =
-    process.platform === 'darwin'
-      ? { text: '{', shift: true }
-      : { text: '\u0009', shift: true };
+  let options = {} as KeyboardEventOptions;
+
+  if( isMac()) {
+    options = {text: '{', shift: true};
+  } else if(isWin()) {
+    options = {text: '\u0009', shift: true};
+  } else {
+    // Linux / anything else. 
+    options = {text:'[', shift: true};
+  }
 
   await sendNativeKeyboardEvent({ text: 'escape' });
   await wait(100);
-  await sendNativeKeyboardEvent({ ...options, ...PLATFORM_MODIFIER });
+  await sendNativeKeyboardEvent( {...options, ...PLATFORM_MODIFIER });
   await wait(300);
 }
 
