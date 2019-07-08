@@ -22,7 +22,7 @@ export async function selectNextTeamShortcut() {
   if( isMac()) {
     options = {text:'}', shift: true};
   } else if(isWin()) {
-    options = {text:'\u0009'};
+    options = {text: '\u0009'};
   } else {
     // Linux
     options = {text: ']', shift: true};
