@@ -8,6 +8,7 @@ import { runTest } from '../runner';
 import { appendReport, writeReport, writeToFile } from '../../report';
 import { appState } from '../state';
 import { observer } from 'mobx-react';
+import { getFailedTests } from '../../utils/get-failed-tests';
 
 export interface ResultsProps {
   results: Array<SuiteResult>;
@@ -68,14 +69,34 @@ export class Results extends React.Component<ResultsProps, {}> {
     );
   }
 
-  private renderIndividualResult(suiteResult: SuiteResult): Array<JSX.Element> {
+  private renderIndividualResult({
+    name: suiteName,
+    results
+  }: SuiteResult): Array<JSX.Element> {
     const { testsDone, slackClosed } = this.props;
+    const noErrorSuite = <h5 key={suiteName}>{suiteName}</h5>;
+    const suiteWithError = (
+      <h5 key={suiteName}>
+        {suiteName}{' '}
+        <a style={{ color: '#D8000C' }}>
+          <u
+            onClick={() => {
+              retrySuite(testsDone, suiteName, results);
+            }}
+          >
+            try again?
+          </u>
+        </a>
+      </h5>
+    );
+    const hasError = results.some(({ error }) => !!error);
+    const suiteElement = hasError ? suiteWithError : noErrorSuite;
     return [
-      <h5 key={suiteResult.name}>{suiteResult.name}</h5>,
-      ...suiteResult.results.map(result => {
+      suiteElement,
+      ...results.map(result => {
         const { error, name } = result;
         const errorTextElement = error ? <pre>{error.toString()}</pre> : null;
-        const retryElem = (
+        const retryElem = error ? (
           <Button
             className="bp3-button bp3-intent-primary"
             icon="outdated"
@@ -84,26 +105,57 @@ export class Results extends React.Component<ResultsProps, {}> {
             intent="warning"
             onClick={() => {
               appState.testRunning = true;
-              retryTest(name, suiteResult.name, testsDone);
+              retryTest(name, suiteName, testsDone);
             }} // using a 'closure'
             title="Retry test"
             text={appState.testRunning ? 'Running...' : `Retry`}
           ></Button>
-        );
-        const errorElement =
-          error && !slackClosed ? retryElem : errorTextElement;
+        ) : null;
+        const errorElement = error ? <pre>{error.toString()}</pre> : null;
         return (
           <div className="result" key={result.name}>
             <p>
               {this.getIcon(result)} {name}
             </p>
-            {errorTextElement}
+            {retryElem}
             {errorElement}
           </div>
         );
       })
     ];
 
+    function retrySuite(
+      testsDone: TestSuite[],
+      suiteName: string,
+      results: Result[]
+    ) {
+      const foundSuiteMethodResults = testsDone.find(
+        ({ name }) => name === suiteName
+      ); // get the suit of tests we want.
+      if (foundSuiteMethodResults === undefined) {
+        throw new Error('undefined suite.');
+      }
+
+      let failedTestNames: string[] = getFailedTests(
+        foundSuiteMethodResults,
+        results
+      );
+
+      const failedTests: ItTestParams[] = findTests(
+        failedTestNames,
+        suiteName,
+        testsDone
+      );
+
+      failedTests.forEach(failedTest => {
+        runTest(failedTest, (succeeded: boolean) => {
+          appendReport(failedTest, succeeded);
+          appState.testPassed = succeeded;
+        });
+      });
+    }
+
+    // Retry a test 
     function retryTest(
       testName: string,
       suiteName: string,
@@ -120,11 +172,12 @@ export class Results extends React.Component<ResultsProps, {}> {
       }
     }
 
-    function findTest(
-      testName: string,
+    // find multiple tests within a suite
+    function findTests(
+      testNames: string[],
       suiteName: string,
       testsDone: TestSuite[]
-    ): ItTestParams | undefined {
+    ): ItTestParams[] {
       // Find the right suiteMethodResult
       const foundSuiteMethodResults = testsDone
         .filter(({ name }) => name === suiteName)
@@ -134,7 +187,6 @@ export class Results extends React.Component<ResultsProps, {}> {
       if (!foundSuiteMethodResults) {
         throw new Error(`Could not find ${suiteName}`);
       }
-
       // Find the right test
       return foundSuiteMethodResults.it.find(test => test.name === testName);
     }
@@ -144,7 +196,6 @@ export class Results extends React.Component<ResultsProps, {}> {
     if (skipped) {
       return <Icon icon="moon" htmlTitle="Test skipped (wrong platform)" />;
     }
-
     if (ok) {
       return <Icon icon="endorsed" htmlTitle="Test passed" />;
     }
