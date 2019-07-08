@@ -1,7 +1,7 @@
 import { sendNativeKeyboardEvent, KeyboardEventOptions } from './send-keyboard-event';
 import { clickWindowMenuItem } from './click-window-menu-item';
 import { wait } from '../utils/wait';
-import { isMac, isLinux, isWin } from '../utils/os';
+import { isMac, isWin } from '../utils/os';
 
 const PLATFORM_MODIFIER =
   process.platform === 'darwin' ? { cmd: true } : { ctrl: true };
