@@ -40,7 +40,7 @@ export async function selectPreviousTeamShortcut() {
   if( isMac()) {
     options = {text:'{', shift: true};
   } else if(isWin()) {
-    options = {text:'\u0009', shift: true};
+    options = {text: '\u0009', shift: true};
   } else {
     // Linux / anything else. 
     options = {text:'[', shift: true};
