@@ -76,6 +76,6 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await switchToTeam(0);
 
     title = await window.client.getTitle();
-    assert.include(title, 'Old Joe Two', "Should now be on 'Old Joe One team'");
+    assert.include(title, 'Old Joe Two', "Should now be on 'Old Joe Two team'");
   });
 };
