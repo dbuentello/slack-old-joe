@@ -108,7 +108,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     'can un-minimize the window',
     async () => {
       await minimize(true);
-      await wait(1000);
+      await wait(2000);
 
       assert.ok(!(await getIsHidden(window.client), 'document.hidden'));
     },

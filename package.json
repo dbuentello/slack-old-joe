@@ -1,6 +1,6 @@
 {
   "name": "old-joe",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A test framework for Slack",
   "main": "./dist/src/main/main",
   "scripts": {
@@ -35,6 +35,7 @@
     "react-stay-scrolled": "^7.0.0",
     "robotjs": "^0.5.1",
     "semver": "^6.1.1",
+    "shelljs": "0.8.3",
     "shortid": "^2.2.14",
     "webdriverio": "^5.10.4"
   },
@@ -53,6 +54,7 @@
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
     "@types/semver": "^6.0.0",
+    "@types/shelljs": "0.8.5",
     "@types/shortid": "0.0.29",
     "cross-env": "^5.2.0",
     "electron": "^4.2.4",

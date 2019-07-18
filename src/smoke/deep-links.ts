@@ -8,12 +8,16 @@ import { getSonicWindow } from '../helpers/get-sonic-window';
 import { wait } from '../utils/wait';
 import { launchWithArgs } from '../helpers/launch-with-args';
 import { appState } from '../renderer/state';
-import { isMac } from '../utils/os';
+import { isMac, isLinux } from '../utils/os';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   function openDeepLink(link: string) {
+    console.log('link given: ' + link);
     if (isMac()) {
-      return shell.openExternal(link);
+      return shell.openExternal(link, {
+        activate: false,
+        workingDirectory: appState.appToTest
+      });
     }
 
     // We used to use shell.openExternal, but Slack would
@@ -56,7 +60,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await openDeepLink(`slack://file?team=${teamId}&id=${fileId}`);
 
     const filesTitle = await window.client.$('div=Files');
-    await filesTitle.waitForExist(1000);
+    await filesTitle.waitForExist(2000);
 
     assert.ok(
       await filesTitle.isDisplayed(),

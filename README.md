@@ -13,6 +13,7 @@ work.
  * If you're running the `Sign In` test suite, ensure that your browser is signed into both the [Old Joe One](https://old-joe.slack.com) and [Old Joe Two](https://oldjoetwo.slack.com) workspaces. There is only one account, get in touch with Felix for credentials.
  * macOS: Let Old Joe control your computer (`System Preferences - Security & Privacy - Accessibility`). macOS will ask during your first run. macOS might at any point decide that Old Joe's automation is too much automation and inform you accordingly.
  * macOS: Close all other apps that might send notifications.
+ * linux: make sur the tool `nmcli` is installed to ensure correct network tests. 
 
 > :warning: If and when Chromedriver crashes, you'll see error messages complaining that Chrome crashed (which means that chromedriver crashed) or that there's no connection to Chrome (again, Chromedriver crashed). You'll see this happening because Slack is gone. Don't let that distract you, just restart the test.
 
