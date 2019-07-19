@@ -15,7 +15,7 @@ import { openContextMenuForElement } from '../helpers/open-context-menu';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
-    await switchToTeam(1);
+    await switchToTeam(0);
 
     if (isWin()) {
       await reopen(appState);
