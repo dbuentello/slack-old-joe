@@ -273,6 +273,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can go "back" in history', async () => {
+    await switchToTeam(0);
     await switchToChannel(window.client, 'ads');
     await switchToChannel(window.client, 'downloads');
 
