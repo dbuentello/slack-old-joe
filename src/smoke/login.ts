@@ -44,14 +44,15 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     );
   });
 
-  it('does not have a quick switcher', async () => {
+  it('does not have a team switcher', async () => {
     await getSonicWindow(window.client);
 
-    const body = await window.client.$('body');
-    const html = await body.getHTML();
-    const hasSidebar = html.includes('TeamSidebar');
+    const sidebar = await window.client.$('div[aria-label=Teams]');
 
-    assert.ok(!hasSidebar, 'has a team sidebar, should have none');
+    assert.ok(
+      !(await sidebar.isDisplayed()),
+      'has a team sidebar, should have none'
+    );
   });
 
   it('signs into a second team', async () => {
@@ -61,25 +62,26 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     );
   });
 
-  it('has a quick switcher', async () => {
+  it('has a team switcher', async () => {
     await getSonicWindow(window.client);
 
-    const body = await window.client.$('body');
-    const html = await body.getHTML();
-    const hasSidebar = html.includes('TeamSidebar');
+    const sidebar = await window.client.$('div[aria-label=Teams]');
 
-    assert.ok(hasSidebar, 'has no team sidebar, should have one');
+    assert.ok(
+      await sidebar.isDisplayed(),
+      'has no team sidebar, should have one'
+    );
   });
 
   it('can switch teams (via shortcut)', async () => {
     await getSonicWindow(window.client);
 
     let title = await window.client.getTitle();
-    assert.ok(title.includes('Old Joe Two'));
+    assert.ok(title.includes('Old Joe One'));
 
     await switchToTeam(0);
 
     title = await window.client.getTitle();
-    assert.include(title, 'Old Joe One', "Should now be on 'Old Joe One team'");
+    assert.include(title, 'Old Joe Two', "Should now be on 'Old Joe Two team'");
   });
 };
