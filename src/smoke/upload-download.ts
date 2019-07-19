@@ -24,7 +24,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
 
   beforeAll(async () => {
     await getSonicWindow(window.client);
-    await switchToTeam(1);
+    await switchToTeam(0);
 
     oldDir = await getPreference(window.client, 'PrefSSBFileDownloadPath');
   });
