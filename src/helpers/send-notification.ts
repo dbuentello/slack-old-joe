@@ -12,7 +12,7 @@ import { BrowserObject } from 'webdriverio';
  * @param {string} text
  */
 export async function sendNotification(client: BrowserObject, text: string) {
-  await switchToTeam(1);
+  await switchToTeam(0);
   await switchToChannel(window.client, 'notify');
 
   await wait(200);
