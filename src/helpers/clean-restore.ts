@@ -60,10 +60,7 @@ export async function deleteOldJoeFolders() {
   );
   if (slackBackupFolders && slackBackupFolders[0]) {
     if (slackBackupFolders.length > 1) {
-      // throw new Error('Should not have more than one backup folder.');
-      // clean up the folders and pick the most recent folder. This should
-      // help with reports of Old Joe not starting since it somehow does not quit correctly.
-      console.log('REMOVING NEW FOLDERS');
+      // clean up the folder!
       slackBackupFolders.forEach((folder, index) => {
         const currPath = path.join(appDataDir, slackBackupFolders[index]);
         index === 0 ? folder : fs.removeSync(currPath);
