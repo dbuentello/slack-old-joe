@@ -59,21 +59,14 @@ export async function deleteOldJoeFolders() {
     f => f.startsWith(`${USER_DATA_FOLDER_NAME}-`) && f.length === 22
   );
   if (slackBackupFolders && slackBackupFolders[0]) {
-    if (slackBackupFolders.length > 1) {
+    if (slackBackupFolders.length >= 1) {
       // clean up the folder!
+      debug(`${slackBackupFolders.length} Old Joe Folders found. Deleting.`);
       slackBackupFolders.forEach((folder, index) => {
         const currPath = path.join(appDataDir, slackBackupFolders[index]);
-        index === 0 ? folder : fs.removeSync(currPath);
+        fs.removeSync(currPath);
         return folder;
       });
     }
-    const folderPath = path.join(appDataDir, slackBackupFolders[0]);
-    if (hasOldJoeFile(folderPath)) {
-      await fs.remove(folderPath);
-    }
   }
-}
-
-export function hasOldJoeFile(folder: string) {
-  return fs.existsSync(path.join(folder, '.oldjoe'));
 }
