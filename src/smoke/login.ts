@@ -39,7 +39,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it('signs in', async () => {
     assert.ok(await getSignInWindow(window.client), 'sign-in window exists');
     assert.ok(
-      await openBrowserAndWaitForSignIn(smokeTeams[0].url),
+      await openBrowserAndWaitForSignIn(smokeTeams[1].url),
       'should be able to sign in.'
     );
   });
@@ -57,7 +57,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
   it('signs into a second team', async () => {
     assert.ok(
-      await openBrowserAndWaitForSignIn(smokeTeams[1].url),
+      await openBrowserAndWaitForSignIn(smokeTeams[0].url),
       'should be able to sign into second team.'
     );
   });
@@ -75,13 +75,21 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
   it('can switch teams (via shortcut)', async () => {
     await getSonicWindow(window.client);
-
-    let title = await window.client.getTitle();
-    assert.ok(title.includes('Old Joe One'));
-
     await switchToTeam(0);
 
+    let title = await window.client.getTitle();
+    assert.ok(
+      title.includes('Old Joe One'),
+      `title does not include \'Old Joe One\', got \'${title}\' instead.`
+    );
+
+    await switchToTeam(1);
+
     title = await window.client.getTitle();
-    assert.include(title, 'Old Joe Two', "Should now be on 'Old Joe Two team'");
+    assert.include(
+      title,
+      'Old Joe Two',
+      `title does not include \'Old Joe Two\', got \'${title}\' instead.`
+    );
   });
 };
