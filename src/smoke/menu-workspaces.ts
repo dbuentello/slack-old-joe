@@ -11,6 +11,7 @@ import {
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { smokeTeams } from '../smoke-teams';
 import { getSonicWindow } from '../helpers/get-sonic-window';
+import { wait } from '../utils/wait';
 
 export const test: SuiteMethod = async ({ it, beforeEach }) => {
   beforeEach(async () => {
@@ -86,7 +87,7 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
   });
 
   it(
-    'can select a workspace using the Dock menu',
+    'check that workspaces are present in the dock menu',
     async () => {
       // In the dock, "Old Joe" should be number five from the bottom
       await clickDockMenuItem(5);
@@ -96,18 +97,17 @@ export const test: SuiteMethod = async ({ it, beforeEach }) => {
       assert.include(
         beforeTitle,
         smokeTeams[0].name,
-        `beforeTitle does not include ${smokeTeams[0].name}`
+        `beforeTitle does not include ${smokeTeams[0].name}, got ${beforeTitle} instead.`
       );
 
       // In the dock, "Old Joe Two" should be number six from the bottom
       await clickDockMenuItem(6);
       await getSonicWindow(window.client, 500);
-
       const afterTitle = await window.client.getTitle();
       assert.include(
         afterTitle,
         smokeTeams[1].name,
-        `beforeTitle does not include ${smokeTeams[1].name}`
+        `beforeTitle does not include ${smokeTeams[1].name}, got ${beforeTitle} instead.`
       );
     },
     { platforms: ['darwin'] }

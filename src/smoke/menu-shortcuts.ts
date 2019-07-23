@@ -36,7 +36,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     'can "close the window"',
     async () => {
       await sendNativeKeyboardEvent({ text: 'w', cmdOrCtrl: true });
-      await wait(300);
+      await wait(5000);  
       assert.ok(await getIsHidden(window.client), 'client is not hidden');
     },
     {

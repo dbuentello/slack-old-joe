@@ -39,7 +39,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it('signs in', async () => {
     assert.ok(await getSignInWindow(window.client), 'sign-in window exists');
     assert.ok(
-      await openBrowserAndWaitForSignIn(smokeTeams[0].url),
+      await openBrowserAndWaitForSignIn(smokeTeams[1].url),
       'should be able to sign in.'
     );
   });
@@ -49,12 +49,15 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     const sidebar = await window.client.$('div[aria-label=Teams]');
 
-    assert.ok(!(await sidebar.isDisplayed()), 'has a team sidebar, should have none');
+    assert.ok(
+      !(await sidebar.isDisplayed()),
+      'has a team sidebar, should have none'
+    );
   });
 
   it('signs into a second team', async () => {
     assert.ok(
-      await openBrowserAndWaitForSignIn(smokeTeams[1].url),
+      await openBrowserAndWaitForSignIn(smokeTeams[0].url),
       'should be able to sign into second team.'
     );
   });
@@ -64,18 +67,29 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     const sidebar = await window.client.$('div[aria-label=Teams]');
 
-    assert.ok(await sidebar.isDisplayed(), 'has no team sidebar, should have one');
+    assert.ok(
+      await sidebar.isDisplayed(),
+      'has no team sidebar, should have one'
+    );
   });
 
   it('can switch teams (via shortcut)', async () => {
     await getSonicWindow(window.client);
-
-    let title = await window.client.getTitle();
-    assert.ok(title.includes('Old Joe One'));
-
     await switchToTeam(0);
 
+    let title = await window.client.getTitle();
+    assert.ok(
+      title.includes('Old Joe One'),
+      `title does not include \'Old Joe One\', got \'${title}\' instead.`
+    );
+
+    await switchToTeam(1);
+
     title = await window.client.getTitle();
-    assert.include(title, 'Old Joe Two', "Should now be on 'Old Joe Two team'");
+    assert.include(
+      title,
+      'Old Joe Two',
+      `title does not include \'Old Joe Two\', got \'${title}\' instead.`
+    );
   });
 };
