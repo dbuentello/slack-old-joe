@@ -155,7 +155,7 @@ export class Results extends React.Component<ResultsProps, {}> {
       });
     }
 
-    // Retry a test 
+    // Retry a test
     function retryTest(
       testName: string,
       suiteName: string,
@@ -180,36 +180,37 @@ export class Results extends React.Component<ResultsProps, {}> {
       // Find the right suiteMethodResult
       const foundSuiteMethodResults = testsDone
         .filter(({ name }) => name === suiteName)
-        .map(({ suiteMethodResults }) => suiteMethodResults)
-        [0];
-
-      // _Should_ never happen
-      if (!foundSuiteMethodResults) {
-        throw new Error(`Could not find ${suiteName}`);
-      }
-
-      // Find the right test
-      return foundSuiteMethodResults.it
-        .find((test) => test.name === testName);
-    }
-
-    // find multiple tests within a suite
-    function findTests(
-      testNames: string[],
-      suiteName: string,
-      testsDone: TestSuite[]
-    ): ItTestParams[] {
-      // Find the right suiteMethodResult
-      const foundSuiteMethodResults = testsDone
-        .filter(({ name }) => name === suiteName)
         .map(({ suiteMethodResults }) => suiteMethodResults)[0];
 
       // _Should_ never happen
       if (!foundSuiteMethodResults) {
         throw new Error(`Could not find ${suiteName}`);
       }
+
       // Find the right test
       return foundSuiteMethodResults.it.find(test => test.name === testName);
+    }
+
+    // find multiple tests within a suite
+    function findTests(
+      testNames: string[],
+      suiteName: string,
+      testsSuitesDone: TestSuite[]
+    ): ItTestParams[] {
+      // Find the right suiteMethodResult
+      const foundSuiteMethodResults = testsSuitesDone
+        .filter(({ name }) => name === suiteName)[0].suiteMethodResults.it;
+      const itFailedTests:ItTestParams[] = [];
+      foundSuiteMethodResults.forEach(
+        (test) => testNames.includes(test.name) ? itFailedTests.push(test) : null
+      )
+
+      // _Should_ never happen
+      if (!foundSuiteMethodResults) {
+        throw new Error(`Could not find ${suiteName}`);
+      }
+      // Find the right test
+      return itFailedTests;
     }
   }
 
