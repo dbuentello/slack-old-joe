@@ -172,6 +172,27 @@ export class Results extends React.Component<ResultsProps, {}> {
       }
     }
 
+    function findTest(
+      testName: string,
+      suiteName: string,
+      testsDone: TestSuite[]
+    ): ItTestParams | undefined {
+      // Find the right suiteMethodResult
+      const foundSuiteMethodResults = testsDone
+        .filter(({ name }) => name === suiteName)
+        .map(({ suiteMethodResults }) => suiteMethodResults)
+        [0];
+
+      // _Should_ never happen
+      if (!foundSuiteMethodResults) {
+        throw new Error(`Could not find ${suiteName}`);
+      }
+
+      // Find the right test
+      return foundSuiteMethodResults.it
+        .find((test) => test.name === testName);
+    }
+
     // find multiple tests within a suite
     function findTests(
       testNames: string[],
