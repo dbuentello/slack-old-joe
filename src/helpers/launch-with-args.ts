@@ -7,7 +7,11 @@ export async function launchWithArgs(
   appState: AppState,
   ...args: Array<string>
 ) {
-  console.log(`Launching with args: ${appState.appToTest} --test-type=webdriver ${args.join(' ')}`);
+  console.log(
+    `Launching with args: ${
+      appState.appToTest
+    } --test-type=webdriver ${args.join(' ')}`
+  );
   console.log(
     exec(`${appState.appToTest} --test-type=webdriver ${args.join(' ')}`).stdout
   );

@@ -5,7 +5,11 @@ import { wait } from '../utils/wait';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { enterMessage } from '../helpers/enter-message';
 import { clipboard } from 'electron';
-import { sendClickElement, PointerEvents, SendClickElementOptions } from '../helpers/send-pointer-event';
+import {
+  sendClickElement,
+  PointerEvents,
+  SendClickElementOptions
+} from '../helpers/send-pointer-event';
 import { switchToChannel } from '../helpers/switch-channel';
 import { clickContextMenuItem } from '../helpers/click-context-menu-item';
 import { clearMessageInput } from '../helpers/clear-message-input';
@@ -18,7 +22,10 @@ import { isWin } from '../utils/os';
 import { appState } from '../renderer/state';
 import { getSonicWindow } from '../helpers/get-sonic-window';
 import { focus } from '../native-commands/focus';
-import { switchToTeam, selectPreviousTeamShortcut } from '../helpers/switch-teams';
+import {
+  switchToTeam,
+  selectPreviousTeamShortcut
+} from '../helpers/switch-teams';
 
 // This suite is pretty unstable. It's not entirely clean
 // when exactly we're opening up the context menu, or when
@@ -175,14 +182,14 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
   it(
     'can "copy image url"',
     async () => {
-      // this test seems flaky when all the tests run at once. 
+      // this test seems flaky when all the tests run at once.
       await switchToChannel(window.client, 'image');
-      await wait(500); 
+      await wait(500);
       await sendClickElement(window.client, {
         selector: 'a.p-file_image_thumbnail__wrapper',
         rightClick: false,
         type: PointerEvents.MOUSEDOWNUP
-      } as SendClickElementOptions );
+      } as SendClickElementOptions);
 
       await openContextMenuForElement(
         window.client,
