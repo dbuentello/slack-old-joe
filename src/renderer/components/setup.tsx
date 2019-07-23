@@ -52,6 +52,10 @@ export class Setup extends React.Component<SetupProps, {}> {
               click on 'Remember my choice' to do this automatically.
             </li>
             <li>
+              If a test fails, make sure to retry the suite on its own.
+              Sometimes there is an ECONNREFUSED error that causes Old Joe to fail.
+            </li>
+            <li>
               Ensure that you're running a version of Old Joe that matches the
               Slack app's Electron version. It should be v{DRIVER_VERSION}.x.
             </li>
