@@ -35,8 +35,22 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it(
     'can "close the window"',
     async () => {
+      await getSonicWindow(window.client);
       await sendNativeKeyboardEvent({ text: 'w', cmdOrCtrl: true });
-      await wait(300);
+      // lets wait a long time because it takes a while for macos to realize it IS in fact hidden. 
+      // const slackWindows = await execSync('echo $PATH').toString();
+      // execSync()
+      // const slackWindows = await runAppleScript(`osascript -e 'property finderwindownumber: 1' -e 'tell application "Slack"' -e 'set TotalNumberOfFinderWindows to (count of (every window where visible is true))' -e 'end tell' -e 'log TotalNumberOfFinderWindows'`);
+      // const slackWindows = await runAppleScriptFile('../helpers/get-windows.applescript');
+      // var osascript = require('node-osascript');
+      // osascript.execute(`property finderwindownumber: 1\ntell application "Slack"\nset TotalNumberOfFinderWindows to (count of (every window where visible is true))\nend tell\nlog TotalNumberOfFinderWindows`, (err, result, raw) {
+        // console.log('result ' + result);
+      // })
+      
+      // const slackWindows = await execSync(;
+      // console.log('slackWindows: ' + slackWindows);
+      // console.log('slackWindows type: ' + typeof(slackWindows));
+      await wait(5000);  
       assert.ok(await getIsHidden(window.client), 'client is not hidden');
     },
     {
