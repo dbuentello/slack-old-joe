@@ -105,10 +105,11 @@ export class Results extends React.Component<ResultsProps, {}> {
             intent="warning"
             onClick={() => {
               appState.testRunning = true;
+              appState.whichRunning = name;
               retryTest(name, suiteName, testsDone);
             }} // using a 'closure'
             title="Retry test"
-            text={appState.testRunning ? 'Running...' : `Retry`}
+            text={appState.testRunning && appState.whichRunning === name ? 'Running...' : `Retry`}
           ></Button>
         ) : null;
         const errorElement = error ? <pre>{error.toString()}</pre> : null;
