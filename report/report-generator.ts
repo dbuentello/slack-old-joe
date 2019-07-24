@@ -2,4 +2,4 @@
 import * as fs from 'fs-extra';
 
 // fetches file 
-const ojr = /** @type {OJ.Result} */ (require('../../lighthouse-core/test/results/sample_v2.json'));
+// const ojr = /** @type {OJ.Result} */ (require('../../lighthouse-core/test/results/sample_v2.json'));
