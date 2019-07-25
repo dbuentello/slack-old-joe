@@ -36,7 +36,6 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   it(
     'can "close the window"',
     async () => {
-      await getSonicWindow(window.client);
       await sendNativeKeyboardEvent({ text: 'w', cmdOrCtrl: true });
       if(isMac()) {
         const slackWindows = await execSync('osascript src/helpers/get-windows.applescript').toString().substr(0, 1);
