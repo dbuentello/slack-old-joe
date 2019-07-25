@@ -36,6 +36,13 @@ export async function writeReport(input: Array<SuiteResult>) {
   return true;
 }
 
+export async function writeJSONReport(input: Array<SuiteResult>) {
+  input.forEach( (currSuiteResult) => {
+    // append to the end of the list. 
+    appState.reportJSON.push(currSuiteResult);
+  })
+}
+
 /**
  * Append a test-retry to the report.
  */
@@ -57,4 +64,17 @@ export async function appendReport(
 export function writeToFile() {
   const reportPath = path.join(appState.absPath, appState.fileName);
   return fs.writeFile(reportPath, appState.report);
+}
+
+export function writeJSONtoFile() {
+  const reportPath = path.join(appState.absPath, appState.JSONfileName);
+  const JSONreport = JSON.stringify(appState.reportJSON);
+  createPage(JSONreport);
+  return fs.writeFile(reportPath, appState.reportJSON);
+}
+
+function createPage(JSONreport: string) {
+  // add in the important stuff. 
+  
+  return true;
 }
