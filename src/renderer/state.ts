@@ -45,8 +45,13 @@ export class AppState {
       .toLocaleTimeString()
       .replace(/:/g, '-')
       .replace(' ', '') + '.txt';
-
+  @observable public JSONfileName: string = 
+    new Date()
+        .toLocaleTimeString()
+        .replace(/:/g, '-')
+        .replace(' ', '') + '.json';
   @observable public report: string = '';
+  @observable public reportJSON: Array<SuiteResult>;
 
   // Used for button retry info
   @observable public testRunning: boolean = false;
