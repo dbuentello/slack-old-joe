@@ -93,13 +93,9 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       assert.ok(!(await getIsHidden(window.client)), 'Window is visible');
 
       await minimize();
-      await wait(1000);
+      await wait(4000);
 
       assert.ok(await getIsHidden(window.client), 'Window is not minimized');
-
-      // Restore
-      await minimize(true);
-      await wait(1000);
     },
     { platforms: ['win32', 'darwin'] }
   );
@@ -110,7 +106,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       await minimize(true);
       await wait(2000);
 
-      assert.ok(!(await getIsHidden(window.client), 'document.hidden'));
+      assert.ok(!(await getIsHidden(window.client)), 'document.hidden');
     },
     { platforms: ['win32', 'darwin'] }
   );
