@@ -40,18 +40,15 @@ export class AppState {
   // Report so far used to modify after test retry
   @observable public reportPath: Function = chooseFolderAsString;
   @observable public absPath: string = '';
+  @observable public absPathJSON: string = './src/report/';
   @observable public fileName: string =
     new Date()
       .toLocaleTimeString()
       .replace(/:/g, '-')
       .replace(' ', '') + '.txt';
-  @observable public JSONfileName: string = 
-    new Date()
-        .toLocaleTimeString()
-        .replace(/:/g, '-')
-        .replace(' ', '') + '.json';
+  @observable public JSONfileName: string = "temp.json";
   @observable public report: string = '';
-  @observable public reportJSON: Array<SuiteResult>;
+  @observable public reportJSON: Array<SuiteResult> = [];
 
   // Used for button retry info
   @observable public testRunning: boolean = false;
