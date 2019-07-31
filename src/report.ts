@@ -63,22 +63,23 @@ export async function appendReport(
 }
 
 export function writeToFile() {
+  // Write text report to specified directory. 
   const reportPath = path.join(appState.absPath, appState.fileName);
   return fs.writeFile(reportPath, appState.report);
 }
 
+// Write our JSON data to disk
 export function writeJSONtoFile() {
-  const reportPath = path.join(appState.absPathJSON, appState.JSONfileName);
-  console.log('saving reportPath at: ', reportPath);
+  const reportPathJSON = path.join(appState.absPathJSON, appState.JSONfileName);
 
   const JSONreport = JSON.stringify(appState.reportJSON);
-  fs.writeFileSync(reportPath, JSONreport);
-  createPage(JSONreport);
+  fs.writeFileSync(reportPathJSON, JSONreport);
+  createPage();
   return true
 }
 
-function createPage(report:string) {
-  execSync('node ./src/script.js');
-  console.log('script.js done!');
+// Create HTML report page
+function createPage() {
+  execSync(`node ./src/report-generator.js`);
 }
 
