@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import { SuiteResult, ItTestParams } from './interfaces';
 import { appState } from './renderer/state';
+import { execSync } from 'child_process';
 
 /**
  * Writes the report to memory. This will no longer write to a file and will instead write to the global
@@ -71,7 +72,13 @@ export function writeJSONtoFile() {
   console.log('saving reportPath at: ', reportPath);
 
   const JSONreport = JSON.stringify(appState.reportJSON);
-  // createPage(JSONreport);
-  return fs.writeFile(reportPath, JSONreport);
+  fs.writeFileSync(reportPath, JSONreport);
+  createPage(JSONreport);
+  return true
+}
+
+function createPage(report:string) {
+  execSync('node ./src/script.js');
+  console.log('script.js done!');
 }
 
