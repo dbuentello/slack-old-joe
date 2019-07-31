@@ -89,3 +89,6 @@ dist
 
 out
 static/data/SlackDevMode.zip
+test-result.html
+src/report/temp.json
+src/report/temp.json
