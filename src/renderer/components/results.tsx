@@ -5,7 +5,7 @@ import { Card, Elevation, Icon, Button } from '@blueprintjs/core';
 import { SuiteResult, Result, TestSuite, ItTestParams } from '../../interfaces';
 import { chooseFolder } from './path-chooser';
 import { runTest } from '../runner';
-import { appendReport, writeReport, writeToFile, writeJSONtoFile, writeJSONReport } from '../../report';
+import { appendReport, writeReport, writetoFile } from '../../report';
 import { appState } from '../state';
 import { observer } from 'mobx-react';
 import { getFailedTests } from '../../utils/get-failed-tests';
@@ -60,10 +60,8 @@ export class Results extends React.Component<ResultsProps, {}> {
         text="Save Report"
         onClick={() => {
           writeReport(appState.results);
-          writeJSONReport(appState.results);
           chooseFolder();
-          writeToFile();
-          writeJSONtoFile();
+          writetoFile();
         }}
       ></Button>
     ) : (
