@@ -2,7 +2,6 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import { SuiteResult, ItTestParams } from './interfaces';
 import { appState } from './renderer/state';
-import { execSync } from 'child_process';
 
 
 /**
