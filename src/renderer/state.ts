@@ -45,7 +45,7 @@ export class AppState {
     new Date()
       .toLocaleTimeString()
       .replace(/:/g, '-')
-      .replace(' ', '') + '.txt';
+      .replace(' ', '') + '.html';
   @observable public JSONfileName: string = "temp.json";
   @observable public report: string = '';
   @observable public reportJSON: Array<SuiteResult> = [];
