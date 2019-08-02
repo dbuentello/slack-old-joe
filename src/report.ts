@@ -37,7 +37,7 @@ export async function appendReport(
 
 
 // Write our JSON data to HTML
-export function writetoFile() {
+export function writeToFile() {
   const JSONreport = JSON.stringify(appState.reportJSON);
   createPage(JSONreport);
   return true
