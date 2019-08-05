@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs-extra';
-import { SuiteResult, ItTestParams } from './interfaces';
+import { SuiteResult, ItTestParams, Result } from './interfaces';
 import { appState } from './renderer/state';
 
 
@@ -20,24 +20,19 @@ export async function writeReport(input: Array<SuiteResult>) {
  */
 export async function appendReport(
   input: ItTestParams, // for now
-  succeeded: boolean
+  succeeded: boolean,
+  error?: string
 ) {
   let text = `\n\n# Slack Old Joe Run ${input.name} (previously failed test)\n`;
-  text += `-`.padEnd(50, '-');
-  text += `\n\n`;
-
-  text += `Test: ${input.name}\n`;
-  text += `Result: ${succeeded ? 'Passed' : 'Did not pass'}\n`;
-  text += `\n`;
-
-  appState.report += text;
+  const result:Result = {'ok': succeeded, 'name': input.name, 'error': error, 'skipped': false};
+  const suiteResult:SuiteResult = {'name': text, 'results':[result]};
+  appState.reportJSON.push(suiteResult);
 }
-
-
 
 // Write our JSON data to HTML
 export function writeToFile() {
   const JSONreport = JSON.stringify(appState.reportJSON);
+  console.log('JSONreport', JSONreport);
   createPage(JSONreport);
   return true
 }
@@ -54,14 +49,19 @@ function createPage(report:string) {
 
 function convert(report:string) {
   const json2html = require('node-json2html');
-
+  // Transform our list of tests into HTML.
   const transforms = {
     '<>': 'h1', 'text': '${name}\n', 'html':function():any {
       return json2html.transform(
         (this as any).results,
         transforms.child
         )},
-      'child':{'<>':'li', 'style': 'font-size:16px' ,'html':'${name} Passed: ${ok}'}
+      'child':{'<>':'li', 'style': 'font-size:16px' , 'text': '${name} Passed: ', 
+        'html':function():any {
+          console.log('🐞')
+          return (this as any).error ? `❌<li style="margin-left: 40px; font-size:16px; color: red"> Error: ${(this as any).error.message}</li>` : '✅';
+          }
+      }
     }
   return json2html.transform(report, transforms);
 }
