@@ -40,7 +40,6 @@ export class AppState {
   // Report so far used to modify after test retry
   @observable public reportPath: Function = chooseFolderAsString;
   @observable public absPath: string = '';
-  @observable public absPathJSON: string = './src/report/';
   @observable public fileName: string =
     new Date()
       .toLocaleTimeString()
