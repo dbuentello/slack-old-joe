@@ -43,7 +43,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
   it('can still switch teams post-reload (via shortcut)', async () => {
     await wait(1000);
-    await switchToTeam(0);
+    await switchToTeam(1);
     await wait(300);
 
     let title = await window.client.getTitle();
@@ -53,7 +53,7 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
       `${title} does not include needle \'Old Joe Two\'`
     );
 
-    await switchToTeam(1);
+    await switchToTeam(0);
 
     title = await window.client.getTitle();
     assert.include(
@@ -77,12 +77,12 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
   });
 
   it('can still switch teams post-reset (via shortcut)', async () => {
-    await switchToTeam(0);
+    await switchToTeam(1);
 
     let title = await window.client.getTitle();
     assert.include(title, 'Old Joe Two');
 
-    await switchToTeam(1);
+    await switchToTeam(0);
 
     title = await window.client.getTitle();
     assert.include(

@@ -48,9 +48,8 @@ export class AppState {
   @observable public reportJSON: Array<SuiteResult> = [];
 
   // Used for button retry info
-  @observable public testRunning: boolean = false;
+  @observable public testRunning: string | undefined = undefined;
   @observable public testPassed: boolean = false;
-  @observable public whichRunning: string = '';
 
   constructor() {
     this.setup();

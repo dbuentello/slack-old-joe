@@ -101,14 +101,14 @@ export class Results extends React.Component<ResultsProps, {}> {
             className="bp3-button bp3-intent-primary"
             icon="outdated"
             id={name}
-            disabled={appState.testRunning}
+            disabled={appState.testRunning === name ? true : false}
             intent="warning"
             onClick={() => {
-              appState.testRunning = true;
+              appState.testRunning = name;
               retryTest(name, suiteName, testsDone);
             }} // using a 'closure'
             title="Retry test"
-            text={appState.testRunning ? 'Running...' : `Retry`}
+            text={appState.testRunning === name ? 'Running...' : `Retry`}
           ></Button>
         ) : null;
         const errorElement = error ? <pre>{error.toString()}</pre> : null;
@@ -172,12 +172,11 @@ export class Results extends React.Component<ResultsProps, {}> {
       }
     }
 
-    // find multiple tests within a suite
-    function findTests(
-      testNames: string[],
+    function findTest(
+      testName: string,
       suiteName: string,
       testsDone: TestSuite[]
-    ): ItTestParams[] {
+    ): ItTestParams | undefined {
       // Find the right suiteMethodResult
       const foundSuiteMethodResults = testsDone
         .filter(({ name }) => name === suiteName)
@@ -187,8 +186,31 @@ export class Results extends React.Component<ResultsProps, {}> {
       if (!foundSuiteMethodResults) {
         throw new Error(`Could not find ${suiteName}`);
       }
+
       // Find the right test
       return foundSuiteMethodResults.it.find(test => test.name === testName);
+    }
+
+    // find multiple tests within a suite
+    function findTests(
+      testNames: string[],
+      suiteName: string,
+      testsSuitesDone: TestSuite[]
+    ): ItTestParams[] {
+      // Find the right suiteMethodResult
+      const foundSuiteMethodResults = testsSuitesDone
+        .filter(({ name }) => name === suiteName)[0].suiteMethodResults.it;
+      const itFailedTests:ItTestParams[] = [];
+      foundSuiteMethodResults.forEach(
+        (test) => testNames.includes(test.name) ? itFailedTests.push(test) : null
+      )
+
+      // _Should_ never happen
+      if (!foundSuiteMethodResults) {
+        throw new Error(`Could not find ${suiteName}`);
+      }
+      // Find the right test
+      return itFailedTests;
     }
   }
 
