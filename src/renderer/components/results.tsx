@@ -155,7 +155,7 @@ export class Results extends React.Component<ResultsProps, {}> {
       });
     }
 
-    // Retry a test 
+    // Retry a test
     function retryTest(
       testName: string,
       suiteName: string,

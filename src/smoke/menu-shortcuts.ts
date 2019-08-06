@@ -37,14 +37,18 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     'can "close the window"',
     async () => {
       await sendNativeKeyboardEvent({ text: 'w', cmdOrCtrl: true });
-      if(isMac()) {
-        const slackWindows = await execSync('osascript src/helpers/get-windows.applescript').toString().substr(0, 1);
+      if (isMac()) {
+        const slackWindows = await execSync(
+          'osascript src/helpers/get-windows.applescript'
+        )
+          .toString()
+          .substr(0, 1);
         console.log('slackWindows', slackWindows);
         assert.equal('0', slackWindows);
         return;
       }
-      // lets wait a  time because it takes a while for macos to realize it IS in fact hidden. 
-      await wait(5000);  
+      // lets wait a  time because it takes a while for macos to realize it IS in fact hidden.
+      await wait(5000);
       assert.ok(await getIsHidden(window.client), 'client is not hidden');
     },
     {
