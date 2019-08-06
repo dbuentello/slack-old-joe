@@ -50,7 +50,7 @@ export class AppState {
   // Used for button retry info
   @observable public testRunning: boolean = false;
   @observable public testPassed: boolean = false;
-  @observable public whichRunning: string = "";
+  @observable public whichRunning: string = '';
 
   constructor() {
     this.setup();

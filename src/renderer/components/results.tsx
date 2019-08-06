@@ -108,8 +108,8 @@ export class Results extends React.Component<ResultsProps, {}> {
               retryTest(name, suiteName, testsDone);
             }} // using a 'closure'
             title="Retry test"
-            text={appState.testRunning ? 'Running...' : `Retry`}	
-            ></Button>
+            text={appState.testRunning ? 'Running...' : `Retry`}
+          ></Button>
         ) : null;
         const errorElement = error ? <pre>{error.toString()}</pre> : null;
         return (
@@ -155,7 +155,7 @@ export class Results extends React.Component<ResultsProps, {}> {
       });
     }
 
-    // Retry a test 
+    // Retry a test
     function retryTest(
       testName: string,
       suiteName: string,
