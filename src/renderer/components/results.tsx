@@ -101,14 +101,14 @@ export class Results extends React.Component<ResultsProps, {}> {
             className="bp3-button bp3-intent-primary"
             icon="outdated"
             id={name}
-            disabled={appState.testRunning}
+            disabled={appState.testRunning === name ? true : false}
             intent="warning"
             onClick={() => {
-              appState.testRunning = true;
+              appState.testRunning = name;
               retryTest(name, suiteName, testsDone);
             }} // using a 'closure'
             title="Retry test"
-            text={appState.testRunning ? 'Running...' : `Retry`}
+            text={appState.testRunning === name ? 'Running...' : `Retry`}
           ></Button>
         ) : null;
         const errorElement = error ? <pre>{error.toString()}</pre> : null;

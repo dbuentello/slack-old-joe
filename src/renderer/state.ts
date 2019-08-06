@@ -49,7 +49,7 @@ export class AppState {
   @observable public report: string = '';
 
   // Used for button retry info
-  @observable public testRunning: boolean = false;
+  @observable public testRunning: string | undefined = undefined;
   @observable public testPassed: boolean = false;
 
   constructor() {
