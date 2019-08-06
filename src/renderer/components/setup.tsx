@@ -48,12 +48,13 @@ export class Setup extends React.Component<SetupProps, {}> {
           <ul>
             <li>Make sure your browser is signed into the teams.</li>
             <li>
-              When you first do a sign in test, chrome will ask you to Open Slack,
-              click on 'Remember my choice' to do this automatically.
+              When you first do a sign in test, chrome will ask you to Open
+              Slack, click on 'Remember my choice' to do this automatically.
             </li>
             <li>
               If a test fails, make sure to retry the suite on its own.
-              Sometimes there is an ECONNREFUSED error that causes Old Joe to fail.
+              Sometimes there is an ECONNREFUSED error that causes Old Joe to
+              fail.
             </li>
             <li>
               Ensure that you're running a version of Old Joe that matches the
