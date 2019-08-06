@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import { SuiteResult, ItTestParams, Result } from './interfaces';
 import { appState } from './renderer/state';
+import * as json2html from 'node-json2html';
 
 /**
  * This will create a reportJSON array which will be later written to a file
@@ -59,7 +60,6 @@ function createPage(report: string) {
 }
 
 function convert(report: string) {
-  const json2html = require('node-json2html');
   // Transform our list of tests into HTML.
   const transforms = {
     '<>': 'h1',
