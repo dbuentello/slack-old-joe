@@ -48,9 +48,8 @@ export function writeToFile() {
 
 // Create HTML report page
 function createPage(report: string) {
-  const dirname = '/Users/cvaldez/Documents/slack-old-joe/src/';
   const template = fs.readFileSync(
-    path.resolve(dirname, './report/static/template.html'),
+    path.resolve(__dirname, '../../static/report-page/template.html'),
     'utf8'
   );
   const html = convert(report);
