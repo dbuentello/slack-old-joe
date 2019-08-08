@@ -27,7 +27,7 @@ export async function appendReport(
   const result: Result = {
     ok: succeeded,
     name: input.name,
-    error: error,
+    error,
     skipped: false
   };
   const suiteResult: SuiteResult = { name: text, results: [result] };
