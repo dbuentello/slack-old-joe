@@ -44,12 +44,11 @@ export class AppState {
     new Date()
       .toLocaleTimeString()
       .replace(/:/g, '-')
-      .replace(' ', '') + '.txt';
-
-  @observable public report: string = '';
+      .replace(' ', '') + '.html';
+  @observable public reportJSON: Array<SuiteResult> = [];
 
   // Used for button retry info
-  @observable public testRunning: boolean = false;
+  @observable public testRunning: string | undefined = undefined;
   @observable public testPassed: boolean = false;
 
   constructor() {

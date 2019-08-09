@@ -11,7 +11,6 @@ import {
 import { clickDockMenuItem } from '../helpers/click-dock-menu-item';
 import { smokeTeams } from '../smoke-teams';
 import { getSonicWindow } from '../helpers/get-sonic-window';
-import { wait } from '../utils/wait';
 
 export const test: SuiteMethod = async ({ it, beforeEach }) => {
   beforeEach(async () => {
