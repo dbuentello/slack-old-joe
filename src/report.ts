@@ -63,17 +63,17 @@ function convert(report: string) {
   const transforms = {
     '<>': 'h1',
     text: '${name}\n',
-    html: function(): any {
-      return json2html.transform((this as any).results, transforms.child);
+    html: function(this:any): any {
+      return json2html.transform(this.results, transforms.child);
     },
     child: {
       '<>': 'li',
       style: 'font-size:16px',
       text: '${name} Passed: ',
-      html: function(): any {
-        return (this as any).error
+      html: function(this:any): any {
+        return this.error
           ? `❌<li style="margin-left: 40px; font-size:16px; color: red"> Error: ${
-              (this as any).error.message
+              this.error.message
             }</li>`
           : '✅';
       }
