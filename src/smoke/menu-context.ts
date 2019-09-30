@@ -254,6 +254,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     'can "copy link"',
     async () => {
       await switchToChannel(window.client, 'image');
+      await wait(200);
       await openContextMenuForElement(
         window.client,
         'a.p-file_image_thumbnail__wrapper',
