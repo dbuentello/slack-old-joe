@@ -13,6 +13,10 @@ export async function seedUserDataDir() {
   const userDir = getUserDir();
   const zipFile = path.join(__dirname, `../../static/data/SlackDevMode.zip`);
 
+  if (!fs.existsSync(zipFile)) {
+    alert(`Failed to extract included user data: Could not find SlackDevMode.zip. See #old-joe-login for help!`);
+  }
+
   await fs.mkdirp(userDir);
   await new Promise((resolve, reject) => {
     extract(zipFile, { dir: userDir }, (err?: Error) => {

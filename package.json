@@ -36,7 +36,6 @@
     "node-json2html": "1.2.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-stay-scrolled": "^7.0.0",
     "robotjs": "^0.5.1",
     "semver": "^6.3.0",
     "shelljs": "0.8.3",

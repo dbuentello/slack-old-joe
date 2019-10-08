@@ -1,5 +1,4 @@
 import * as React from 'react';
-import useStayScrolled from 'react-stay-scrolled';
 import { Card, Elevation, Icon, Button } from '@blueprintjs/core';
 
 import { SuiteResult, Result, TestSuite, ItTestParams } from '../../interfaces';
@@ -19,6 +18,8 @@ export interface ResultsProps {
 
 @observer
 export class Results extends React.Component<ResultsProps, {}> {
+  private listRef: React.Ref<HTMLDivElement> = React.createRef();
+
   constructor(props: ResultsProps) {
     super(props);
 
@@ -26,20 +27,13 @@ export class Results extends React.Component<ResultsProps, {}> {
   }
 
   public render() {
-    const listRef = React.useRef();
-    const { stayScrolled } = useStayScrolled(listRef);
     const resultElements = this.renderResultElements();
     const doneElements = this.renderDoneElements();
-    // Typically you will want to use stayScrolled or scrollBottom inside
-    // useLayoutEffect, because it measures and changes DOM attributes (scrollTop) directly
-    React.useLayoutEffect(() => {
-      stayScrolled();
-    }, [this.props.results.length]);
 
     return (
       <Card elevation={Elevation.ONE} className="result-card">
         {doneElements}
-        <div ref={listRef as any}>{resultElements}</div>
+        <div ref={this.listRef}>{resultElements}</div>
       </Card>
     );
   }
@@ -73,7 +67,7 @@ export class Results extends React.Component<ResultsProps, {}> {
     name: suiteName,
     results
   }: SuiteResult): Array<JSX.Element> {
-    const { testsDone, slackClosed } = this.props;
+    const { testsDone } = this.props;
     const noErrorSuite = <h5 key={suiteName}>{suiteName}</h5>;
     const suiteWithError = (
       <h5 key={suiteName}>
@@ -89,13 +83,15 @@ export class Results extends React.Component<ResultsProps, {}> {
         </a>
       </h5>
     );
+
     const hasError = results.some(({ error }) => !!error);
     const suiteElement = hasError ? suiteWithError : noErrorSuite;
+
     return [
       suiteElement,
       ...results.map(result => {
         const { error, name } = result;
-        const errorTextElement = error ? <pre>{error.toString()}</pre> : null;
+        const errorElement = error ? <pre>{error.toString()}</pre> : null;
         const retryElem = error ? (
           <Button
             className="bp3-button bp3-intent-primary"
@@ -111,7 +107,7 @@ export class Results extends React.Component<ResultsProps, {}> {
             text={appState.testRunning === name ? 'Running...' : `Retry`}
           ></Button>
         ) : null;
-        const errorElement = error ? <pre>{error.toString()}</pre> : null;
+
         return (
           <div className="result" key={result.name}>
             <p>

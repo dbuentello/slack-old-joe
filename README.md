@@ -13,7 +13,7 @@ work.
  * If you're running the `Sign In` test suite, ensure that your browser is signed into both the [Old Joe One](https://old-joe.slack.com) and [Old Joe Two](https://oldjoetwo.slack.com) workspaces. There is only one account, get in touch with Felix for credentials.
  * macOS: Let Old Joe control your computer (`System Preferences - Security & Privacy - Accessibility`). macOS will ask during your first run. macOS might at any point decide that Old Joe's automation is too much automation and inform you accordingly.
  * macOS: Close all other apps that might send notifications.
- * linux: make sur the tool `nmcli` is installed to ensure correct network tests. 
+ * linux: make sur the tool `nmcli` is installed to ensure correct network tests.
 
 > :warning: If and when Chromedriver crashes, you'll see error messages complaining that Chrome crashed (which means that chromedriver crashed) or that there's no connection to Chrome (again, Chromedriver crashed). You'll see this happening because Slack is gone. Don't let that distract you, just restart the test.
 
@@ -21,7 +21,7 @@ work.
 You can find a list of tests [here](docs/tests.md).
 
 ## Internals
-Old Joe is using [Chromedriver](http://chromedriver.chromium.org/) driven by [webdriverio](https://webdriver.io/docs/api.html). Assertions are being done with [Cherio](https://github.com/cheeriojs/cheerio). Automation is being done by WebDriver, Chrome's DevTools protocol, and – where necessary – with AppleScript, PowerShell, and Robotjs. There are no dependencies for the system that's running the test.
+Old Joe uses [Chromedriver](http://chromedriver.chromium.org/) driven by [webdriverio](https://webdriver.io/docs/api.html). Assertions are being done with [Cherio](https://github.com/cheeriojs/cheerio). Automation is being done by WebDriver, Chrome's DevTools protocol, and – where necessary – with AppleScript, PowerShell, and Robotjs. There are no dependencies for the system that's running the test.
 
 Check out the [`src/smoke`](src/smoke) folder to see test suites. The whole framework is built to look and feel just like any other test suite - with a large library of helpers for common Slack operations (switching teams, opening channels, clicking on menu items, and more). All of this stuff is pretty movable - you can swap out Chromedriver for another protocol with ease, swapping out Cheerio for another assertion library is just as easy.
 
