@@ -19,11 +19,6 @@ addons:
     - fakeroot
     - rpm
 
-branches:
-  only:
-  - master
-  - /^v\d+\.\d+\.\d+/
-
 install:
 - npm install
 - mkdir -p ./static/data
