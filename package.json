@@ -1,6 +1,6 @@
 {
   "name": "old-joe",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A test framework for Slack",
   "main": "./dist/src/main/main",
   "scripts": {
