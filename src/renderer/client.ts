@@ -7,6 +7,7 @@ import { waitUntilSlackClosed } from '../helpers/wait-until-slack-closed';
 import { AppState } from './state';
 import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 import { isMac } from '../utils/os';
+import { getUserDir } from '../helpers/get-user-dir';
 
 let _client: null | JoeBrowserObject = null;
 
@@ -18,7 +19,11 @@ export async function getClient(appState: AppState) {
       browserName: 'chrome',
       'goog:chromeOptions': {
         binary: appState.appToTest,
-        args: ['--remote-debugging-port=12209', '--test-type=webdriver']
+        args: [
+          '--remote-debugging-port=12209',
+          '--test-type=webdriver',
+          `--user-data-dir=${getUserDir()}`
+        ]
       }
     }
   };
