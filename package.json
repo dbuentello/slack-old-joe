@@ -61,7 +61,7 @@
     "@types/shelljs": "0.8.5",
     "@types/shortid": "0.0.29",
     "cross-env": "^6.0.3",
-    "electron": "4.2.12",
+    "electron": "4.2.0",
     "less": "^3.10.3",
     "parcel-bundler": "^1.12.4",
     "prettier": "1.19.1",
