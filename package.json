@@ -64,7 +64,6 @@
     "electron": "4.2.12",
     "electron-rebuild": "1.8.8",
     "less": "^3.10.3",
-    "node-gyp": "6.0.1",
     "parcel-bundler": "^1.12.4",
     "prettier": "1.19.1",
     "rimraf": "^3.0.0",
