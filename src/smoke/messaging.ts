@@ -4,9 +4,7 @@ import { SuiteMethod, JoeBrowserObject } from '../interfaces';
 import { switchToChannel } from '../helpers/switch-channel';
 import { enterMessage } from '../helpers/enter-message';
 import { getSonicWindow } from '../helpers/get-sonic-window';
-import {
-  switchToTeam,
-} from '../helpers/switch-teams';
+import { switchToTeam } from '../helpers/switch-teams';
 import { wait } from '../utils/wait';
 
 async function assertVideo(client: JoeBrowserObject) {
@@ -24,17 +22,32 @@ async function assertVideo(client: JoeBrowserObject) {
   assert.ok(src.includes('youtube.com'), "src does not include 'youtube.com'");
   assert.ok(src.includes('IEItOBG0r2g'), "src does not include 'IEItOBG0r2g'");
 
-  await wait(1000)
+  await wait(1000);
 
   // Switch to the iframe
   await client.switchToFrame(iframe);
 
   // Expect "playing mode"
-  const player = await client.$('.playing-mode')
+  const player = await client.$('.playing-mode');
   await player.waitForExist(3000);
 
   // Stop the video
   await (await client.$('body')).click();
+
+  const fullscreenBtn = await client.$('.ytp-fullscreen-button');
+  await fullscreenBtn.moveTo();
+  await fullscreenBtn.click();
+
+  await client.waitUntil(async () => {
+    const bodyWidth = await client.executeScript(
+      'return window.outerWidth',
+      []
+    );
+    return screen.width === bodyWidth;
+  }, 2000);
+
+  await fullscreenBtn.moveTo();
+  await fullscreenBtn.click();
 
   // Switch back
   await client.switchToParentFrame();
