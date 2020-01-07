@@ -4,6 +4,10 @@ import { SuiteMethod, JoeBrowserObject } from '../interfaces';
 import { switchToChannel } from '../helpers/switch-channel';
 import { enterMessage } from '../helpers/enter-message';
 import { getSonicWindow } from '../helpers/get-sonic-window';
+import {
+  switchToTeam,
+} from '../helpers/switch-teams';
+import { wait } from '../utils/wait';
 
 async function assertVideo(client: JoeBrowserObject) {
   // Play the video
@@ -14,19 +18,20 @@ async function assertVideo(client: JoeBrowserObject) {
   // Expect the iframe to show up
   let iframe = await client.$('iframe');
   await iframe.waitForExist(2000);
-  iframe = await client.$('iframe');
 
   // Expect the video to be playing
   const src = (await iframe.getProperty('src')) as string;
   assert.ok(src.includes('youtube.com'), "src does not include 'youtube.com'");
   assert.ok(src.includes('IEItOBG0r2g'), "src does not include 'IEItOBG0r2g'");
 
+  await wait(1000)
+
   // Switch to the iframe
   await client.switchToFrame(iframe);
 
   // Expect "playing mode"
-  let player = await client.$('.playing-mode');
-  await player.waitForExist(2000);
+  const player = await client.$('.playing-mode')
+  await player.waitForExist(3000);
 
   // Stop the video
   await (await client.$('body')).click();
@@ -38,6 +43,7 @@ async function assertVideo(client: JoeBrowserObject) {
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   beforeAll(async () => {
     await getSonicWindow(window.client);
+    await switchToTeam(0);
   });
 
   it('can switch to the #random channel', async () => {
@@ -59,12 +65,11 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     await enterMessage(window.client, testValue, true);
 
     // The message should show up
-    const randomDesc = await window.client.$(`span=${testValue}`);
+    const randomDesc = await window.client.$(`div=${testValue}`);
     assert.ok(await randomDesc.waitForExist(1000), 'could not post a message.');
   });
 
   it('can play a YouTube video', async () => {
-    // Switch to the random channel
     await switchToChannel(window.client, 'ads');
 
     // Wait for the description to show up
