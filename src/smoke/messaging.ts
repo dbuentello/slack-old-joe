@@ -4,6 +4,9 @@ import { SuiteMethod, JoeBrowserObject } from '../interfaces';
 import { switchToChannel } from '../helpers/switch-channel';
 import { enterMessage } from '../helpers/enter-message';
 import { getSonicWindow } from '../helpers/get-sonic-window';
+import { getDockBadgeText } from '../helpers/get-dock-badge-text';
+import { sendClickElement, PointerEvents } from '../helpers/send-pointer-event';
+import { sendNativeKeyboardEvent } from '../helpers/send-keyboard-event';
 
 async function assertVideo(client: JoeBrowserObject) {
   // Play the video
@@ -73,4 +76,58 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
 
     await assertVideo(window.client);
   });
+
+  it(
+    'dock badge reflects unread state',
+    async () => {
+      // Switch to the random channel
+      await switchToChannel(window.client, 'unreads');
+
+      // Badge should not be on the icon
+      await window.client.waitUntil(
+        async () => null === (await getDockBadgeText()),
+        5000,
+        'unable to clear the dock badge'
+      );
+
+      // Mark a message as unread
+      await sendClickElement(window.client, {
+        selector: '[data-qa="message_content"]',
+        type: PointerEvents.MOUSEDOWNUP,
+        alt: true
+      });
+
+      // Badge should now be visible
+      await window.client.waitUntil(
+        async () => '•' === (await getDockBadgeText()),
+        undefined,
+        '• is not displayed in the badge for unread state'
+      );
+    },
+    { platforms: ['darwin'] }
+  );
+
+  it(
+    'dock badge reflects notification state',
+    async () => {
+      await switchToChannel(window.client, 'Slackbot');
+
+      // Mark a message as unread
+      await sendClickElement(window.client, {
+        selector: '[data-qa="message_content"]',
+        type: PointerEvents.MOUSEDOWNUP,
+        alt: true
+      });
+
+      await window.client.waitUntil(
+        async () => '1' === (await getDockBadgeText()),
+        undefined,
+        '1 is not displayed in the badge for notification state'
+      );
+
+      // Clear the unread
+      await sendNativeKeyboardEvent({ text: 'escape' });
+    },
+    { platforms: ['darwin'] }
+  );
 };
