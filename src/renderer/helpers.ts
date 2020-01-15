@@ -52,6 +52,7 @@ import { getZoomLevel } from '../helpers/get-zoom';
 import { sendNotification } from '../helpers/send-notification';
 import { moveCursorToElement } from '../helpers/move-cursor';
 import { topLeftMouse } from '../native-commands/top-left-mouse';
+import { getDockBadgeText } from '../helpers/get-dock-badge-text';
 
 export function registerHelpers() {
   window['helpers'] = {
@@ -70,6 +71,7 @@ export function registerHelpers() {
     getAboutBoxValue,
     getAboutWindowHandle,
     getDevToolsWindowHandle,
+    getDockBadgeText,
     getGpuWindowHandle,
     getIsNetLogSheetOpen,
     getIsResetAppDataSheetOpen,
