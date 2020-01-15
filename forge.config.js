@@ -35,26 +35,29 @@ module.exports = {
       name: '@electron-forge/maker-squirrel',
       platforms: ['win32'],
       config: (arch) => {
+        const options = {
+          name: 'old-joe',
+          authors: 'Felix Rieseberg',
+          exe: 'old-joe.exe',
+          iconUrl: 'https://raw.githubusercontent.com/electron/fiddle/0119f0ce697f5ff7dec4fe51f17620c78cfd488b/assets/icons/fiddle.ico',
+          noMsi: true,
+          noDelta: true,
+          setupExe: `old-joe-${version}-${arch}-setup.exe`,
+          setupIcon: path.resolve(iconDir, 'icon.ico')
+        }
+
         const certificateFile = process.env.CI
           ? path.join(__dirname, 'cert.p12')
           : process.env.WINDOWS_CERTIFICATE_FILE;
 
         if (!certificateFile || !fs.existsSync(certificateFile)) {
           console.warn(`Warning: Could not find certificate file at ${certificateFile}`)
+        } else {
+          options.certificatePassword = process.env.WINDOWS_CERTIFICATE_PASSWORD;
+          options.certificateFile = certificateFile;
         }
 
-        return {
-          name: 'old-joe',
-          authors: 'Felix Rieseberg',
-          exe: 'old-joe.exe',
-          iconUrl: 'https://raw.githubusercontent.com/electron/fiddle/0119f0ce697f5ff7dec4fe51f17620c78cfd488b/assets/icons/fiddle.ico',
-          noMsi: true,
-          remoteReleases: '',
-          setupExe: `old-joe-${version}-${arch}-setup.exe`,
-          setupIcon: path.resolve(iconDir, 'icon.ico'),
-          certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD,
-          certificateFile
-        }
+        return options;
       }
     },
     {
