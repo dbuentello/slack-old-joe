@@ -13,7 +13,6 @@ import { setPreference } from '../helpers/set-preference';
 import { openPreferences, closePreferences } from '../helpers/open-preferences';
 import { getPreference } from '../helpers/get-preference';
 import { getSonicWindow } from '../helpers/get-sonic-window';
-import { topLeftMouse } from '../native-commands/top-left-mouse';
 
 const DOWNLOADS_DIR = remote.app.getPath('downloads');
 
@@ -27,10 +26,6 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
     await switchToTeam(0);
 
     oldDir = await getPreference(window.client, 'PrefSSBFileDownloadPath');
-  });
-
-  beforeEach(async () => {
-    await topLeftMouse();
   });
 
   it('can download a file in-channel', async () => {
@@ -95,7 +90,7 @@ export const test: SuiteMethod = async ({ it, beforeAll, beforeEach }) => {
       await wait(500);
 
       // Wait for the panel to show up
-      const downloadsHeader = await window.client.$('span=Downloads');
+      const downloadsHeader = await window.client.$('div=Downloads');
       await downloadsHeader.waitForExist(2000);
       await wait(500);
 
