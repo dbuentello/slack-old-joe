@@ -9,6 +9,10 @@ import {
 import { wait } from '../utils/wait';
 import { getAboutWindowHandle } from '../helpers/get-about-window';
 import { getSonicWindow } from '../helpers/get-sonic-window';
+import { switchToChannel } from '../helpers/switch-channel';
+import { sendClickElement, PointerEvents } from '../helpers/send-pointer-event';
+import { switchToTeam } from '../helpers/switch-teams';
+import { sendKeyboardEvent } from '../helpers/send-keyboard-event';
 
 export const test: SuiteMethod = async ({ it, beforeAll }) => {
   const expectedVersion = {
@@ -127,6 +131,89 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     },
     { platforms: ['win32', 'linux'] }
   );
+
+  it('DM call send / receive', async () => {
+    await getSonicWindow(window.client);
+    const sonicWindowId = await window.client.getWindowHandle();
+
+    // A webapp hack to let us open up multiple call windows.
+    await window.client.executeScript(
+      'allowMultipleCallWindowsForTesting = true',
+      []
+    );
+
+    // Start a shared channel call between Jane Doe One and Jane Doe Two.
+    await switchToChannel(window.client, 'Jane Doe Two');
+    await sendClickElement(window.client, {
+      selector: '[data-qa="channel_header_calls_button"]',
+      type: PointerEvents.MOUSEDOWNUP
+    });
+
+    // Wait until we have the window handle ids of both the calling user (Jane
+    // Doe One) and the invited user (Jane Doe Two).
+    let callerWindow: string | undefined;
+    let inviteWindow: string | undefined;
+    await window.client.waitUntil(
+      async () => {
+        const windows = await window.client.getWindowHandles();
+
+        for (const windowId of windows) {
+          try {
+            await window.client.switchToWindow(windowId);
+            const title = await window.client.getTitle();
+            const url = await window.client.getUrl();
+            if (url.includes('/calls/')) {
+              if (title.includes('Calling')) {
+                callerWindow = windowId;
+              } else {
+                inviteWindow = windowId;
+              }
+            }
+          } catch {
+            // Window maybe dead.
+            continue;
+          }
+        }
+
+        return !!callerWindow && !!inviteWindow;
+      },
+      6000,
+      'failed to get both the call window and invite window',
+      1000
+    );
+
+    // Switch to the invite window and accept the call.
+    await window.client.switchToWindow(inviteWindow!);
+    await sendClickElement(window.client, {
+      selector: '[aria-label="Accept"]',
+      type: PointerEvents.MOUSEDOWNUP
+    });
+
+    // Loosely confirm that the call is working by checking for each other's
+    // name.
+    (await window.client.$('div=Jane Doe One')).waitForExist(1500);
+    await window.client.switchToWindow(callerWindow!);
+    (await window.client.$('div=Jane Doe Two')).waitForExist(1500);
+
+    // Hangup.
+    await sendClickElement(window.client, {
+      selector: '[data-qa="hangup-button"]',
+      type: PointerEvents.MOUSEDOWNUP
+    });
+    await window.client.switchToWindow(inviteWindow!);
+    await sendClickElement(window.client, {
+      selector: '[data-qa="hangup-button"]',
+      type: PointerEvents.MOUSEDOWNUP
+    });
+
+    // Clear possibly-stuck notifications.
+    await window.client.switchToWindow(sonicWindowId);
+    await switchToTeam(1);
+    await switchToChannel(window.client, 'Jane Doe One');
+    await sendKeyboardEvent(window.client, { text: 'Escape' });
+    await switchToTeam(0);
+    await sendKeyboardEvent(window.client, { text: 'Escape' });
+  });
 
   // Disabled: Posts don't work in Sonic (yet)
   //

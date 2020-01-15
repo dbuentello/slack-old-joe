@@ -51,8 +51,7 @@ export function sendPointerEvent(
   return client.sendCommand(command, data);
 }
 
-export interface SendClickElementOptions {
-  selector: string;
+export interface SharedSendClickOptions {
   rightClick?: boolean;
   type?: PointerEvents;
   ctrl?: boolean;
@@ -61,12 +60,33 @@ export interface SendClickElementOptions {
   cmd?: boolean;
 }
 
+export interface SendClickForElement extends SharedSendClickOptions {
+  element: WebdriverIOAsync.Element;
+  selector?: undefined;
+}
+export interface SendClickForSelector extends SharedSendClickOptions {
+  element?: undefined;
+  selector: string;
+}
+export type SendClickElementOptions =
+  | SendClickForElement
+  | SendClickForSelector;
+
 export async function sendClickElement(
   client: BrowserObject,
   options: SendClickElementOptions
 ) {
-  const { rightClick, selector, type, alt, cmd, ctrl, shift } = options;
-  const element = await client.$(selector);
+  const {
+    rightClick,
+    element: passedElement,
+    selector,
+    type,
+    alt,
+    cmd,
+    ctrl,
+    shift
+  } = options;
+  const element = passedElement || (await client.$(selector!));
   await element.waitForExist(1000);
   const location = await element.getLocation();
 

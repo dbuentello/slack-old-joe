@@ -112,9 +112,13 @@ export const test: SuiteMethod = async ({ it, beforeAll }) => {
     async () => {
       await switchToChannel(window.client, 'Slackbot');
 
+      const messageElements = await window.client.$$(
+        '[data-qa="message_container"]'
+      );
+
       // Mark a message as unread
       await sendClickElement(window.client, {
-        selector: '[data-qa="message_content"]',
+        element: messageElements[messageElements.length - 1],
         type: PointerEvents.MOUSEDOWNUP,
         alt: true
       });
